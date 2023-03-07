@@ -3,7 +3,7 @@ import express from "npm:express"
 const app = express()
 
 app.get("/", (_req: express.Request, res: express.Response) => {
-  res.send("Hello World from Dinosaurier Planet!")
+  res.send("Hello World from Dinosaur Planet!")
 })
 
 app.listen(8000, () => {
