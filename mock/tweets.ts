@@ -1,7 +1,7 @@
-import express from "npm:express";
+import { RouterContext } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 
-const get = async (_req: express.Request, res: express.Response) => {
-  res.send(await Deno.readTextFile("mock/tweets.json"));
+const get = async (ctx: RouterContext<"/tweets", Record<string | number, string | undefined>, Record<string, any>>) => {
+  ctx.response.body = await Deno.readTextFile("mock/tweets.json");
 };
 
 export default { get: get };
