@@ -46,6 +46,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
             REFERENCES users(user_id)
             ON DELETE CASCADE
 );`;
+client.queryArray`COMMENT ON COLUMN tweets.tweet_id IS 'Generate snowflake id';`
 
 client.queryArray`CREATE TABLE IF NOT EXISTS likes (
     like_id INT GENERATED ALWAYS AS IDENTITY,
@@ -63,7 +64,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS likes (
 );`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS comments (
-    comment_id BIGINT GENERATED ALWAYS AS IDENTITY,
+    comment_id BIGINT,
     author_id INT NOT NULL,
     tweet_id BIGINT NOT NULL,
     content VARCHAR NOT NULL,
@@ -78,9 +79,10 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comments (
             REFERENCES tweets(tweet_id) 
             ON DELETE CASCADE
 );`;
+client.queryArray`COMMENT ON COLUMN comments.comment_id IS 'Generate snowflake id';`
 
 client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
-    retweet_id BIGINT GENERATED ALWAYS AS IDENTITY,
+    retweet_id BIGINT,
     author_id INT NOT NULL,
     tweet_id BIGINT NOT NULL,
     PRIMARY KEY (retweet_id),
@@ -93,3 +95,4 @@ client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
             REFERENCES tweets(tweet_id)
             ON DELETE CASCADE
 );`;
+client.queryArray`COMMENT ON COLUMN retweets.retweet_id IS 'Generate snowflake id';`
