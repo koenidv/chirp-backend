@@ -46,3 +46,18 @@ client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
             REFERENCES users(user_id)
             ON DELETE CASCADE
 );`;
+
+client.queryArray`CREATE TABLE IF NOT EXISTS likes (
+    like_id INT GENERATED ALWAYS AS IDENTITY,
+    author_id INT NOT NULL,
+    tweet_id BIGINT NOT NULL,
+    PRIMARY KEY (like_id),
+    CONSTRAINT fk_user_id
+        FOREIGN KEY(author_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_tweet_id
+        FOREIGN KEY(tweet_id)
+            REFERENCES tweets(tweet_id)
+            ON DELETE CASCADE
+);`;
