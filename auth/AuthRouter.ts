@@ -5,10 +5,6 @@ import { init } from "https://deno.land/x/bedrock/mod.ts";
 const MFARouter = new Router();
 export default MFARouter;
 
-MFARouter.get("/login", (ctx: Context) => {
-  ctx.response.body = "Login page";
-});
-
 const Bedrock = init({
   provider: "Local",
   mfaType: "Token",
@@ -48,6 +44,12 @@ MFARouter.post("/login", Bedrock.localLogin, (ctx: Context) => {
     };
     ctx.response.status = 401;
   }
+
+  console.log(ctx.state.localVerified);
+  console.log(ctx.state.mfaRequired);
+  console.log(ctx.state.authSuccess);
+  console.log(ctx.state.hasSecret);
+  console.log(ctx.state.OAuthVerified);
   return;
 });
 
