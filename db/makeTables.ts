@@ -78,3 +78,18 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comments (
             REFERENCES tweets(tweet_id) 
             ON DELETE CASCADE
 );`;
+
+client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
+    retweet_id BIGINT GENERATED ALWAYS AS IDENTITY,
+    author_id INT NOT NULL,
+    tweet_id BIGINT NOT NULL,
+    PRIMARY KEY (retweet_id),
+    CONSTRAINT fk_user_id
+        FOREIGN KEY(author_id)    
+            REFERENCES users(user_id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_tweet_id
+        FOREIGN KEY(tweet_id)
+            REFERENCES tweets(tweet_id)
+            ON DELETE CASCADE
+);`;
