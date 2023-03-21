@@ -4,10 +4,21 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
     user_id INT GENERATED ALWAYS AS IDENTITY,
     username VARCHAR(24) NOT NULL,
     displayname VARCHAR(36) NOT NULL,
-    passwordhash VARCHAR NOT NULL,
     profile_image_url VARCHAR,
     PRIMARY KEY (user_id)
 );`;
+
+client.queryArray`CREATE TABLE IF NOT EXISTS auths (
+    auth_id INT GENERATED ALWAYS AS IDENTITY,
+    user_id INT NOT NULL,
+    email VARCHAR(36) NOT NULL,
+    passwordhash VARCHAR NOT NULL,
+    PRIMARY KEY (auth_id),
+    CONSTRAINT fk_user_id
+        FOREIGN KEY(user_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE
+)`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
     tweet_id BIGINT NOT NULL,
