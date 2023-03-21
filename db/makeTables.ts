@@ -96,3 +96,18 @@ client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
             ON DELETE CASCADE
 );`;
 client.queryArray`COMMENT ON COLUMN retweets.retweet_id IS 'Generate snowflake id';`
+
+client.queryArray`CREATE TABLE IF NOT EXISTS mentions (
+    mention_id INT GENERATED ALWAYS AS IDENTITY,
+    tweet_id BIGINT NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY (mention_id),
+    CONSTRAINT fk_tweet_id  
+        FOREIGN KEY(tweet_id)  
+            REFERENCES tweets(tweet_id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_user_id
+        FOREIGN KEY(user_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE   
+);`;
