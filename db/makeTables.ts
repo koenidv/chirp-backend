@@ -20,6 +20,21 @@ client.queryArray`CREATE TABLE IF NOT EXISTS auths (
             ON DELETE CASCADE
 )`;
 
+client.queryArray`CREATE TABLE IF NOT EXISTS follows (
+    follow_id INT GENERATED ALWAYS AS IDENTITY,
+    follower_id INT NOT NULL,
+    AUTHOR_id INT NOT NULL,
+    PRIMARY KEY (follow_id),
+    CONSTRAINT fk_follower_id
+        FOREIGN KEY(follower_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_author_id
+        FOREIGN KEY(author_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE
+);`;
+
 client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
     tweet_id BIGINT NOT NULL,
     author_id INT NOT NULL,
