@@ -14,7 +14,7 @@ router.get("/", (ctx) => {
 });
 
 router.use("/mock", mockRouter.routes(), mockRouter.allowedMethods());
-router.use("", MFARouter.routes(), MFARouter.allowedMethods());
+router.use("/auth", MFARouter.routes(), MFARouter.allowedMethods());
 
 const app = new Application<AppState>();
 

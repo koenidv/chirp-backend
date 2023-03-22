@@ -1,6 +1,6 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import { init } from "https://deno.land/x/bedrock@v1.0.3/mod.ts";
-import { checkEmailAuth } from "../db/auths.ts";
+import { checkEmailAuth, createEmailAuth } from "../db/auths.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
@@ -12,8 +12,36 @@ const Bedrock = init({
   getSecret: (username: string) =>
     new Promise((resolve, reject) => {
       resolve("secret");
-    }),
+    })
 });
+
+MFARouter.get("/", (ctx: Context) => {
+  ctx.response.body = "Auth API available";
+});
+
+MFARouter.post("/register", async (ctx: Context) => {
+  const body = await ctx.request.body().value;
+  
+  let email, password;
+  if (body instanceof URLSearchParams) {
+    email = body.get("email");
+    password = body.get("password");
+  } else {
+    email = body.email;
+    password = body.password;
+  }
+  
+  if (!email || !password) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const success = await createEmailAuth(email, password);
+
+  ctx.response.status = success ? 200 : 400;
+});
+
+// todo refactor below
 
 MFARouter.post("/login", Bedrock.localLogin, (ctx: Context) => {
   if (ctx.state.localVerified) {
