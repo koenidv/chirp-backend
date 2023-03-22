@@ -10,7 +10,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
 
 client.queryArray`CREATE TABLE IF NOT EXISTS auths (
     auth_id INT GENERATED ALWAYS AS IDENTITY,
-    user_id INT NOT NULL,
+    user_id INT,
     email VARCHAR(36) NOT NULL,
     passwordhash VARCHAR NOT NULL,
     PRIMARY KEY (auth_id),
