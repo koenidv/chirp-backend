@@ -2,7 +2,7 @@ import client from "./db.ts";
 
 client.queryArray`CREATE TABLE IF NOT EXISTS users (
     user_id INT GENERATED ALWAYS AS IDENTITY,
-    username VARCHAR(24) NOT NULL,
+    username VARCHAR(24) NOT NULL UNIQUE,
     displayname VARCHAR(36) NOT NULL,
     profile_image_url VARCHAR,
     PRIMARY KEY (user_id)
@@ -11,7 +11,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
 client.queryArray`CREATE TABLE IF NOT EXISTS auths (
     auth_id INT GENERATED ALWAYS AS IDENTITY,
     user_id INT,
-    email VARCHAR(36) NOT NULL,
+    email VARCHAR(36) NOT NULL UNIQUE,
     passwordhash VARCHAR NOT NULL,
     PRIMARY KEY (auth_id),
     CONSTRAINT fk_user_id
@@ -36,7 +36,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS follows (
 );`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
-    tweet_id BIGINT NOT NULL,
+    tweet_id BIGINT NOT NULL UNIQUE,
     author_id INT NOT NULL,
     content VARCHAR NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -64,7 +64,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS likes (
 );`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS comments (
-    comment_id BIGINT,
+    comment_id BIGINT UNIQUE,
     author_id INT NOT NULL,
     tweet_id BIGINT NOT NULL,
     content VARCHAR NOT NULL,
@@ -82,7 +82,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comments (
 client.queryArray`COMMENT ON COLUMN comments.comment_id IS 'Generate snowflake id';`
 
 client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
-    retweet_id BIGINT,
+    retweet_id BIGINT UNIQUE,
     author_id INT NOT NULL,
     tweet_id BIGINT NOT NULL,
     PRIMARY KEY (retweet_id),
