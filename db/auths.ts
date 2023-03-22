@@ -31,7 +31,8 @@ export async function createEmailAuth(
 export async function checkEmailAuth(
   email: string,
   password: string,
-): Promise<boolean> {
+): Promise<false | {auth_id: bigint, user_id: bigint}> {
+
   if (anyUnescaped(email, password)) {
     console.log("Denied inserting unescaped data");
     return false;
@@ -39,8 +40,10 @@ export async function checkEmailAuth(
   if (!validateEmailSchema(email)) return false;
 
   const result = await client.queryObject<
-    { passwordhash: string }
-  >`SELECT passwordhash FROM auths WHERE email=${email}`;
+    { auth_id: bigint, user_id: bigint, passwordhash: string }
+  >`SELECT auth_id, user_id, passwordhash FROM auths WHERE email=${email}`;
 
-  return await comparePassword(password, result.rows[0].passwordhash);
+  if (await comparePassword(password, result.rows[0].passwordhash)) {
+    return { auth_id: result.rows[0].auth_id, user_id: result.rows[0].user_id }
+  } else return false;
 }
