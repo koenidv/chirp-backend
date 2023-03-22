@@ -18,7 +18,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS auths (
         FOREIGN KEY(user_id)
             REFERENCES users(user_id)
             ON DELETE CASCADE
-)`;
+);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS follows (
     follow_id INT GENERATED ALWAYS AS IDENTITY,
