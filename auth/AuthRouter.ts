@@ -1,6 +1,6 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { Session } from "https://deno.land/x/oak_sessions@v3.4.0/mod.ts";
-import { init } from "https://deno.land/x/bedrock/mod.ts";
+import { init } from "https://deno.land/x/bedrock@v1.0.3/mod.ts";
+import { checkEmailAuth } from "../db/auths.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
@@ -8,10 +8,7 @@ export default MFARouter;
 const Bedrock = init({
   provider: "Local",
   mfaType: "Token",
-  checkCreds: (username: string, password: string) =>
-    new Promise((resolve, reject) => {
-      resolve(true);
-    }),
+  checkCreds: checkEmailAuth,
   getSecret: (username: string) =>
     new Promise((resolve, reject) => {
       resolve("secret");
