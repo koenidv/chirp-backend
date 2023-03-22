@@ -6,8 +6,8 @@ export function validateEmailSchema(email: string): boolean {
 }
 
 export async function hashPassword(password: string): Promise<string> {
-  const salt = await bcrypt.genSalt(8);
-  const hash = await bcrypt.hash(password, salt);
+  const salt = bcrypt.genSaltSync(8); // using sync because workers don't work on deno deploy yet
+  const hash = bcrypt.hashSync(password, salt);
   return hash;
 }
 
@@ -15,5 +15,5 @@ export async function comparePassword(
   password: string,
   hash: string,
 ): Promise<boolean> {
-  return await bcrypt.compare(password, hash);
+  return await bcrypt.compareSync(password, hash);
 }
