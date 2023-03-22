@@ -22,6 +22,7 @@ MFARouter.post("/register", async (ctx: Context) => {
   }
 
   const success = await createEmailAuth(email, password);
+  if (success) ctx.state.session.set("auth_id", success);
 
   ctx.response.status = success ? 200 : 400;
 });
@@ -38,7 +39,6 @@ MFARouter.post("/login", async (ctx: Context) => {
   }
 
   const check = await checkEmailAuth(email, password);
-  console.log((check as {auth_id: bigint, user_id: bigint}).auth_id * 2n)
 
   if (check) {
     ctx.state.session.set("auth_id", check.auth_id);
@@ -55,6 +55,7 @@ MFARouter.get("/logout", async (ctx: Context) => {
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
-  ctx.response.body = "Currently logged in with user id " +
-    await ctx.state.session.get("user_id");
+  ctx.response.body = `Currently logged in with user id 
+  ${await ctx.state.session.get("user_id")} (auth id 
+      ${await ctx.state.session.get("auth_id")})`;
 });
