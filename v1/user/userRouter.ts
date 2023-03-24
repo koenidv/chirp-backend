@@ -1,9 +1,9 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import { createUser } from "../../db/users.ts";
-const manageUserRouter = new Router();
-export default manageUserRouter;
+const userRouter = new Router();
+export default userRouter;
 
-manageUserRouter.post("/create", async (ctx) => {
+userRouter.post("/", async (ctx) => {
   const body = await ctx.request.body().value;
   const username = body.get("username");
   const displayname = body.get("displayname");
