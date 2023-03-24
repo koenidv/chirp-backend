@@ -3,5 +3,7 @@ const v1Router = new Router();
 export default v1Router;
 
 import userRouter from "./user/userRouter.ts";
+import tweetRouter from "./tweet/tweetRouter.ts";
 
 v1Router.use("/user", userRouter.routes(), userRouter.allowedMethods());
+v1Router.use("/tweet", tweetRouter.routes(), tweetRouter.allowedMethods());

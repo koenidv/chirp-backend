@@ -39,7 +39,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
     tweet_id BIGINT NOT NULL UNIQUE,
     author_id INT NOT NULL,
     content VARCHAR NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (tweet_id),
     CONSTRAINT fk_author_id
         FOREIGN KEY(author_id)
@@ -68,7 +68,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comments (
     author_id INT NOT NULL,
     tweet_id BIGINT NOT NULL,
     content VARCHAR NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (comment_id),
     CONSTRAINT fk_user_id
         FOREIGN KEY(author_id)
