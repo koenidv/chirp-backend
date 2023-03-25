@@ -1,4 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { createMention, Mention } from "../../db/mentions.ts";
 import { createTweet, queryTweetsSubscribed } from "../../db/tweets.ts";
 const router = new Router();
 export default router;
@@ -13,13 +14,15 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  const content = body.get("content");
-  const mentions = JSON.parse(body.get("mentions"));
+  const content: string = body.get("content");
+  const mentions: bigint[] = JSON.parse(body.get("mentions"));
 
   if (!content) {
     ctx.response.status = 400;
     return;
   }
+
+  // todo insert tweet and mentions in a transaction
 
   const tweet_id = await createTweet(user_id, content);
 
@@ -28,7 +31,9 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  // todo create mention rows
+  mentions.forEach((mention: bigint) => {
+    createMention(tweet_id, mention);
+  });
 
   ctx.response.body = tweet_id;
   ctx.response.status = 200;

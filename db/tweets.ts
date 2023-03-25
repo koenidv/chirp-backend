@@ -1,7 +1,7 @@
 import client from "./db.ts";
 import { anyUnescaped, generateId } from "./dbMethods.ts";
 
-export async function createTweet(user_id: string, content: string) {
+export async function createTweet(user_id: string, content: string) : Promise<number|false> {
   // user_id is expected to be verified!
 
   if (anyUnescaped(content) || content.length > 280) {
