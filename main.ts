@@ -35,3 +35,13 @@ app.addEventListener("listen", ({ hostname, port, secure }) => {
   );
 });
 app.listen({ port: 8000 });
+
+
+// Set up BigInt to be serialized in JSON.stringify
+interface BigInt {
+  toJSON: () => string;
+}
+// @ts-ignore create toJSON method on BigInt prototype
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};

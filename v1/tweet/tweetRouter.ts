@@ -1,5 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { createTweet } from "../../db/tweets.ts";
+import { createTweet, queryTweetsSubscribed } from "../../db/tweets.ts";
 const router = new Router();
 export default router;
 
@@ -32,4 +32,14 @@ router.post("/", async (ctx) => {
 
   ctx.response.body = tweet_id;
   ctx.response.status = 200;
+});
+
+router.get("/", async (ctx) => {
+  const user_id = await ctx.state.session.get("user_id");
+  if (!user_id) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = await queryTweetsSubscribed(user_id);
 });
