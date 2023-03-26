@@ -5,7 +5,7 @@ export async function queryLikes(tweet_id: string) {
         SELECT author_id
         FROM likes
         WHERE tweet_id = ${tweet_id}
-    `).rows;
+    `).rows.flat();
 }
 
 export async function createLike(tweet_id: string, user_id: string) {
@@ -17,10 +17,8 @@ export async function createLike(tweet_id: string, user_id: string) {
 }
 
 export async function deleteLike(tweet_id: string, user_id: string) {
-  console.log(
-    await client.queryArray`
+  await client.queryArray`
                 DELETE FROM likes
                 WHERE tweet_id = ${tweet_id} AND author_id = ${user_id}
-            `,
-  );
+            `;
 }

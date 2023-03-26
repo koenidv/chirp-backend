@@ -26,14 +26,12 @@ router.put("/like", async (ctx) => {
     }
     
     const body = await ctx.request.body().value;
-    const like: boolean = body.get("like");
+    const like: string = body.get("like");
     
-    if (like === true) {
+    if (like === "true") {
         await createLike(tweet_id, user_id);
-        console.log("liking")
     } else {
         await deleteLike(tweet_id, user_id);
-        console.log("unliking")
     }
     
     ctx.response.status = 200;
