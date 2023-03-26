@@ -50,10 +50,9 @@ client
   .queryArray`COMMENT ON COLUMN tweets.tweet_id IS 'Generate snowflake id';`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS likes (
-    like_id INT GENERATED ALWAYS AS IDENTITY,
     author_id INT NOT NULL,
     tweet_id BIGINT NOT NULL,
-    PRIMARY KEY (like_id),
+    PRIMARY KEY (author_id, tweet_id),
     CONSTRAINT fk_user_id
         FOREIGN KEY(author_id)
             REFERENCES users(user_id)
