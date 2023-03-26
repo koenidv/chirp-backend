@@ -1,12 +1,35 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import { createMention } from "../../db/mentions.ts";
-import { createTweet, queryTweetsSubscribed } from "../../db/tweets.ts";
+import {
+  createTweet,
+  queryTweet,
+  queryTweetsSubscribed,
+} from "../../db/tweets.ts";
 const router = new Router();
 export default router;
 
-import actionsRouter from "./tweetActionsRouter.ts";
-router.use("/:tweet_id", actionsRouter.routes(), actionsRouter.allowedMethods());
+import likesRouter from "./likes.ts";
+router.use("/:tweet_id", likesRouter.routes(), likesRouter.allowedMethods());
 
+export async function extractIds(
+  ctx: any,
+): Promise<
+  { user_id: string | undefined; tweet_id: string | undefined; status: number }
+> {
+  const user_id = await ctx.state.session.get("user_id");
+  if (!await ctx.state.session.get("user_id")) {
+    // this check is optional since tweets are public
+    // might remove later when platform may be accessible without account
+    return { user_id: undefined, tweet_id: undefined, status: 401 };
+  }
+
+  const tweet_id = ctx.params.tweet_id;
+  if (!tweet_id || !tweet_id.match(/^\d{14}$/)) {
+    return { user_id: user_id, tweet_id: undefined, status: 400 };
+  }
+
+  return { user_id: user_id, tweet_id: tweet_id, status: 200 };
+}
 
 // Creates a tweet
 router.post("/", async (ctx) => {
@@ -51,4 +74,23 @@ router.get("/", async (ctx) => {
   }
 
   ctx.response.body = await queryTweetsSubscribed(user_id);
+});
+
+// Get a tweet
+router.get("/:tweet_id", async (ctx) => {
+  const { tweet_id, status } = await extractIds(ctx);
+  if (!tweet_id) {
+    ctx.response.status = status;
+    return;
+  }
+
+  const tweet = await queryTweet(tweet_id);
+
+  if (!tweet) {
+    ctx.response.status = 404;
+    return;
+  }
+
+  ctx.response.body = tweet;
+  ctx.response.status = 200;
 });
