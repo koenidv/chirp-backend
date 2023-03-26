@@ -8,8 +8,10 @@ import {
 const router = new Router();
 export default router;
 
-import likesRouter from "./likes.ts";
+import likesRouter from "./like.ts";
+import commentRouter from "./comment.ts";
 router.use("/:tweet_id", likesRouter.routes(), likesRouter.allowedMethods());
+router.use("/:tweet_id", commentRouter.routes(), commentRouter.allowedMethods());
 
 export async function extractIds(
   ctx: any,
