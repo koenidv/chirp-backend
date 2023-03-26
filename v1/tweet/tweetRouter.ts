@@ -1,8 +1,12 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { createMention, Mention } from "../../db/mentions.ts";
+import { createMention } from "../../db/mentions.ts";
 import { createTweet, queryTweetsSubscribed } from "../../db/tweets.ts";
 const router = new Router();
 export default router;
+
+import actionsRouter from "./tweetActionsRouter.ts";
+router.use("/:tweet_id", actionsRouter.routes(), actionsRouter.allowedMethods());
+
 
 // Creates a tweet
 router.post("/", async (ctx) => {
