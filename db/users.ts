@@ -49,7 +49,7 @@ export async function queryUser(user_id: string) {
     await client.queryObject<UserData>`
       SELECT users.user_id, username, displayname, profile_image_url, bio, created_at,
         (SELECT COUNT(*) FROM tweets WHERE tweets.author_id = users.user_id) AS count_tweets,
-        (SELECT COUNT(*) FROM follows WHERE follows.author_id = users.user_id) AS count_followers,
+        (SELECT COUNT(*) FROM follows WHERE follows.following_id = users.user_id) AS count_followers,
         (SELECT COUNT(*) FROM follows WHERE follows.follower_id = users.user_id) AS count_followings
       FROM users
       WHERE CASE ${field}

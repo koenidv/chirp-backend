@@ -23,16 +23,16 @@ client.queryArray`CREATE TABLE IF NOT EXISTS auths (
 );`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS follows (
-    follow_id INT GENERATED ALWAYS AS IDENTITY,
     follower_id INT NOT NULL,
-    AUTHOR_id INT NOT NULL,
-    PRIMARY KEY (follow_id),
+    following_id INT NOT NULL,
+    PRIMARY KEY (follower_id, following_id),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_follower_id
         FOREIGN KEY(follower_id)
             REFERENCES users(user_id)
             ON DELETE CASCADE,
-    CONSTRAINT fk_author_id
-        FOREIGN KEY(author_id)
+    CONSTRAINT fk_following_id
+        FOREIGN KEY(following_id)
             REFERENCES users(user_id)
             ON DELETE CASCADE
 );`;
