@@ -1,5 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { createUser } from "../../db/users.ts";
+import { createUser, queryUser } from "../../db/users.ts";
 const userRouter = new Router();
 export default userRouter;
 
@@ -37,4 +37,21 @@ userRouter.post("/", async (ctx) => {
     };
   }
   ctx.response.status = success ? 200 : 400;
+});
+
+userRouter.get("/:user_id", async (ctx) => {
+  const user_id = ctx.params.user_id;
+  if (!user_id) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const user = await queryUser(user_id);
+  if (!user) {
+    ctx.response.status = 404;
+    return;
+  }
+
+  ctx.response.body = user;
+  ctx.response.status = 200;
 });
