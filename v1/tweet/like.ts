@@ -4,19 +4,6 @@ import { extractIds } from "./tweetRouter.ts";
 const router = new Router();
 export default router;
 
-// Get likes of a tweet
-router.get("/like", async (ctx) => {
-  const { tweet_id, status } = await extractIds(ctx);
-  if (!tweet_id) {
-    ctx.response.status = status;
-    return;
-  }
-
-  const tweet = await queryLikes(tweet_id);
-  ctx.response.body = tweet;
-  ctx.response.status = 200;
-});
-
 // Like / unlike a tweet
 router.put("/like", async (ctx) => {
     const { user_id, tweet_id, status } = await extractIds(ctx);
@@ -35,4 +22,17 @@ router.put("/like", async (ctx) => {
     }
     
     ctx.response.status = 200;
+});
+
+// Get likes of a tweet
+router.get("/like/all", async (ctx) => {
+  const { tweet_id, status } = await extractIds(ctx);
+  if (!tweet_id) {
+    ctx.response.status = status;
+    return;
+  }
+
+  const tweet = await queryLikes(tweet_id);
+  ctx.response.body = tweet;
+  ctx.response.status = 200;
 });
