@@ -8,6 +8,14 @@ export async function queryLikes(tweet_id: string) {
     `).rows.flat();
 }
 
+export async function queryLikedBy(tweet_id: string, user_id: string) {
+  return (await client.queryArray`
+        SELECT author_id
+        FROM likes
+        WHERE tweet_id = ${tweet_id} AND author_id = ${user_id}
+    `).rows.length > 0;
+}
+
 export async function createLike(tweet_id: string, user_id: string) {
   await client.queryArray`
             INSERT INTO likes (tweet_id, author_id)
