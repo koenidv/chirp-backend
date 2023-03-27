@@ -3,6 +3,25 @@ import { createUser, queryUser } from "../../db/users.ts";
 const userRouter = new Router();
 export default userRouter;
 
+import followers from "./followers.ts";
+userRouter.use("/:user_id", followers.routes(), followers.allowedMethods());
+
+export async function extractIds(
+  ctx: any,
+): Promise<
+  { user_id: string | undefined; ref_id: string | undefined; status: number }
+> {
+  const user_id = await ctx.state.session.get("user_id");
+  if (!user_id) {
+    return { user_id: undefined, ref_id: undefined, status: 401 };
+  }
+  const tweet_id = ctx.params.user_id;
+  if (!tweet_id) {
+    return { user_id: user_id, ref_id: undefined, status: 400 };
+  }
+  return { user_id: user_id, ref_id: tweet_id, status: 200 };
+}
+
 userRouter.post("/", async (ctx) => {
   const body = await ctx.request.body().value;
   const username = body.get("username");
