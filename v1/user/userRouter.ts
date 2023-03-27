@@ -4,7 +4,9 @@ const userRouter = new Router();
 export default userRouter;
 
 import followers from "./followers.ts";
+import follow from "./follow.ts";
 userRouter.use("/:user_id", followers.routes(), followers.allowedMethods());
+userRouter.use("/:user_id", follow.routes(), follow.allowedMethods());
 
 export async function extractIds(
   ctx: any,
