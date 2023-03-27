@@ -5,6 +5,8 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(24) NOT NULL UNIQUE,
     displayname VARCHAR(36) NOT NULL,
     profile_image_url VARCHAR,
+    bio VARCHAR,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id)
 );`;
 
