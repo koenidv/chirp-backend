@@ -42,7 +42,8 @@ export async function createUser(
 }
 
 export async function queryUser(user_id: string) {
-  const field = user_id.match(/^\d{14}$/) ? "user_id" : "username";
+  const field = user_id.match(/^\d+$/) ? "user_id" : "username";
+  console.log(field, user_id)
   // fixme can only query for user ids, not usernames, because field is interpreted as varchar, not column
   return (
     await client.queryObject<UserData>`
@@ -51,7 +52,10 @@ export async function queryUser(user_id: string) {
         (SELECT COUNT(*) FROM follows WHERE follows.author_id = users.user_id) AS count_followers,
         (SELECT COUNT(*) FROM follows WHERE follows.follower_id = users.user_id) AS count_followings
       FROM users
-      WHERE users.user_id = ${user_id};
+      WHERE CASE ${field}
+        WHEN 'user_id' THEN users.user_id = ${field == "user_id" ? user_id : 0}
+        WHEN 'username' THEN users.username = ${user_id}
+      END;
   `
   ).rows[0];
 }
