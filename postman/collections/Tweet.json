@@ -1,0 +1,302 @@
+{
+	"info": {
+		"_postman_id": "aa33ce80-01ef-42a7-930e-dae9e4b20a0a",
+		"name": "Tweet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "18739960-aa33ce80-01ef-42a7-930e-dae9e4b20a0a"
+	},
+	"item": [
+		{
+			"name": "Likes",
+			"item": [
+				{
+					"name": "Like a tweet",
+					"id": "a221c9f3-8499-4ec3-97ce-0385ec642c4e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "like",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/v1/tweet/72969718891000/like",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"tweet",
+								"72969718891000",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unlike a tweet",
+					"id": "36fce45c-d62f-40f4-b53b-1596d1cc40f6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "like",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/v1/tweet/72969718891000/like",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"tweet",
+								"72969718891000",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Liked a tweet",
+					"id": "0bcf5786-5cfe-4042-ae18-6047112ca77e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/tweet/72969718891000/like",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"tweet",
+								"72969718891000",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All likes on a tweet",
+					"id": "0f480e6e-0ca7-41c6-9060-3fb64f96c5fb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/tweet/72969718891000/like/all",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"tweet",
+								"72969718891000",
+								"like",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "e57c822a-e664-47bf-a45a-ca111b65e67e"
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Create comment on tweet",
+					"id": "6b4c0858-6e32-479e-84fe-489588d6c01b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "Comment on this wonderful, tweet commas and more",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/v1/tweet/72969718891000/comment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"tweet",
+								"72969718891000",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query comments on tweet",
+					"id": "e8b0878e-329f-4ebc-90ff-735633fd3539",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/tweet/72969718891000/comment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"tweet",
+								"72969718891000",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "4e892afe-1755-4b5c-bd3e-4259aa342edc"
+		},
+		{
+			"name": "Create tweet",
+			"id": "30ae6694-0db2-4131-b1c7-ac4b0f305a29",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "test with mentions, and, commas",
+							"type": "text"
+						},
+						{
+							"key": "mentions",
+							"value": "[5,6]",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/v1/tweet",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tweet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query subscribed",
+			"id": "1d99a29d-1609-40f5-ad79-de3541825f28",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tweet",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tweet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query subscribed subribed",
+			"id": "71de9cfd-4cdb-449f-9a22-50e2007cf5ef",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tweet/extend",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tweet",
+						"extend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query by tweet id",
+			"id": "6499165c-be86-4079-a178-b50ea1484ab3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tweet/72969718891000",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tweet",
+						"72969718891000"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
