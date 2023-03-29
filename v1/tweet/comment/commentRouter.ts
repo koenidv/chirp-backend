@@ -5,8 +5,8 @@ export default router;
 
 import comment from "./comment.ts";
 import like from "./like.ts";
-router.use("/comment", comment.routes(), comment.allowedMethods());
-router.use("/comment/:comment_id", like.routes(), like.allowedMethods());
+router.use("", comment.routes(), comment.allowedMethods());
+router.use("/:comment_id", like.routes(), like.allowedMethods());
 
 export async function extractIds(
   ctx: any,
