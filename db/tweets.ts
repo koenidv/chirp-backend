@@ -80,3 +80,18 @@ export async function queryTweetsSubscribedExtended(
 
   return tweets.rows;
 }
+
+export async function queryTweetsByUserId(
+  user_id: string,
+): Promise<Tweet[]> {
+  const tweets = await client.queryObject<Tweet>`
+    SELECT t.tweet_id, t.author_id, t.content, t.created_at,
+      (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
+      (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
+      (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+    FROM tweets as t
+      WHERE t.author_id = ${user_id}
+    GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
+
+  return tweets.rows;
+}

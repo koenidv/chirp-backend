@@ -5,8 +5,10 @@ export default userRouter;
 
 import followers from "./followers.ts";
 import follow from "./follow.ts";
+import tweets from "./tweets.ts";
 userRouter.use("/:user_id", followers.routes(), followers.allowedMethods());
 userRouter.use("/:user_id", follow.routes(), follow.allowedMethods());
+userRouter.use("/:user_id", tweets.routes(), tweets.allowedMethods());
 
 export async function extractIds(
   ctx: any,
