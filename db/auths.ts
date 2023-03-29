@@ -25,7 +25,8 @@ export async function createEmailAuth(
   const auth_id =
     (await client.queryObject<{ auth_id: bigint }>`INSERT INTO auths 
     (user_id, email, passwordhash) 
-    VALUES (${userid || null}, ${email}, ${passwordhash})`).rows[0].auth_id;
+    VALUES (${userid || null}, ${email}, ${passwordhash})
+    RETURNING auth_id`).rows[0].auth_id;
 
   return auth_id;
 }
