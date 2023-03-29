@@ -67,7 +67,6 @@ export async function queryTweetsSubscribedExtended(
 ): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
   // todo include own tweets here, even if no followings follow self
-  // todo include tweets from own followings
   // todo include retweets
 
   const tweets = await client.queryObject<Tweet>`
@@ -77,7 +76,7 @@ export async function queryTweetsSubscribedExtended(
       (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
     FROM follows as f
       LEFT JOIN follows as f2 on f.following_id = f2.follower_id
-      LEFT JOIN tweets t on f2.following_id = t.author_id
+      LEFT JOIN tweets t on f2.following_id = t.author_id OR f.following_id = t.author_id
     WHERE f.follower_id = ${user_id}
     GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
 
