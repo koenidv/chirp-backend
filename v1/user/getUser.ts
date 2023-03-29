@@ -25,3 +25,20 @@ router.get("/:user_id", async (ctx) => {
   ctx.response.body = user;
   ctx.response.status = 200;
 });
+
+router.get("/me", async (ctx) => {
+  const user_id = await ctx.state.session.get("user_id");
+  if (!user_id) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  const user = await queryUser(user_id);
+  if (!user) {
+    ctx.response.status = 404;
+    return;
+  }
+
+  ctx.response.body = user;
+  ctx.response.status = 200;
+});
