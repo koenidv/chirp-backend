@@ -26,7 +26,8 @@ export async function queryComments(tweet_id: string) {
   return (await client.queryObject<
     { comment_id: string; author_id: string; content: string; created_at: Date }
   >`
-        SELECT comment_id, author_id, content, created_at
+        SELECT comment_id, author_id, content, created_at,
+          (SELECT COUNT(*) FROM comment_likes WHERE comment_likes.comment_id = comments.comment_id) AS likes
         FROM comments
         WHERE tweet_id = ${tweet_id}
     `).rows;
