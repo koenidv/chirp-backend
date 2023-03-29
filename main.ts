@@ -21,7 +21,10 @@ router.use("/v1", v1Router.routes(), v1Router.allowedMethods());
 
 const app = new Application<AppState>();
 
-app.use(oakCors())
+app.use(oakCors({
+  origin: /.*/,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+}))
 // @ts-ignore - Session is not correctly typed
 app.use(Session.initMiddleware())
 app.use(router.routes());
