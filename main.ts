@@ -21,10 +21,10 @@ router.use("/v1", v1Router.routes(), v1Router.allowedMethods());
 
 const app = new Application<AppState>();
 
+app.use(oakCors())
 // @ts-ignore - Session is not correctly typed
 app.use(Session.initMiddleware())
 app.use(router.routes());
-app.use(oakCors())
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
   console.log(
