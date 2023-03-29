@@ -46,6 +46,8 @@ export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
 
 export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
+  // todo include own tweets here
+  // todo include retweets
 
   const tweets = await client.queryObject<Tweet>`
   SELECT t.tweet_id, t.author_id, t.content, t.created_at,
@@ -56,6 +58,28 @@ export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
     LEFT JOIN tweets t on f.following_id = t.author_id
   WHERE f.follower_id = ${user_id}
   GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
+
+  return tweets.rows;
+}
+
+export async function queryTweetsSubscribedExtended(
+  user_id: string,
+): Promise<Tweet[]> {
+  // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
+  // todo include own tweets here, even if no followings follow self
+  // todo include tweets from own followings
+  // todo include retweets
+
+  const tweets = await client.queryObject<Tweet>`
+    SELECT t.tweet_id, t.author_id, t.content, t.created_at,
+      (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
+      (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
+      (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+    FROM follows as f
+      LEFT JOIN follows as f2 on f.following_id = f2.follower_id
+      LEFT JOIN tweets t on f2.following_id = t.author_id
+    WHERE f.follower_id = ${user_id}
+    GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
 
   return tweets.rows;
 }

@@ -4,6 +4,7 @@ import {
   createTweet,
   queryTweet,
   queryTweetsSubscribed,
+queryTweetsSubscribedExtended,
 } from "../../db/tweets.ts";
 const router = new Router();
 export default router;
@@ -76,6 +77,16 @@ router.get("/", async (ctx) => {
   }
 
   ctx.response.body = await queryTweetsSubscribed(user_id);
+});
+
+router.get("/extend", async (ctx) => {
+  const user_id = await ctx.state.session.get("user_id");
+  if (!user_id) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = await queryTweetsSubscribedExtended(user_id);
 });
 
 // Get a tweet
