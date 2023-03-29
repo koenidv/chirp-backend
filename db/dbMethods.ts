@@ -21,6 +21,6 @@ export function isUsernameAllowed(username: string) {
   if (anyUnescaped(username)) return false;
   if (username.match(/^\d*$/)) return false;
   if (!username.match(/^([a-zA-Z0-9]+[._-]?)+$/)) return false;
-  if (prohibitedUsernames.includes(username)) return false;
+  if (prohibitedUsernames.includes(username.toLocaleLowerCase())) return false;
   return true;
 }

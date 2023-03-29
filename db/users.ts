@@ -21,7 +21,8 @@ export async function createUser(
   // auth_id is expected to be verified!
   if (
     anyUnescaped(username, displayname) || username.length > 24 ||
-    displayname.length > 36 || !isUsernameAllowed(username)
+    displayname.length > 36 || !isUsernameAllowed(username) ||
+    !isUsernameAllowed(displayname)
   ) return false;
 
   const transaction = client.createTransaction("createUser");
@@ -55,4 +56,34 @@ export async function queryUser(user_id: string) {
       END;
   `
   ).rows[0];
+}
+
+export async function overwriteUsername(user_id: string, username: string) {
+  if (
+    anyUnescaped(username) || username.length > 24 ||
+    !isUsernameAllowed(username)
+  ) return false;
+  await client.queryArray`
+    UPDATE users SET username = ${username} WHERE user_id = ${user_id}`;
+  return true;
+}
+
+export async function overwriteDisplayname(
+  user_id: string,
+  displayname: string,
+) {
+  if (
+    anyUnescaped(displayname) || displayname.length > 36 ||
+    !isUsernameAllowed(displayname)
+  ) return false;
+  await client.queryArray`
+    UPDATE users SET displayname = ${displayname} WHERE user_id = ${user_id}`;
+  return true;
+}
+
+export async function overwriteBio(user_id: string, bio: string) {
+  if (anyUnescaped(bio) || bio.length > 160) return false;
+  await client.queryArray`
+    UPDATE users SET bio = ${bio} WHERE user_id = ${user_id}`;
+  return true;
 }
