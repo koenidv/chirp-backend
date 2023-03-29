@@ -1,12 +1,12 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { createComment, queryComments } from "../../db/comments.ts";
-import { extractIds } from "./tweetRouter.ts";
+import { createComment, queryComments } from "../../../db/comments.ts";
+import { extractIds as extractIdsOuter } from "../tweetRouter.ts";
 const router = new Router();
 export default router;
 
 // Get comments on a tweet
 router.get("/comment", async (ctx) => {
-  const { tweet_id, status } = await extractIds(ctx);
+  const { tweet_id, status } = await extractIdsOuter(ctx);
   if (!tweet_id) {
     ctx.response.status = status;
     return;
@@ -19,7 +19,7 @@ router.get("/comment", async (ctx) => {
 
 // Create a comment on a tweet
 router.post("/comment", async (ctx) => {
-  const { user_id, tweet_id, status } = await extractIds(ctx);
+  const { user_id, tweet_id, status } = await extractIdsOuter(ctx);
   if (!user_id || !tweet_id) {
     ctx.response.status = status;
     return;

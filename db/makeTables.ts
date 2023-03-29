@@ -86,6 +86,21 @@ client
   .queryArray`COMMENT ON COLUMN comments.comment_id IS 'Generate snowflake id';`;
 client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON comments(tweet_id);`;	
 
+client.queryArray`CREATE TABLE IF NOT EXISTS comment_likes (
+    author_id INT NOT NULL,
+    comment_id BIGINT NOT NULL,
+    PRIMARY KEY (author_id, comment_id),
+    CONSTRAINT fk_user_id
+        FOREIGN KEY(author_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_comment_id
+        FOREIGN KEY(comment_id)
+            REFERENCES comments(comment_id)
+            ON DELETE CASCADE
+);`;
+client.queryArray`CREATE INDEX IF NOT EXISTS comment_id ON comment_likes(comment_id);`;
+
 client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
     retweet_id BIGINT UNIQUE,
     author_id INT NOT NULL,
