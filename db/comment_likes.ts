@@ -27,6 +27,6 @@ export async function createLike(comment_id: string, user_id: string) {
 export async function deleteLike(comment_id: string, user_id: string) {
   await client.queryArray`
                 DELETE FROM comment_likes
-                WHERE tweet_id = ${comment_id} AND author_id = ${user_id}
+                WHERE comment_id = ${comment_id} AND author_id = ${user_id}
             `;
 }
