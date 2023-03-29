@@ -1,5 +1,5 @@
 import client from "./db.ts";
-import { anyUnescaped } from "./dbMethods.ts";
+import { anyUnescaped, isUsernameAllowed } from "./dbMethods.ts";
 
 export type UserData = {
   user_id: bigint;
@@ -21,11 +21,8 @@ export async function createUser(
   // auth_id is expected to be verified!
   if (
     anyUnescaped(username, displayname) || username.length > 24 ||
-    displayname.length > 36
-  ) {
-    // may not contain /["'&<>]/
-    return false;
-  }
+    displayname.length > 36 || !isUsernameAllowed(username)
+  ) return false;
 
   const transaction = client.createTransaction("createUser");
   await transaction.begin();
@@ -43,7 +40,7 @@ export async function createUser(
 
 export async function queryUser(user_id: string) {
   const field = user_id.match(/^\d+$/) ? "user_id" : "username";
-  console.log(field, user_id)
+  console.log(field, user_id);
   // fixme can only query for user ids, not usernames, because field is interpreted as varchar, not column
   return (
     await client.queryObject<UserData>`
