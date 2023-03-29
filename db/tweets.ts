@@ -45,18 +45,17 @@ export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
 }
 
 export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
-  // todo join with follows table, currently just queries all tweets
-  // todo join comments
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
 
   const tweets = await client.queryObject<Tweet>`
-  SELECT DISTINCT t.tweet_id, t.author_id, t.content, t.created_at, count(like_id), array_agg(m.user_id) AS mentions
-  FROM tweets as t
-      LEFT JOIN likes l on t.tweet_id = l.tweet_id
-      LEFT JOIN mentions m on t.tweet_id = m.tweet_id
+  SELECT t.tweet_id, t.author_id, t.content, t.created_at,
+    (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
+    (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
+    (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+  FROM follows as f
+    LEFT JOIN tweets t on f.following_id = t.author_id
+  WHERE f.follower_id = ${user_id}
   GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
-
-  console.log(tweets.rows);
 
   return tweets.rows;
 }
