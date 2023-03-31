@@ -17,7 +17,6 @@ const app = new Application();
 app.use(oakCors({
   origin: /.*/,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
 }));
 app.use(router.routes());
 
