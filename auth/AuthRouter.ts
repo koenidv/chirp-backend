@@ -9,16 +9,7 @@ const MFARouter = new Router();
 export default MFARouter;
 
 MFARouter.post("/register", async (ctx: Context) => {
-  const body = await ctx.request.body().value;
-
-  let email, password;
-  if (body instanceof URLSearchParams) {
-    email = body.get("email");
-    password = body.get("password");
-  } else {
-    email = body.email;
-    password = body.password;
-  }
+  const { email, password } = await ctx.request.body().value;
 
   if (!email || !password) {
     ctx.response.status = 400;
@@ -48,10 +39,7 @@ MFARouter.post("/register", async (ctx: Context) => {
 });
 
 MFARouter.post("/login", async (ctx: Context) => {
-  const body = await ctx.request.body().value;
-
-  const email = body.get("email");
-  const password = body.get("password");
+  const { email, password } = await ctx.request.body().value;
 
   if (!email || !password) {
     ctx.response.status = 400;

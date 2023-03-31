@@ -9,9 +9,7 @@ const router = new Router();
 export default router;
 
 router.post("/", async (ctx) => {
-  const body = await ctx.request.body().value;
-  const username = body.get("username");
-  const displayname = body.get("displayname");
+  const { username, displayname } = await ctx.request.body().value;
 
   if (
     !username ||
@@ -51,11 +49,8 @@ router.put("/", async (ctx) => {
     return;
   }
 
-  const body = await ctx.request.body().value;
-  const username = body.get("username");
-  const displayname = body.get("displayname");
-  const bio = body.get("bio");
-
+  const { username, displayname, bio} = await ctx.request.body().value;
+  
   ctx.response.status = 400;
 
   if (username) {

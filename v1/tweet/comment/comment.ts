@@ -30,8 +30,7 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  const body = await ctx.request.body().value;
-  const content: string = body.get("content");
+  const { content } = await ctx.request.body().value;
 
   if (!content) {
     ctx.response.status = 400;

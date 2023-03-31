@@ -36,7 +36,6 @@ export async function extractIds(
 
 // Creates a tweet
 router.post("/", async (ctx) => {
-  const body = await ctx.request.body().value;
   const user_id = await ctx.state.session.get("user_id");
 
   if (!user_id) {
@@ -44,8 +43,7 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  const content: string = body.get("content");
-  const mentions: bigint[] = JSON.parse(body.get("mentions"));
+  const { content, mentions } = await ctx.request.body().value;
 
   if (!content) {
     ctx.response.status = 400;
