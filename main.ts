@@ -2,12 +2,7 @@ import { Application, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import mockRouter from "./mock/MockRouter.ts";
 import v1Router from "./v1/v1Router.ts";
-import { Session } from "https://deno.land/x/oak_sessions/mod.ts";
 import "https://deno.land/std@0.180.0/dotenv/load.ts";
-
-type AppState = {
-  session: Session;
-};
 
 const router = new Router();
 router.get("/", (ctx) => {
@@ -17,15 +12,13 @@ router.get("/", (ctx) => {
 router.use("/mock", mockRouter.routes(), mockRouter.allowedMethods());
 router.use("/v1", v1Router.routes(), v1Router.allowedMethods());
 
-const app = new Application<AppState>();
+const app = new Application();
 
 app.use(oakCors({
   origin: /.*/,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 }));
-// @ts-ignore - Session is not correctly typed
-app.use(Session.initMiddleware(undefined, { sameSite: "none" }));
 app.use(router.routes());
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
