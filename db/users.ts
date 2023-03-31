@@ -21,8 +21,7 @@ export async function createUser(
   // auth_id is expected to be verified!
   if (
     anyUnescaped(username, displayname) || username.length > 24 ||
-    displayname.length > 36 || !isUsernameAllowed(username) ||
-    !isUsernameAllowed(displayname)
+    displayname.length > 36 || !isUsernameAllowed(username)
   ) {
     return false;
   }
