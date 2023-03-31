@@ -1,6 +1,6 @@
 import { email as emailvalidate } from "https://deno.land/x/validation@v0.4.0/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
-import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
+import { create, verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 
 export function validateEmailSchema(email: string): boolean {
   return emailvalidate.valid(email);
@@ -17,6 +17,20 @@ export function comparePassword(
   hash: string,
 ): boolean {
   return bcrypt.compareSync(password, hash);
+}
+
+export async function createJWT(
+  auth_id: string,
+  user_id: string | null,
+): Promise<string> {
+  return await create(
+    { alg: "HS512", typ: "JWT" },
+    {
+      auth_id: auth_id,
+      user_id: user_id,
+    },
+    Deno.env.get("JWT_KEY")!,
+  );
 }
 
 export async function authenticate(ctx: any): Promise<string | false> {

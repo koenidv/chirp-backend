@@ -5,6 +5,7 @@ import {
   checkEmailAuth,
   createEmailAuth,
 } from "../../db/auths.ts";
+import { createJWT } from "../../auth/authMethods.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
@@ -39,17 +40,8 @@ MFARouter.post("/register", async (ctx: Context) => {
     return;
   }
 
-  const jwt = await create(
-    { alg: "HS512", typ: "JWT" },
-    {
-      auth_id: auth_id,
-      user_id: null,
-    },
-    Deno.env.get("JWT_KEY")!,
-  );
-
   ctx.response.body = {
-    jwt: jwt,
+    jwt: await createJWT(auth_id.toString(), null),
   };
 });
 
@@ -68,17 +60,11 @@ MFARouter.get("/login", async (ctx: Context) => {
     return;
   }
 
-  const jwt = await create(
-    { alg: "HS512", typ: "JWT" },
-    {
-      auth_id: validatedUser.auth_id,
-      user_id: validatedUser.user_id,
-    },
-    Deno.env.get("JWT_KEY")!,
-  );
-
   ctx.response.body = {
-    jwt: jwt,
+    jwt: await createJWT(
+      validatedUser.auth_id.toString(),
+      validatedUser.user_id.toString(),
+    ),
   };
 });
 
