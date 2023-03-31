@@ -11,6 +11,7 @@ export default router;
 
 import likesRouter from "./like.ts";
 import commentRouter from "./comment/commentRouter.ts";
+import { authenticate } from "../../auth/authMethods.ts";
 router.use("/:tweet_id", likesRouter.routes(), likesRouter.allowedMethods());
 router.use("/:tweet_id/comment", commentRouter.routes(), commentRouter.allowedMethods());
 
@@ -19,8 +20,8 @@ export async function extractIds(
 ): Promise<
   { user_id: string | undefined; tweet_id: string | undefined; status: number }
 > {
-  const user_id = await ctx.state.session.get("user_id");
-  if (!await ctx.state.session.get("user_id")) {
+  const user_id = await authenticate(ctx);
+  if (!user_id) {
     // this check is optional since tweets are public
     // might remove later when platform may be accessible without account
     return { user_id: undefined, tweet_id: undefined, status: 401 };
@@ -36,7 +37,7 @@ export async function extractIds(
 
 // Creates a tweet
 router.post("/", async (ctx) => {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
 
   if (!user_id) {
     ctx.response.status = 401;
@@ -68,7 +69,7 @@ router.post("/", async (ctx) => {
 });
 
 router.get("/", async (ctx) => {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
   if (!user_id) {
     ctx.response.status = 401;
     return;
@@ -78,7 +79,7 @@ router.get("/", async (ctx) => {
 });
 
 router.get("/extend", async (ctx) => {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
   if (!user_id) {
     ctx.response.status = 401;
     return;

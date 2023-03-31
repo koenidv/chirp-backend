@@ -8,6 +8,7 @@ import updateUser from "./updateUser.ts";
 import followers from "./followers.ts";
 import follow from "./follow.ts";
 import tweets from "./tweets.ts";
+import { authenticate } from "../../auth/authMethods.ts";
 userRouter.use("", getUser.routes(), getUser.allowedMethods());
 userRouter.use("", updateUser.routes(), updateUser.allowedMethods());
 userRouter.use("/:user_id", followers.routes(), followers.allowedMethods());
@@ -19,7 +20,7 @@ export async function extractIds(
 ): Promise<
   { user_id: string | undefined; ref_id: string | undefined; status: number }
 > {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
   if (!user_id) {
     return { user_id: undefined, ref_id: undefined, status: 401 };
   }

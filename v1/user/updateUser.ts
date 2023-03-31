@@ -5,33 +5,38 @@ import {
   overwriteDisplayname,
   overwriteUsername,
 } from "../../db/users.ts";
+import { authenticate, authenticateIncludingAuthId } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
 router.post("/", async (ctx) => {
   const { username, displayname } = await ctx.request.body().value;
-
-  if (
-    !username ||
-    !displayname ||
-    await ctx.state.session.get("user_id")
-  ) {
-    ctx.response.status = 400;
-    return;
-  }
-  if (!await ctx.state.session.get("auth_id")) {
+  const auth = await authenticateIncludingAuthId(ctx);
+  
+  if (!auth) {
     ctx.response.status = 401;
     return;
   }
 
+  if (
+    !username ||
+    !displayname ||
+    auth.user_id !== null
+  ) {
+    ctx.response.status = 400;
+    return;
+  }
+
   const success = await createUser(
-    await ctx.state.session.get("auth_id"),
+    auth.auth_id,
     username,
     displayname,
   );
 
   if (success) {
     ctx.state.session.set("user_id", success);
+
+    // todo recreate jwt here
 
     ctx.response.body = {
       user_id: success.toString(), // toString to serialize bigint
@@ -43,7 +48,7 @@ router.post("/", async (ctx) => {
 });
 
 router.put("/", async (ctx) => {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
   if (!user_id) {
     ctx.response.status = 401;
     return;
