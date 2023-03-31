@@ -1,5 +1,5 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { create, verify } from "https://deno.land/x/djwt@v2.2/mod.ts"
+import { create, verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,
@@ -50,7 +50,26 @@ MFARouter.post("/register", async (ctx: Context) => {
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
-  ctx.response.body = `Currently logged in with user id 
-  ${await ctx.state.session.get("user_id")} (auth id 
-      ${await ctx.state.session.get("auth_id")})`;
+  const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
+  if (!jwt) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  let payload;
+  try {
+    payload = await verify(
+      jwt,
+      Deno.env.get("JWT_KEY")!,
+      "HS512",
+    );
+  } catch (_e) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = {
+    auth_id: payload.auth_id,
+    user_id: payload.user_id,
+  };
 });
