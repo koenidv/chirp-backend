@@ -63,7 +63,7 @@ MFARouter.post("/login", async (ctx: Context) => {
   ctx.response.body = {
     jwt: await createJWT(
       validatedUser.auth_id.toString(),
-      validatedUser.user_id.toString(),
+      validatedUser.user_id ? validatedUser.user_id.toString() : null,
     ),
   };
 });
