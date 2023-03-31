@@ -6,11 +6,13 @@ import {
 } from "../auth/authMethods.ts";
 import client from "./db.ts";
 
+export const AUTH_ID_DUPLICATE_EMAIL = -1n;
+
 export async function createEmailAuth(
   email: string,
   password: string,
   userid?: string,
-): Promise<bigint|false> {
+): Promise<bigint | false> {
   // userid is expected to be verified!
 
   if (anyUnescaped(email, password)) {
@@ -21,13 +23,14 @@ export async function createEmailAuth(
 
   const passwordhash = await hashPassword(password);
 
-  // fixme creating duplicate accounts crashes the server
-  const auth_id =
+  const auth_id: bigint | undefined =
     (await client.queryObject<{ auth_id: bigint }>`INSERT INTO auths 
     (user_id, email, passwordhash) 
     VALUES (${userid || null}, ${email}, ${passwordhash})
-    RETURNING auth_id`).rows[0].auth_id;
+    ON CONFLICT DO NOTHING
+    RETURNING auth_id`).rows[0]?.auth_id;
 
+  if (auth_id === undefined) return AUTH_ID_DUPLICATE_EMAIL;
   return auth_id;
 }
 

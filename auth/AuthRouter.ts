@@ -1,5 +1,9 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { checkEmailAuth, createEmailAuth } from "../db/auths.ts";
+import {
+  AUTH_ID_DUPLICATE_EMAIL,
+  checkEmailAuth,
+  createEmailAuth,
+} from "../db/auths.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
@@ -21,10 +25,26 @@ MFARouter.post("/register", async (ctx: Context) => {
     return;
   }
 
-  const success = await createEmailAuth(email, password);
-  if (success) ctx.state.session.set("auth_id", success);
+  const auth_id = await createEmailAuth(email, password);
 
-  ctx.response.status = success ? 200 : 400;
+  if (!auth_id) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  if (auth_id === AUTH_ID_DUPLICATE_EMAIL) {
+    ctx.response.status = 409;
+    ctx.response.body = {
+      error: "auth-duplicate-email",
+      message: "Email already registered",
+      detail: "This email is already associated with an account",
+    };
+    return;
+  }
+
+  if (auth_id) ctx.state.session.set("auth_id", auth_id);
+
+  ctx.response.status = auth_id ? 200 : 400;
 });
 
 MFARouter.post("/login", async (ctx: Context) => {
