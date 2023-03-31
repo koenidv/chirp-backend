@@ -23,7 +23,9 @@ export async function createUser(
     anyUnescaped(username, displayname) || username.length > 24 ||
     displayname.length > 36 || !isUsernameAllowed(username) ||
     !isUsernameAllowed(displayname)
-  ) return false;
+  ) {
+    return false;
+  }
 
   const transaction = client.createTransaction("createUser");
   await transaction.begin();
