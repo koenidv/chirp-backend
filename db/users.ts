@@ -42,8 +42,6 @@ export async function createUser(
 
 export async function queryUser(user_id: string) {
   const field = user_id.match(/^\d+$/) ? "user_id" : "username";
-  console.log(field, user_id);
-  // fixme can only query for user ids, not usernames, because field is interpreted as varchar, not column
   return (
     await client.queryObject<UserData>`
       SELECT users.user_id, username, displayname, profile_image_url, bio, created_at,

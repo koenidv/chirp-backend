@@ -24,6 +24,7 @@ const app = new Application<AppState>();
 app.use(oakCors({
   origin: /.*/,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
 }))
 // @ts-ignore - Session is not correctly typed
 app.use(Session.initMiddleware())
