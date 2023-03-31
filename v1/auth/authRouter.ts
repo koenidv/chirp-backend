@@ -45,7 +45,7 @@ MFARouter.post("/register", async (ctx: Context) => {
   };
 });
 
-MFARouter.get("/login", async (ctx: Context) => {
+MFARouter.post("/login", async (ctx: Context) => {
   const { email, password } = await ctx.request.body().value;
 
   if (!email || !password) {
