@@ -8,7 +8,7 @@ import "https://deno.land/std@0.180.0/dotenv/load.ts";
 
 type AppState = {
   session: Session;
-}
+};
 
 const router = new Router();
 router.get("/", (ctx) => {
@@ -25,9 +25,9 @@ app.use(oakCors({
   origin: /.*/,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
-}))
+}));
 // @ts-ignore - Session is not correctly typed
-app.use(Session.initMiddleware())
+app.use(Session.initMiddleware(undefined, { sameSite: "none" }));
 app.use(router.routes());
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
@@ -39,7 +39,6 @@ app.addEventListener("listen", ({ hostname, port, secure }) => {
   );
 });
 app.listen({ port: 8000 });
-
 
 // Set up BigInt to be serialized in JSON.stringify
 interface BigInt {
