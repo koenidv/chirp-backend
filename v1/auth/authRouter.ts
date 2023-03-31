@@ -1,9 +1,11 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { create, verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,
   createEmailAuth,
 } from "../../db/auths.ts";
+import { createJWT } from "../../auth/authMethods.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
@@ -33,12 +35,17 @@ MFARouter.post("/register", async (ctx: Context) => {
     return;
   }
 
-  if (auth_id) ctx.state.session.set("auth_id", auth_id);
+  if (!auth_id) {
+    ctx.response.status = 400;
+    return;
+  }
 
-  ctx.response.status = auth_id ? 200 : 400;
+  ctx.response.body = {
+    jwt: await createJWT(auth_id.toString(), null),
+  };
 });
 
-MFARouter.post("/login", async (ctx: Context) => {
+MFARouter.get("/login", async (ctx: Context) => {
   const { email, password } = await ctx.request.body().value;
 
   if (!email || !password) {
@@ -46,24 +53,42 @@ MFARouter.post("/login", async (ctx: Context) => {
     return;
   }
 
-  const check = await checkEmailAuth(email, password);
+  const validatedUser = await checkEmailAuth(email, password);
 
-  if (check) {
-    ctx.state.session.set("auth_id", check.auth_id);
-    ctx.state.session.set("user_id", check.user_id);
-    ctx.response.status = 200;
-  } else {
+  if (!validatedUser) {
     ctx.response.status = 401;
+    return;
   }
-});
 
-MFARouter.get("/logout", async (ctx: Context) => {
-  await ctx.state.session.deleteSession();
-  ctx.response.status = 200;
+  ctx.response.body = {
+    jwt: await createJWT(
+      validatedUser.auth_id.toString(),
+      validatedUser.user_id.toString(),
+    ),
+  };
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
-  ctx.response.body = `Currently logged in with user id 
-  ${await ctx.state.session.get("user_id")} (auth id 
-      ${await ctx.state.session.get("auth_id")})`;
+  const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
+  if (!jwt) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  let payload;
+  try {
+    payload = await verify(
+      jwt,
+      Deno.env.get("JWT_KEY")!,
+      "HS512",
+    );
+  } catch (_e) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = {
+    auth_id: payload.auth_id,
+    user_id: payload.user_id,
+  };
 });

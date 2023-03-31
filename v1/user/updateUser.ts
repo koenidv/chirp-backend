@@ -5,52 +5,62 @@ import {
   overwriteDisplayname,
   overwriteUsername,
 } from "../../db/users.ts";
+import {
+  authenticate,
+  authenticateIncludingAuthId,
+  createJWT,
+} from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
 router.post("/", async (ctx) => {
   const { username, displayname } = await ctx.request.body().value;
+  const auth = await authenticateIncludingAuthId(ctx);
 
-  if (
-    !username ||
-    !displayname ||
-    await ctx.state.session.get("user_id")
-  ) {
-    ctx.response.status = 400;
-    return;
-  }
-  if (!await ctx.state.session.get("auth_id")) {
+  if (!auth) {
     ctx.response.status = 401;
     return;
   }
 
-  const success = await createUser(
-    await ctx.state.session.get("auth_id"),
+  if (
+    !username ||
+    !displayname ||
+    auth.user_id !== null
+  ) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const user_id = await createUser(
+    auth.auth_id,
     username,
     displayname,
   );
 
-  if (success) {
-    ctx.state.session.set("user_id", success);
+  if (!user_id) {
+    ctx.response.status = 400;
+    return;
+  }
 
+  if (user_id) {
     ctx.response.body = {
-      user_id: success.toString(), // toString to serialize bigint
+      jwt: await createJWT(auth.auth_id, user_id.toString()),
+      user_id: user_id.toString(), // toString to serialize bigint
       username: username,
       displayname: displayname,
     };
   }
-  ctx.response.status = success ? 200 : 400;
 });
 
 router.put("/", async (ctx) => {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
   if (!user_id) {
     ctx.response.status = 401;
     return;
   }
 
-  const { username, displayname, bio} = await ctx.request.body().value;
-  
+  const { username, displayname, bio } = await ctx.request.body().value;
+
   ctx.response.status = 400;
 
   if (username) {

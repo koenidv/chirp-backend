@@ -1,5 +1,6 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import { queryUser, queryUsernameTaken } from "../../db/users.ts";
+import { authenticate } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
@@ -15,7 +16,7 @@ router.get("/istaken", async (ctx) => {
 });
 
 router.get("/me", async (ctx) => {
-  const user_id = await ctx.state.session.get("user_id");
+  const user_id = await authenticate(ctx);
   if (!user_id) {
     ctx.response.status = 401;
     return;
@@ -34,7 +35,7 @@ router.get("/me", async (ctx) => {
 router.get("/:user_id", async (ctx) => {
   // todo query users by username only and change route to /@:username
 
-  if (!await ctx.state.session.get("user_id")) {
+  if (!await authenticate(ctx)) {
     // user profiles are public, remove this check once we allow non-signed-in browsing
     ctx.response.status = 401;
     return;
