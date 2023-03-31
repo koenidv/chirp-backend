@@ -1,6 +1,10 @@
 import { email as emailvalidate } from "https://deno.land/x/validation@v0.4.0/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
-import { create, verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
+import {
+  create,
+  getNumericDate,
+  verify,
+} from "https://deno.land/x/djwt@v2.2/mod.ts";
 
 export function validateEmailSchema(email: string): boolean {
   return emailvalidate.valid(email);
@@ -28,6 +32,9 @@ export async function createJWT(
     {
       auth_id: auth_id,
       user_id: user_id,
+      iss: "https://api.chirp.koenidv.de",
+      iat: getNumericDate(0),
+      exp: getNumericDate(60 * 60 * 24 * 7), // expires after 1 week
     },
     Deno.env.get("JWT_KEY")!,
   );
