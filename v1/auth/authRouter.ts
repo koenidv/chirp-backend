@@ -3,7 +3,7 @@ import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,
   createEmailAuth,
-} from "../db/auths.ts";
+} from "../../db/auths.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
