@@ -58,6 +58,13 @@ export async function queryUser(user_id: string) {
   ).rows[0];
 }
 
+export async function queryUsernameTaken(username: string): Promise<boolean> {
+  return (
+    await client.queryObject<{ user_id: bigint }>`
+      SELECT user_id FROM users WHERE username = ${username}`
+  ).rows[0] !== undefined;
+}
+
 export async function overwriteUsername(user_id: string, username: string) {
   if (
     anyUnescaped(username) || username.length > 24 ||
