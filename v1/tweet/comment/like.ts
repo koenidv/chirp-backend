@@ -12,8 +12,7 @@ router.put("/like", async (ctx) => {
       return;
     }
   
-    const body = await ctx.request.body().value;
-    const like: string = body.get("like");
+    const like = await ctx.request.body().value;
   
     if (like === "true") {
       await createLike(comment_id!, user_id!);
