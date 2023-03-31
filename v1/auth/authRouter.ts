@@ -39,7 +39,7 @@ MFARouter.post("/register", async (ctx: Context) => {
     return;
   }
 
-  ctx.response.body = await create(
+  const jwt = await create(
     { alg: "HS512", typ: "JWT" },
     {
       auth_id: auth_id,
@@ -47,6 +47,10 @@ MFARouter.post("/register", async (ctx: Context) => {
     },
     Deno.env.get("JWT_KEY")!,
   );
+
+  ctx.response.body = {
+    jwt: jwt,
+  };
 });
 
 MFARouter.get("/login", async (ctx: Context) => {
@@ -64,7 +68,7 @@ MFARouter.get("/login", async (ctx: Context) => {
     return;
   }
 
-  ctx.response.body = await create(
+  const jwt = await create(
     { alg: "HS512", typ: "JWT" },
     {
       auth_id: validatedUser.auth_id,
@@ -72,6 +76,10 @@ MFARouter.get("/login", async (ctx: Context) => {
     },
     Deno.env.get("JWT_KEY")!,
   );
+
+  ctx.response.body = {
+    jwt: jwt,
+  };
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
