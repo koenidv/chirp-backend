@@ -49,6 +49,31 @@ MFARouter.post("/register", async (ctx: Context) => {
   );
 });
 
+MFARouter.get("/login", async (ctx: Context) => {
+  const { email, password } = await ctx.request.body().value;
+
+  if (!email || !password) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const validatedUser = await checkEmailAuth(email, password);
+
+  if (!validatedUser) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = await create(
+    { alg: "HS512", typ: "JWT" },
+    {
+      auth_id: validatedUser.auth_id,
+      user_id: validatedUser.user_id,
+    },
+    Deno.env.get("JWT_KEY")!,
+  );
+});
+
 MFARouter.get("/whoami", async (ctx: Context) => {
   const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!jwt) {
