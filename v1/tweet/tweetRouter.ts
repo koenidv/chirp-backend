@@ -2,9 +2,10 @@ import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import { createMention } from "../../db/mentions.ts";
 import {
   createTweet,
+  deleteTweet,
   queryTweet,
   queryTweetsSubscribed,
-queryTweetsSubscribedExtended,
+  queryTweetsSubscribedExtended,
 } from "../../db/tweets.ts";
 const router = new Router();
 export default router;
@@ -13,7 +14,11 @@ import likesRouter from "./like.ts";
 import commentRouter from "./comment/commentRouter.ts";
 import { authenticate } from "../../auth/authMethods.ts";
 router.use("/:tweet_id", likesRouter.routes(), likesRouter.allowedMethods());
-router.use("/:tweet_id/comment", commentRouter.routes(), commentRouter.allowedMethods());
+router.use(
+  "/:tweet_id/comment",
+  commentRouter.routes(),
+  commentRouter.allowedMethods(),
+);
 
 export async function extractIds(
   ctx: any,
@@ -66,6 +71,18 @@ router.post("/", async (ctx) => {
 
   ctx.response.body = tweet_id;
   ctx.response.status = 200;
+});
+
+router.delete("/:tweet_id", async (ctx) => {
+  const { user_id, tweet_id, status } = await extractIds(ctx);
+  if (!user_id || !tweet_id) {
+    ctx.response.status = status;
+    return;
+  }
+
+  const deleted = await deleteTweet(user_id, tweet_id);
+
+  ctx.response.status = deleted ? 200 : 400;
 });
 
 router.get("/", async (ctx) => {

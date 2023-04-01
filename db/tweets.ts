@@ -29,6 +29,12 @@ export async function createTweet(
   return snowflake_id;
 }
 
+export async function deleteTweet(user_id: string, tweet_id: string) {
+  return (await client.queryArray`
+        DELETE FROM tweets WHERE author_id=${user_id} AND tweet_id=${tweet_id} RETURNING tweet_id`)
+    .rows[0] || false;
+}
+
 export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
   // all tweets are public, so no need to check if user is subscribed to author
 
