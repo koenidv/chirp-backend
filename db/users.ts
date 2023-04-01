@@ -40,6 +40,12 @@ export async function createUser(
   return user_id;
 }
 
+export async function deleteUser(user_id: string) {
+  // sideeffect: this will also delete all associated auth entries
+  await client.queryArray`
+    DELETE FROM users WHERE user_id=${user_id}`;
+}
+
 export async function queryUser(user_id: string) {
   const field = user_id.match(/^\d+$/) ? "user_id" : "username";
   return (

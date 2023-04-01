@@ -52,3 +52,7 @@ export async function checkEmailAuth(
     return { auth_id: result.rows[0].auth_id, user_id: result.rows[0].user_id };
   } else return false;
 }
+
+export async function deleteEmailAuth(auth_id: string) {
+  await client.queryObject`DELETE FROM auths WHERE auth_id=${auth_id} and user_id IS NULL`;
+}

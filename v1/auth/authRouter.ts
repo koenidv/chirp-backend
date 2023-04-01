@@ -1,11 +1,15 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { create, verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
+import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,
   createEmailAuth,
+  deleteEmailAuth,
 } from "../../db/auths.ts";
-import { createJWT } from "../../auth/authMethods.ts";
+import {
+  authenticateIncludingAuthId,
+  createJWT,
+} from "../../auth/authMethods.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
@@ -69,26 +73,30 @@ MFARouter.post("/login", async (ctx: Context) => {
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
-  const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
-  if (!jwt) {
-    ctx.response.status = 401;
-    return;
-  }
-
-  let payload;
-  try {
-    payload = await verify(
-      jwt,
-      Deno.env.get("JWT_KEY")!,
-      "HS512",
-    );
-  } catch (_e) {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
     ctx.response.status = 401;
     return;
   }
 
   ctx.response.body = {
-    auth_id: payload.auth_id,
-    user_id: payload.user_id,
+    auth_id: auth.auth_id,
+    user_id: auth.user_id,
   };
+});
+
+MFARouter.delete("/", async (ctx: Context) => {
+  // Can only be used if no user is associated. Use delete /user instead
+  
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  await deleteEmailAuth(auth.auth_id!);
+
+  // fixme jwt will still be valid even though auth doesn't exist anymore
+
+  ctx.response.status = 200;
 });

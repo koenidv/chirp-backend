@@ -1,6 +1,7 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import {
   createUser,
+  deleteUser,
   overwriteBio,
   overwriteDisplayname,
   overwriteUsername,
@@ -75,4 +76,19 @@ router.put("/", async (ctx) => {
     overwriteBio(user_id, bio);
     ctx.response.status = 200;
   }
+});
+
+router.delete("/", async (ctx) => {
+  // sideeffect: this will also delete all associated auth entries
+  const user_id = await authenticate(ctx);
+  if (!user_id) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  await deleteUser(user_id);
+
+  // fixme jwt will still be valid even though user doesn't exist anymore
+
+  ctx.response.status = 200;
 });
