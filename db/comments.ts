@@ -22,6 +22,12 @@ export async function createComment(
   return rows[0].comment_id;
 }
 
+export async function deleteComment(user_id: string, tweet_id: string) {
+  return (await client.queryArray`
+        DELETE FROM comments WHERE author_id=${user_id} AND comment_id=${tweet_id} RETURNING comment_id`)
+    .rows[0] || false;
+}
+
 export async function queryComments(tweet_id: string) {
   return (await client.queryObject<
     { comment_id: string; author_id: string; content: string; created_at: Date }

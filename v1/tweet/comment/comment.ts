@@ -1,6 +1,7 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import {
   createComment,
+  deleteComment,
   queryComment,
   queryComments,
 } from "../../../db/comments.ts";
@@ -44,6 +45,18 @@ router.post("/", async (ctx) => {
   }
 
   ctx.response.status = 200;
+});
+
+router.delete("/:comment_id", async (ctx) => {
+  const { user_id, comment_id, status } = await extractIds(ctx);
+  if (status !== 200) {
+    ctx.response.status = status;
+    return;
+  }
+
+  const deleted = await deleteComment(user_id!, comment_id!);
+
+  ctx.response.status = deleted ? 200 : 400;
 });
 
 router.get("/:comment_id", async (ctx) => {
