@@ -4,8 +4,8 @@ import { authenticate } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
-router.get("/istaken", async (ctx) => {
-  const username = (await ctx.request.body().value).get("username");
+router.get("/istaken/:user_id", async (ctx) => {
+  const username = ctx.params.user_id;
   if (!username) {
     ctx.response.status = 400;
     return;
