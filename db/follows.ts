@@ -41,3 +41,19 @@ export async function queryFollowsByUserIds(self_id: string, ref_id: string) {
         ) AS following
     `).rows[0][0];
 }
+
+export async function followUser(self_if: string, ref_id: string) {
+  return (await client.queryArray`
+        INSERT INTO follows (follower_id, following_id)
+        VALUES (${self_if}, ${ref_id})
+        ON CONFLICT DO NOTHING
+    `).rows;
+}
+
+export async function unfollowUser(self_if: string, ref_id: string) {
+  return (await client.queryArray`
+        DELETE FROM follows
+        WHERE follower_id = ${self_if} AND following_id = ${ref_id}
+        ON CONFLICT DO NOTHING
+    `).rows;
+}

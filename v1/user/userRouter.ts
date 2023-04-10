@@ -24,9 +24,9 @@ export async function extractIds(
   if (!user_id) {
     return { user_id: undefined, ref_id: undefined, status: 401 };
   }
-  const tweet_id = ctx.params.user_id;
-  if (!tweet_id) {
+  const ref_id = ctx.params.user_id;
+  if (!ref_id) {
     return { user_id: user_id, ref_id: undefined, status: 400 };
   }
-  return { user_id: user_id, ref_id: tweet_id, status: 200 };
+  return { user_id: user_id, ref_id: ref_id, status: 200 };
 }
