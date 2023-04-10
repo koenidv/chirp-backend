@@ -14,6 +14,9 @@ import {
 const MFARouter = new Router();
 export default MFARouter;
 
+import resetRouter from "./resetPassword.ts";
+MFARouter.use("/resetpassword", resetRouter.routes(), resetRouter.allowedMethods());
+
 MFARouter.post("/register", async (ctx: Context) => {
   const { email, password } = await ctx.request.body().value;
 
