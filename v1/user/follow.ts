@@ -22,7 +22,7 @@ router.post("/follow", async (ctx) => {
     ctx.response.status = status;
     return;
   }
-  const follow = ctx.request.body().value;
+  const follow = await ctx.request.body().value;
   if (follow === undefined) {
     ctx.response.status = 400;
     return;
