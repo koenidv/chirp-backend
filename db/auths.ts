@@ -21,7 +21,7 @@ export async function createEmailAuth(
   }
   if (!validateEmailSchema(email)) return false;
 
-  const passwordhash = await hashPassword(password);
+  const passwordhash = hashPassword(password);
 
   const auth_id: bigint | undefined =
     (await client.queryObject<{ auth_id: bigint }>`INSERT INTO auths 
@@ -58,8 +58,19 @@ export async function deleteEmailAuth(auth_id: string) {
     .queryObject`DELETE FROM auths WHERE auth_id=${auth_id} and user_id IS NULL`;
 }
 
+export async function updatePasswordForAuthId(
+  auth_id: string,
+  newpassword: string,
+) {
+  const passwordhash = hashPassword(newpassword);
+  await client
+    .queryObject`UPDATE auths SET passwordhash=${passwordhash} WHERE auth_id=${auth_id}`;
+}
+
 export async function queryAuthIdAndUsernameByEmail(email: string) {
-  return (await client.queryObject<{ auth_id: bigint; username: string | undefined }>`
+  return (await client.queryObject<
+    { auth_id: bigint; username: string | undefined }
+  >`
         SELECT auth_id, username FROM auths AS a
             LEFT JOIN users AS u ON u.user_id = a.user_id
         WHERE email = ${email}

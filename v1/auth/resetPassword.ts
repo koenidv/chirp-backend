@@ -4,7 +4,10 @@ import {
   generateTokenId,
   sendPasswordResetEmail,
 } from "../../auth/passwordResetMethods.ts";
-import { queryAuthIdAndUsernameByEmail } from "../../db/auths.ts";
+import {
+  queryAuthIdAndUsernameByEmail,
+  updatePasswordForAuthId,
+} from "../../db/auths.ts";
 import {
   consumePasswordResetTokenid,
   savePasswordResetTokenId,
@@ -25,7 +28,7 @@ router.post("/", async (ctx) => {
   const token_id = generateTokenId();
 
   const token = await createPasswordResetToken(token_id, auth_id);
-  //await sendPasswordResetEmail(email, username || "Chirper", token);
+  await sendPasswordResetEmail(email, username || "Chirper", token);
   const dbSuccess = await savePasswordResetTokenId(token_id);
 
   if (!dbSuccess) {
@@ -72,7 +75,7 @@ router.put("/", async (ctx) => {
     return;
   }
 
-  // todo save new password
+  updatePasswordForAuthId(auth_id, newpassword);
 
   ctx.response.status = 200;
 });
