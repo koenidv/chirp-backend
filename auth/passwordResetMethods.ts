@@ -1,6 +1,6 @@
 import { create, getNumericDate } from "https://deno.land/x/djwt@v2.2/mod.ts";
 
-export async function createPasswordResetToken(auth_id: number) {
+export async function createPasswordResetToken(auth_id: bigint) {
   return await create(
     { alg: "HS512", typ: "JWT" },
     {
