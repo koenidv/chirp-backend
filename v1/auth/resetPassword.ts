@@ -5,8 +5,12 @@ import {
   sendPasswordResetEmail,
 } from "../../auth/passwordResetMethods.ts";
 import { queryAuthIdAndUsernameByEmail } from "../../db/auths.ts";
-import { savePasswordResetTokenId } from "../../db/reset_tokens.ts";
+import {
+  consumePasswordResetTokenid,
+  savePasswordResetTokenId,
+} from "../../db/reset_tokens.ts";
 import { hashPassword } from "../../auth/authMethods.ts";
+import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 const router = new Router();
 export default router;
 
@@ -23,13 +27,52 @@ router.post("/", async (ctx) => {
   const token = await createPasswordResetToken(token_id, auth_id);
   //await sendPasswordResetEmail(email, username || "Chirper", token);
   const dbSuccess = await savePasswordResetTokenId(token_id);
-  
+
   if (!dbSuccess) {
     ctx.response.status = 500;
     return;
   }
 
   console.log("Token: " + token);
+
+  ctx.response.status = 200;
+});
+
+router.put("/", async (ctx) => {
+  const token = ctx.request.headers.get("Authorization")?.split(" ")[1];
+  if (!token) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  let token_id;
+  let auth_id;
+  try {
+    const payload = await verify(
+      token,
+      Deno.env.get("JWT_KEY")!,
+      "HS512",
+    );
+    token_id = payload?.id as string;
+    auth_id = payload?.auth_id as string;
+  } catch (_e) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  const tokenIdValid = await consumePasswordResetTokenid(token_id);
+  if (!tokenIdValid) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  const newpassword = (await ctx.request.body().value).newpassword;
+  if (newpassword === undefined) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  // todo save new password
 
   ctx.response.status = 200;
 });
