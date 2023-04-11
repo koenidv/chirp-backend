@@ -42,7 +42,7 @@ export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
   SELECT t.tweet_id, t.author_id, t.content, t.created_at,
   (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
   (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
-  (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+  (SELECT array_agg(u.username) FROM mentions as m JOIN users as u ON m.user_id = u.user_id WHERE t.tweet_id = m.tweet_id)
   FROM tweets as t
   WHERE t.tweet_id = ${tweet_id}
   GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
@@ -58,7 +58,7 @@ export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
   SELECT t.tweet_id, t.author_id, t.content, t.created_at,
     (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
     (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
-    (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+    (SELECT array_agg(u.username) FROM mentions as m JOIN users as u ON m.user_id = u.user_id WHERE t.tweet_id = m.tweet_id)
   FROM follows as f
     LEFT JOIN tweets t on f.following_id = t.author_id OR t.author_id = ${user_id}
   WHERE f.follower_id = ${user_id}
@@ -77,7 +77,7 @@ export async function queryTweetsSubscribedExtended(
     SELECT t.tweet_id, t.author_id, t.content, t.created_at,
       (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
       (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
-      (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+      (SELECT array_agg(u.username) FROM mentions as m JOIN users as u ON m.user_id = u.user_id WHERE t.tweet_id = m.tweet_id)
     FROM follows as f
       LEFT JOIN follows as f2 on f.following_id = f2.follower_id
       LEFT JOIN tweets t on f2.following_id = t.author_id OR f.following_id = t.author_id OR t.author_id = ${user_id}
@@ -94,7 +94,7 @@ export async function queryTweetsByUsername(
     SELECT t.tweet_id, t.author_id, t.content, t.created_at,
       (SELECT COUNT(*) FROM likes WHERE likes.tweet_id = t.tweet_id) AS like_count,
       (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
-      (SELECT array_agg(m.user_id) FROM mentions as m WHERE t.tweet_id = m.tweet_id)
+      (SELECT array_agg(u.username) FROM mentions as m JOIN users as u ON m.user_id = u.user_id WHERE t.tweet_id = m.tweet_id)
     FROM tweets as t
       WHERE t.author_id = (SELECT user_id FROM users WHERE username = ${username})
     GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
