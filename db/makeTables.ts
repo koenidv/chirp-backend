@@ -136,6 +136,6 @@ client.queryArray`CREATE TABLE IF NOT EXISTS mentions (
 client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON mentions(tweet_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS reset_tokens (
-    token_hash VARCHAR NOT NULL,
+    token_id VARCHAR NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) WITH (ttl_expire_after = '6 hours');`;

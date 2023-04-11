@@ -1,10 +1,11 @@
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import {
   createPasswordResetToken,
+  generateTokenId,
   sendPasswordResetEmail,
 } from "../../auth/passwordResetMethods.ts";
 import { queryAuthIdAndUsernameByEmail } from "../../db/auths.ts";
-import { savePasswordResetToken } from "../../db/reset_tokens.ts";
+import { savePasswordResetTokenId } from "../../db/reset_tokens.ts";
 import { hashPassword } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
@@ -17,11 +18,16 @@ router.post("/", async (ctx) => {
   }
 
   const { auth_id, username } = await queryAuthIdAndUsernameByEmail(email);
-  const token = await createPasswordResetToken(auth_id);
-  await sendPasswordResetEmail(email, username || "Chirper", token);
+  const token_id = generateTokenId();
 
-  const hashedToken = hashPassword(token);
-  await savePasswordResetToken(hashedToken);
+  const token = await createPasswordResetToken(token_id, auth_id);
+  //await sendPasswordResetEmail(email, username || "Chirper", token);
+  const dbSuccess = await savePasswordResetTokenId(token_id);
+  
+  if (!dbSuccess) {
+    ctx.response.status = 500;
+    return;
+  }
 
   console.log("Token: " + token);
 
