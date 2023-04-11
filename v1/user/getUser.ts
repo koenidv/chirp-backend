@@ -4,8 +4,8 @@ import { authenticate } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
-router.get("/istaken/:user_id", async (ctx) => {
-  const username = ctx.params.user_id;
+router.get("/istaken/:username", async (ctx) => {
+  const username = ctx.params.username;
   if (!username) {
     ctx.response.status = 400;
     return;
@@ -33,8 +33,6 @@ router.get("/me", async (ctx) => {
 });
 
 router.get("/:user_id", async (ctx) => {
-  // todo query users by username only and change route to /@:username
-
   if (!await authenticate(ctx)) {
     // user profiles are public, remove this check once we allow non-signed-in browsing
     ctx.response.status = 401;
