@@ -5,6 +5,8 @@ import {
   sendPasswordResetEmail,
 } from "../../auth/passwordResetMethods.ts";
 import { queryAuthIdAndUsernameByEmail } from "../../db/auths.ts";
+import { savePasswordResetToken } from "../../db/reset_tokens.ts";
+import { hashPassword } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
@@ -19,7 +21,8 @@ router.post("/resetpassword", async (ctx) => {
   const token = await createPasswordResetToken(auth_id);
   await sendPasswordResetEmail(email, username || "Chirper", token);
 
-  // todo save hashed+salted resetToken (authMethods#hashPassword) to db with expiry: https://www.cockroachlabs.com/blog/row-level-ttl-explained/
+  const hashedToken = hashPassword(token);
+  await savePasswordResetToken(hashedToken);
 
   ctx.response.status = 200;
 });

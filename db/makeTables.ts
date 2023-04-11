@@ -84,7 +84,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comments (
 );`;
 client
   .queryArray`COMMENT ON COLUMN comments.comment_id IS 'Generate snowflake id';`;
-client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON comments(tweet_id);`;	
+client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON comments(tweet_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS comment_likes (
     author_id INT NOT NULL,
@@ -99,7 +99,8 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comment_likes (
             REFERENCES comments(comment_id)
             ON DELETE CASCADE
 );`;
-client.queryArray`CREATE INDEX IF NOT EXISTS comment_id ON comment_likes(comment_id);`;
+client
+  .queryArray`CREATE INDEX IF NOT EXISTS comment_id ON comment_likes(comment_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
     retweet_id BIGINT UNIQUE,
@@ -133,3 +134,8 @@ client.queryArray`CREATE TABLE IF NOT EXISTS mentions (
             ON DELETE CASCADE   
 );`;
 client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON mentions(tweet_id);`;
+
+client.queryArray`CREATE TABLE IF NOT EXISTS reset_tokens (
+    token_hash VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) WITH (ttl_expire_after = '6 hours');`;
