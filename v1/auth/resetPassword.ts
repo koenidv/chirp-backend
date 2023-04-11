@@ -1,4 +1,3 @@
-import { create, getNumericDate } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import {
   createPasswordResetToken,
@@ -10,7 +9,7 @@ import { hashPassword } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
 
-router.post("/resetpassword", async (ctx) => {
+router.post("/", async (ctx) => {
   const email = (await ctx.request.body().value).email;
   if (email === undefined) {
     ctx.response.status = 400;
@@ -23,6 +22,8 @@ router.post("/resetpassword", async (ctx) => {
 
   const hashedToken = hashPassword(token);
   await savePasswordResetToken(hashedToken);
+
+  console.log("Token: " + token);
 
   ctx.response.status = 200;
 });
