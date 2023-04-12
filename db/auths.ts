@@ -76,3 +76,14 @@ export async function queryAuthIdAndUsernameByEmail(email: string) {
         WHERE email = ${email}
     `).rows[0];
 }
+
+export async function checkAuthAndUserStillValid(
+  auth_id: bigint,
+  user_id: bigint,
+) {
+  return (await client.queryObject<{ exists: boolean }>`
+        SELECT EXISTS(SELECT 1 FROM auths AS a
+            LEFT JOIN users AS u ON u.user_id = a.user_id
+        WHERE auth_id = ${auth_id} AND u.user_id = ${user_id})
+    `).rows[0]?.exists === true;
+}

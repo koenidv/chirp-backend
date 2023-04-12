@@ -9,13 +9,18 @@ import {
 import {
   authenticateIncludingAuthId,
   createJWT,
+  createRefreshToken,
 } from "../../auth/authMethods.ts";
 
 const MFARouter = new Router();
 export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
-MFARouter.use("/resetpassword", resetRouter.routes(), resetRouter.allowedMethods());
+MFARouter.use(
+  "/resetpassword",
+  resetRouter.routes(),
+  resetRouter.allowedMethods(),
+);
 
 MFARouter.post("/register", async (ctx: Context) => {
   const { email, password } = await ctx.request.body().value;
@@ -73,6 +78,16 @@ MFARouter.post("/login", async (ctx: Context) => {
       validatedUser.user_id ? validatedUser.user_id.toString() : null,
     ),
   };
+
+  if (validatedUser.user_id) {
+    ctx.response.body = {
+      ...ctx.response.body,
+      refreshToken: await createRefreshToken(
+        validatedUser.auth_id.toString(),
+        validatedUser.user_id.toString(),
+      ),
+    };
+  }
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
@@ -90,7 +105,7 @@ MFARouter.get("/whoami", async (ctx: Context) => {
 
 MFARouter.delete("/", async (ctx: Context) => {
   // Can only be used if no user is associated. Use delete /user instead
-  
+
   const auth = await authenticateIncludingAuthId(ctx);
   if (!auth) {
     ctx.response.status = 401;
@@ -98,8 +113,6 @@ MFARouter.delete("/", async (ctx: Context) => {
   }
 
   await deleteEmailAuth(auth.auth_id!);
-
-  // fixme jwt will still be valid even though auth doesn't exist anymore
 
   ctx.response.status = 200;
 });

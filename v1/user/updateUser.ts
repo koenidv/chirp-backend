@@ -10,6 +10,7 @@ import {
   authenticate,
   authenticateIncludingAuthId,
   createJWT,
+  createRefreshToken,
 } from "../../auth/authMethods.ts";
 const router = new Router();
 export default router;
@@ -46,6 +47,10 @@ router.post("/", async (ctx) => {
   if (user_id) {
     ctx.response.body = {
       jwt: await createJWT(auth.auth_id, user_id.toString()),
+      refreshToken: await createRefreshToken(
+        auth.auth_id.toString(),
+        user_id.toString(),
+      ),
       user_id: user_id.toString(), // toString to serialize bigint
       username: username,
       displayname: displayname,
@@ -87,8 +92,6 @@ router.delete("/", async (ctx) => {
   }
 
   await deleteUser(user_id);
-
-  // fixme jwt will still be valid even though user doesn't exist anymore
 
   ctx.response.status = 200;
 });

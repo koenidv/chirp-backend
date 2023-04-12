@@ -25,7 +25,7 @@ export function comparePassword(
 
 export async function createJWT(
   auth_id: string,
-  user_id: string | null,
+  user_id: string | null
 ): Promise<string> {
   return await create(
     { alg: "HS512", typ: "JWT" },
@@ -34,7 +34,24 @@ export async function createJWT(
       user_id: user_id,
       iss: "https://api.chirp.koenidv.de",
       iat: getNumericDate(0),
-      exp: getNumericDate(60 * 60 * 24 * 7), // expires after 1 week
+      exp: getNumericDate(60 * 15), // expires after 15 minutes
+    },
+    Deno.env.get("JWT_KEY")!,
+  );
+}
+export async function createRefreshToken(
+  auth_id: string,
+  user_id: string | null
+): Promise<string> {
+  return await create(
+    { alg: "HS512", typ: "JWT" },
+    {
+      auth_id: auth_id,
+      user_id: user_id,
+      aud: "refresh",
+      iss: "https://api.chirp.koenidv.de",
+      iat: getNumericDate(0),
+      exp: getNumericDate(60 * 60 * 24 * 365), // expires after 1 year
     },
     Deno.env.get("JWT_KEY")!,
   );
@@ -64,4 +81,27 @@ export async function authenticateIncludingAuthId(
   } catch (_e) {
     return false;
   }
+}
+
+export async function useRefreshToken(
+  refreshToken: string,
+): Promise<string | false> {
+  let auth_id: string;
+  let user_id: string | undefined;  
+
+  try {
+    const payload = await verify(
+      refreshToken,
+      Deno.env.get("JWT_KEY")!,
+      "HS512",
+    );
+    if (payload.aud !== "refresh") return false;
+    auth_id = payload?.auth_id as string;
+    user_id = payload?.user_id as string;
+  } catch (_e) {
+    return false;
+  }
+
+  const newJwt = await createJWT(auth_id, user_id);
+  return newJwt;
 }
