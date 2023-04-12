@@ -51,7 +51,7 @@ router.post("/", async (ctx) => {
     await registerSession(session_id, auth.auth_id);
 
     ctx.response.body = {
-      jwt: await createJWT(auth.auth_id, user_id.toString()),
+      jwt: await createJWT(session_id, auth.auth_id, user_id.toString()),
       refreshToken: await createRefreshToken(
         session_id,
         auth.auth_id.toString(),

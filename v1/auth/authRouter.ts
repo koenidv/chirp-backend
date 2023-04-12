@@ -55,8 +55,16 @@ MFARouter.post("/register", async (ctx: Context) => {
     return;
   }
 
+  const session_id = generateSessionId();
+  await registerSession(session_id, auth_id.toString());
+
   ctx.response.body = {
-    jwt: await createJWT(auth_id.toString(), null),
+    jwt: await createJWT(session_id, auth_id.toString(), null),
+    refreshToken: await createRefreshToken(
+      session_id,
+      auth_id.toString(),
+      null,
+    ),
   };
 });
 
@@ -75,25 +83,21 @@ MFARouter.post("/login", async (ctx: Context) => {
     return;
   }
 
+  const session_id = generateSessionId();
+  await registerSession(session_id, validatedUser.auth_id.toString());
+
   ctx.response.body = {
     jwt: await createJWT(
+      session_id,
       validatedUser.auth_id.toString(),
       validatedUser.user_id ? validatedUser.user_id.toString() : null,
     ),
+    refreshToken: await createRefreshToken(
+      session_id,
+      validatedUser.auth_id.toString(),
+      validatedUser.user_id.toString(),
+    ),
   };
-
-  if (validatedUser.user_id) {
-    const session_id = generateSessionId();
-    await registerSession(session_id, validatedUser.auth_id.toString());
-    ctx.response.body = {
-      ...ctx.response.body,
-      refreshToken: await createRefreshToken(
-        session_id,
-        validatedUser.auth_id.toString(),
-        validatedUser.user_id.toString(),
-      ),
-    };
-  }
 });
 
 MFARouter.post("/refresh", async (ctx: Context) => {

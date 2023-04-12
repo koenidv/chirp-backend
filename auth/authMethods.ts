@@ -30,12 +30,14 @@ export function generateSessionId(): string {
 }
 
 export async function createJWT(
+  session_id: string,
   auth_id: string,
   user_id: string | null
 ): Promise<string> {
   return await create(
     { alg: "HS512", typ: "JWT" },
     {
+      session: session_id,
       auth_id: auth_id,
       user_id: user_id,
       iss: "https://api.chirp.koenidv.de",
@@ -73,7 +75,7 @@ export async function authenticate(ctx: any): Promise<string | false> {
 
 export async function authenticateIncludingAuthId(
   ctx: any,
-): Promise<{ auth_id: string; user_id: string } | false> {
+): Promise<{ token_id: string, auth_id: string; user_id: string } | false> {
   const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!jwt) return false;
   try {
@@ -83,6 +85,7 @@ export async function authenticateIncludingAuthId(
       "HS512",
     );
     return {
+      token_id: payload?.id as string,
       auth_id: payload?.auth_id as string,
       user_id: payload?.user_id as string,
     };
@@ -119,6 +122,6 @@ export async function useRefreshToken(
     return false;
   }
 
-  const newJwt = await createJWT(auth_id, user_id);
+  const newJwt = await createJWT(session, auth_id, user_id);
   return newJwt;
 }
