@@ -54,5 +54,10 @@ export async function sendPasswordResetEmail(
     }),
   });
 
-  return result.status === 200;
+  if (!result.ok) {
+    console.log("Sending password reset email failed");
+    console.log(await result.text());
+  }
+
+  return result.status === 202;
 }

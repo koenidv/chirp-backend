@@ -12,7 +12,6 @@ import {
   consumePasswordResetTokenid,
   savePasswordResetTokenId,
 } from "../../db/reset_tokens.ts";
-import { hashPassword } from "../../auth/authMethods.ts";
 import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import { invalidateUser } from "../../db/sessions.ts";
 const router = new Router();
@@ -29,16 +28,13 @@ router.post("/", async (ctx) => {
   const token_id = generateTokenId();
 
   const token = await createPasswordResetToken(token_id, auth_id);
-  if (!await sendPasswordResetEmail(email, username || "Chirper", token)) {
+  if (
+    !await savePasswordResetTokenId(token_id) ||
+    !await sendPasswordResetEmail(email, username || "Chirper", token)
+  ) {
     ctx.response.status = 500;
     return;
   }
-  if (!await savePasswordResetTokenId(token_id)) {
-    ctx.response.status = 500;
-    return;
-  }
-
-  console.log("Token: " + token);
 
   ctx.response.status = 200;
 });
