@@ -1,9 +1,11 @@
+import { FormDataFile } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+
 const CDN_API_URL = "https://upload.imagekit.io/api/v1";
 
 export async function uploadFile(
   filename: string,
-  file: File,
-  owner_id: string
+  file: Blob,
+  owner_id: string,
 ): Promise<string | false> {
   const formData = new FormData();
   formData.append("file", file);
@@ -15,7 +17,6 @@ export async function uploadFile(
     method: "POST",
     headers: {
       "Authorization": `Basic ${Deno.env.get("CDN_KEY")}`,
-      "Content-Type": "multipart/form-data",
     },
     body: formData,
   });
@@ -24,6 +25,6 @@ export async function uploadFile(
     const data = await response.json();
     return data.name;
   } else {
-    throw false;
+    return false;
   }
 }

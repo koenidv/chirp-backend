@@ -14,6 +14,7 @@ import {
   generateSessionId,
 } from "../../auth/authMethods.ts";
 import { registerSession } from "../../db/sessions.ts";
+import { uploadFile } from "../../cdn/cdn.ts";
 const router = new Router();
 export default router;
 
@@ -99,5 +100,47 @@ router.delete("/", async (ctx) => {
 
   await deleteUser(user_id);
 
+  ctx.response.status = 200;
+});
+
+router.put("/profileimage", async (ctx) => {
+  if (!ctx.request.headers.get("content-type")?.startsWith("multipart/form-data")) {
+    ctx.response.status = 400;
+    ctx.response.body = "Content-Type must be multipart/form-data";
+    console.log(ctx.request.headers.get("content-type"));
+    return;
+  }
+  const user_id = await authenticate(ctx);
+  if (!user_id) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  const body = ctx.request.body({ type: "form-data" });
+  const values = await body.value.read({ maxSize: 15_000_000 });
+  if (!values.files) {
+    ctx.response.status = 400;
+    ctx.response.body = "No file uploaded";
+    return;
+  }
+  const file = values.files[0];
+  if (!file || !file.content) {
+    ctx.response.status = 400;
+    ctx.response.body = "Uploaded file is invalid";
+    return;
+  }
+
+  const filename = await uploadFile(
+    `pi-${user_id}`,
+    new Blob([file.content], { type: file.contentType }),
+    user_id.toString(),
+  );
+
+  if (!filename) {
+    ctx.response.status = 500;
+    ctx.response.body = "Failed to upload file to CDN";
+    return;
+  }
+  
   ctx.response.status = 200;
 });
