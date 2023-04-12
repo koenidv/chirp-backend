@@ -25,6 +25,10 @@ export function comparePassword(
   return bcrypt.compareSync(password, hash);
 }
 
+export function generateSessionId(): string {
+  return crypto.randomUUID();
+}
+
 export async function createJWT(
   auth_id: string,
   user_id: string | null
@@ -42,12 +46,14 @@ export async function createJWT(
   );
 }
 export async function createRefreshToken(
+  session_id: string,
   auth_id: string,
   user_id: string | null
 ): Promise<string> {
   return await create(
     { alg: "HS512", typ: "JWT" },
     {
+      session: session_id,
       auth_id: auth_id,
       user_id: user_id,
       aud: "refresh",

@@ -11,7 +11,9 @@ import {
   authenticateIncludingAuthId,
   createJWT,
   createRefreshToken,
+  generateSessionId,
 } from "../../auth/authMethods.ts";
+import { registerSession } from "../../db/sessions.ts";
 const router = new Router();
 export default router;
 
@@ -45,9 +47,13 @@ router.post("/", async (ctx) => {
   }
 
   if (user_id) {
+    const session_id = generateSessionId();
+    await registerSession(session_id, auth.auth_id);
+
     ctx.response.body = {
       jwt: await createJWT(auth.auth_id, user_id.toString()),
       refreshToken: await createRefreshToken(
+        session_id,
         auth.auth_id.toString(),
         user_id.toString(),
       ),

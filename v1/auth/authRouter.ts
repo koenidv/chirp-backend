@@ -10,6 +10,7 @@ import {
   authenticateIncludingAuthId,
   createJWT,
   createRefreshToken,
+  generateSessionId,
   useRefreshToken,
 } from "../../auth/authMethods.ts";
 
@@ -17,6 +18,7 @@ const MFARouter = new Router();
 export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
+import { registerSession } from "../../db/sessions.ts";
 MFARouter.use(
   "/resetpassword",
   resetRouter.routes(),
@@ -81,9 +83,12 @@ MFARouter.post("/login", async (ctx: Context) => {
   };
 
   if (validatedUser.user_id) {
+    const session_id = generateSessionId();
+    await registerSession(session_id, validatedUser.auth_id.toString());
     ctx.response.body = {
       ...ctx.response.body,
       refreshToken: await createRefreshToken(
+        session_id,
         validatedUser.auth_id.toString(),
         validatedUser.user_id.toString(),
       ),
