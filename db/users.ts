@@ -99,3 +99,9 @@ export async function overwriteBio(user_id: string, bio: string) {
     UPDATE users SET bio = ${bio} WHERE user_id = ${user_id}`;
   return true;
 }
+
+export async function overwriteProfilePictureUrl(user_id: string, url: string) {
+  await client.queryArray`
+    UPDATE users SET profile_image_url = ${url} WHERE user_id = ${user_id}`;
+  return true;
+}

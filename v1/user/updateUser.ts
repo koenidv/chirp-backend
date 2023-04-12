@@ -4,6 +4,7 @@ import {
   deleteUser,
   overwriteBio,
   overwriteDisplayname,
+  overwriteProfilePictureUrl,
   overwriteUsername,
 } from "../../db/users.ts";
 import {
@@ -141,6 +142,8 @@ router.put("/profileimage", async (ctx) => {
     ctx.response.body = "Failed to upload file to CDN";
     return;
   }
+
+  await overwriteProfilePictureUrl(user_id, `https://ik.imagekit.io/pst/${filename}?tr=w-512,h-512`);
   
   ctx.response.status = 200;
 });
