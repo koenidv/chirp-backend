@@ -14,6 +14,7 @@ import {
 } from "../../db/reset_tokens.ts";
 import { hashPassword } from "../../auth/authMethods.ts";
 import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
+import { invalidateUser } from "../../db/sessions.ts";
 const router = new Router();
 export default router;
 
@@ -77,6 +78,7 @@ router.put("/", async (ctx) => {
   }
 
   updatePasswordForAuthId(auth_id, newpassword);
+  invalidateUser(auth_id);
 
   ctx.response.status = 200;
 });
