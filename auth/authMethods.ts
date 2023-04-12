@@ -5,6 +5,8 @@ import {
   getNumericDate,
   verify,
 } from "https://deno.land/x/djwt@v2.2/mod.ts";
+import { checkAuthAndUserStillValid } from "../db/auths.ts";
+import { sessionExists } from "../db/sessions.ts";
 
 export function validateEmailSchema(email: string): boolean {
   return emailvalidate.valid(email);
@@ -86,8 +88,9 @@ export async function authenticateIncludingAuthId(
 export async function useRefreshToken(
   refreshToken: string,
 ): Promise<string | false> {
+  let session: string;
   let auth_id: string;
-  let user_id: string | undefined;  
+  let user_id: string | undefined;
 
   try {
     const payload = await verify(
@@ -96,9 +99,17 @@ export async function useRefreshToken(
       "HS512",
     );
     if (payload.aud !== "refresh") return false;
+    session = payload?.session as string;
     auth_id = payload?.auth_id as string;
     user_id = payload?.user_id as string;
   } catch (_e) {
+    return false;
+  }
+
+  if (
+    !await sessionExists(session) ||
+    !await checkAuthAndUserStillValid(auth_id, user_id)
+  ) {
     return false;
   }
 

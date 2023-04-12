@@ -78,8 +78,8 @@ export async function queryAuthIdAndUsernameByEmail(email: string) {
 }
 
 export async function checkAuthAndUserStillValid(
-  auth_id: bigint,
-  user_id: bigint,
+  auth_id: string,
+  user_id: string,
 ) {
   return (await client.queryObject<{ exists: boolean }>`
         SELECT EXISTS(SELECT 1 FROM auths AS a

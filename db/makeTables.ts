@@ -139,3 +139,14 @@ client.queryArray`CREATE TABLE IF NOT EXISTS reset_tokens (
     token_id VARCHAR NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) WITH (ttl_expire_after = '6 hours');`;
+
+client.queryArray(`CREATE TABLE IF NOT EXISTS SESSIONS (
+    session_id VARCHAR NOT NULL UNIQUE,
+    auth_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (session_id),
+    CONSTRAINT fk_auth_id
+        FOREIGN KEY(auth_id)
+            REFERENCES auths(auth_id)
+            ON DELETE CASCADE
+)`);
