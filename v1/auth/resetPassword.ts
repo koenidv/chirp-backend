@@ -28,10 +28,11 @@ router.post("/", async (ctx) => {
   const token_id = generateTokenId();
 
   const token = await createPasswordResetToken(token_id, auth_id);
-  await sendPasswordResetEmail(email, username || "Chirper", token);
-  const dbSuccess = await savePasswordResetTokenId(token_id);
-
-  if (!dbSuccess) {
+  if (!await sendPasswordResetEmail(email, username || "Chirper", token)) {
+    ctx.response.status = 500;
+    return;
+  }
+  if (!await savePasswordResetTokenId(token_id)) {
     ctx.response.status = 500;
     return;
   }

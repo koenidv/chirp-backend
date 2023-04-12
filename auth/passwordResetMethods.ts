@@ -27,7 +27,7 @@ export async function sendPasswordResetEmail(
   username: string,
   token: string,
 ) {
-  await fetch("https://api.mailersend.com/v1/email", {
+  const result = await fetch("https://api.mailersend.com/v1/email", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,10 +38,11 @@ export async function sendPasswordResetEmail(
         "email": "mail@chirp.koenidv.de",
         "name": "Chirp",
       },
-      "to": {
+      "to": [{
         "email": email,
         "name": username,
-      },
+      }],
+      "subject": "Reset your password for Chirp",
       "personalization": [{
         "email": email,
         "data": {
@@ -52,4 +53,6 @@ export async function sendPasswordResetEmail(
       "template_id": "neqvygmn6r540p7w",
     }),
   });
+
+  return result.status === 200;
 }
