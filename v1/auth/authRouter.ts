@@ -18,7 +18,7 @@ const MFARouter = new Router();
 export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
-import { registerSession } from "../../db/sessions.ts";
+import { invalidateSession, invalidateUser, registerSession } from "../../db/sessions.ts";
 MFARouter.use(
   "/resetpassword",
   resetRouter.routes(),
@@ -142,5 +142,27 @@ MFARouter.delete("/", async (ctx: Context) => {
 
   await deleteEmailAuth(auth.auth_id!);
 
+  ctx.response.status = 200;
+});
+
+MFARouter.post("/signout", async (ctx: Context) => {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  await invalidateSession(auth.token_id!)
+  ctx.response.status = 200;
+});
+
+MFARouter.post("/signoutAll", async (ctx: Context) => {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  await invalidateUser(auth.auth_id!)
   ctx.response.status = 200;
 });
