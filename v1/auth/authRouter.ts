@@ -10,6 +10,7 @@ import {
   authenticateIncludingAuthId,
   createJWT,
   createRefreshToken,
+  useRefreshToken,
 } from "../../auth/authMethods.ts";
 
 const MFARouter = new Router();
@@ -88,6 +89,24 @@ MFARouter.post("/login", async (ctx: Context) => {
       ),
     };
   }
+});
+
+MFARouter.post("/refresh", async (ctx: Context) => {
+  const { refreshToken } = await ctx.request.body().value;
+  if (!refreshToken) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const jwt = await useRefreshToken(refreshToken);
+  if (!jwt) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = {
+    jwt: jwt,
+  };
 });
 
 MFARouter.get("/whoami", async (ctx: Context) => {
