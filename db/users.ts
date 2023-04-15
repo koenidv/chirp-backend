@@ -106,12 +106,12 @@ export async function overwriteProfilePicture(user_id: string, picture_url: stri
   return true;
 }
 
-export async function queryUsernameProfilePictureUrl(
+export async function queryProfilePictureIdByUserId(
   user_id: string,
 ): Promise<string | false> {
   return (
     (await client.queryObject<{ profile_image_url: string }>`
-      SELECT profile_image_url FROM users WHERE user_id = ${user_id}`).rows[0]
+      SELECT profile_image_id FROM users WHERE user_id = ${user_id}`).rows[0]
       ?.profile_image_url || false
   );
 }

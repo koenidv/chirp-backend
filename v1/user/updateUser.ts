@@ -6,6 +6,7 @@ import {
   overwriteDisplayname,
   overwriteProfilePicture,
   overwriteUsername,
+  queryProfilePictureIdByUserId,
 } from "../../db/users.ts";
 import {
   authenticate,
@@ -15,7 +16,7 @@ import {
   generateSessionId,
 } from "../../auth/authMethods.ts";
 import { registerSession } from "../../db/sessions.ts";
-import { uploadFile } from "../../cdn/cdn.ts";
+import { deleteFile, uploadFile } from "../../cdn/cdn.ts";
 const router = new Router();
 export default router;
 
@@ -105,7 +106,9 @@ router.delete("/", async (ctx) => {
 });
 
 router.put("/profileimage", async (ctx) => {
-  if (!ctx.request.headers.get("content-type")?.startsWith("multipart/form-data")) {
+  if (
+    !ctx.request.headers.get("content-type")?.startsWith("multipart/form-data")
+  ) {
     ctx.response.status = 400;
     ctx.response.body = "Content-Type must be multipart/form-data";
     console.log(ctx.request.headers.get("content-type"));
@@ -116,6 +119,8 @@ router.put("/profileimage", async (ctx) => {
     ctx.response.status = 401;
     return;
   }
+
+  // Extract uploaded file
 
   const body = ctx.request.body({ type: "form-data" });
   const values = await body.value.read({ maxSize: 15_000_000 });
@@ -131,6 +136,8 @@ router.put("/profileimage", async (ctx) => {
     return;
   }
 
+  // Upload file
+
   const uploaded = await uploadFile(
     `pi-${user_id}`,
     new Blob([file.content], { type: file.contentType }),
@@ -143,7 +150,20 @@ router.put("/profileimage", async (ctx) => {
     return;
   }
 
-  await overwriteProfilePicture(user_id, `${uploaded.url}?tr=w-512,h-512`, uploaded.id);
-  
+  // Delete old profile picture
+
+  const old_id = await queryProfilePictureIdByUserId(user_id);
+  if (old_id) {
+    deleteFile(old_id);
+  }
+
+  // Write new profile picture details to db
+
+  await overwriteProfilePicture(
+    user_id,
+    `${uploaded.url}?tr=w-512,h-512`,
+    uploaded.id,
+  );
+
   ctx.response.status = 200;
 });
