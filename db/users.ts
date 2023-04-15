@@ -100,8 +100,18 @@ export async function overwriteBio(user_id: string, bio: string) {
   return true;
 }
 
-export async function overwriteProfilePictureUrl(user_id: string, url: string) {
+export async function overwriteProfilePicture(user_id: string, picture_url: string, picture_id: string) {
   await client.queryArray`
-    UPDATE users SET profile_image_url = ${url} WHERE user_id = ${user_id}`;
+    UPDATE users SET profile_image_url = ${picture_url}, profile_image_id = ${picture_id} WHERE user_id = ${user_id}`;
   return true;
+}
+
+export async function queryUsernameProfilePictureUrl(
+  user_id: string,
+): Promise<string | false> {
+  return (
+    (await client.queryObject<{ profile_image_url: string }>`
+      SELECT profile_image_url FROM users WHERE user_id = ${user_id}`).rows[0]
+      ?.profile_image_url || false
+  );
 }

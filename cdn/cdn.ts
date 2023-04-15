@@ -1,12 +1,10 @@
-import { FormDataFile } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-
 const CDN_API_URL = "https://upload.imagekit.io/api/v1";
 
 export async function uploadFile(
   filename: string,
   file: Blob,
   owner_id: string,
-): Promise<string | false> {
+): Promise<{ url: string; id: string } | false> {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("fileName", filename);
@@ -23,7 +21,10 @@ export async function uploadFile(
 
   if (response.ok) {
     const data = await response.json();
-    return data.name;
+    return {
+      url: data.url,
+      id: data.fileId,
+    };
   } else {
     return false;
   }
