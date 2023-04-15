@@ -80,7 +80,7 @@ export async function queryTweetsSubscribedExtended(
       (SELECT array_agg(u.username) FROM mentions as m JOIN users as u ON m.user_id = u.user_id WHERE t.tweet_id = m.tweet_id)
     FROM follows as f
       LEFT JOIN follows as f2 on f.following_id = f2.follower_id
-      LEFT JOIN tweets t on f2.following_id = t.author_id OR f.following_id = t.author_id OR t.author_id = ${user_id}
+      LEFT JOIN tweets t on f2.following_id = t.author_id
     WHERE f.follower_id = ${user_id}
     GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
 
