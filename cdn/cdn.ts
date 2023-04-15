@@ -11,7 +11,7 @@ export async function uploadFile(
   formData.append("file", file);
   formData.append("fileName", filename);
   formData.append("customMetadata", JSON.stringify({ owner_id }));
-  formData.append("useUniqueFileName", "false");
+  formData.append("useUniqueFileName", "true");
 
   const response = await fetch(`${CDN_API_URL}/files/upload`, {
     method: "POST",
