@@ -29,3 +29,12 @@ export async function uploadFile(
     return false;
   }
 }
+
+export async function deleteFile(file_id: string): Promise<boolean> {
+  return (await fetch(`${CDN_API_URL}/files/${file_id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Basic ${Deno.env.get("CDN_KEY")}`,
+    },
+  })).ok;
+}
