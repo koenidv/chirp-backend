@@ -60,7 +60,7 @@ export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
     (SELECT COUNT(*) FROM comments WHERE comments.tweet_id = t.tweet_id) AS comment_count,
     (SELECT array_agg(u.username) FROM mentions as m JOIN users as u ON m.user_id = u.user_id WHERE t.tweet_id = m.tweet_id)
   FROM follows as f
-    LEFT JOIN tweets t on f.following_id = t.author_id OR t.author_id = ${user_id}
+    LEFT JOIN tweets t on f.following_id = t.author_id
   WHERE f.follower_id = ${user_id}
   GROUP BY t.tweet_id, t.author_id, t.content, t.created_at`;
 
