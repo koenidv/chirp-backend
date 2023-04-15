@@ -110,8 +110,8 @@ export async function queryProfilePictureIdByUserId(
   user_id: string,
 ): Promise<string | false> {
   return (
-    (await client.queryObject<{ profile_image_url: string }>`
+    (await client.queryObject<{ profile_image_id: string }>`
       SELECT profile_image_id FROM users WHERE user_id = ${user_id}`).rows[0]
-      ?.profile_image_url || false
+      ?.profile_image_id || false
   );
 }

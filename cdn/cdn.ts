@@ -1,4 +1,5 @@
-const CDN_API_URL = "https://upload.imagekit.io/api/v1";
+const CDN_UPLOAD_URL = "https://upload.imagekit.io/api/v1";
+const CDN_API_URL = "https://api.imagekit.io/v1";
 
 export async function uploadFile(
   filename: string,
@@ -11,7 +12,7 @@ export async function uploadFile(
   formData.append("customMetadata", JSON.stringify({ owner_id }));
   formData.append("useUniqueFileName", "true");
 
-  const response = await fetch(`${CDN_API_URL}/files/upload`, {
+  const response = await fetch(`${CDN_UPLOAD_URL}/files/upload`, {
     method: "POST",
     headers: {
       "Authorization": `Basic ${Deno.env.get("CDN_KEY")}`,
@@ -31,10 +32,11 @@ export async function uploadFile(
 }
 
 export async function deleteFile(file_id: string): Promise<boolean> {
-  return (await fetch(`${CDN_API_URL}/files/${file_id}`, {
+  const res = await fetch(`${CDN_API_URL}/files/${file_id}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Basic ${Deno.env.get("CDN_KEY")}`,
     },
-  })).ok;
+  });
+  return res.ok;
 }

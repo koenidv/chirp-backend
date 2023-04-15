@@ -154,7 +154,7 @@ router.put("/profileimage", async (ctx) => {
 
   const old_id = await queryProfilePictureIdByUserId(user_id);
   if (old_id) {
-    deleteFile(old_id);
+    await deleteFile(old_id);
   }
 
   // Write new profile picture details to db
