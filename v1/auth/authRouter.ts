@@ -95,7 +95,7 @@ MFARouter.post("/login", async (ctx: Context) => {
     refreshToken: await createRefreshToken(
       session_id,
       validatedUser.auth_id.toString(),
-      validatedUser.user_id.toString(),
+      validatedUser.user_id ? validatedUser.user_id.toString() : null,
     ),
   };
 });
