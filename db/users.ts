@@ -81,8 +81,14 @@ export async function overwriteUsername(user_id: string, username: string) {
     anyUnescaped(username) || username.length > 24 ||
     !isUsernameAllowed(username)
   ) return false;
+
+  const displayname = (await client.queryObject<{ displayname: string }>`
+    SELECT displayname FROM users WHERE user_id = ${user_id}`).rows[0]
+    .displayname;
+  const grams = [...generateNGrams(username), ...generateNGrams(displayname)];
+
   await client.queryArray`
-    UPDATE users SET username = ${username} WHERE user_id = ${user_id}`;
+    UPDATE users SET username = ${username}, grams = ${grams} WHERE user_id = ${user_id}`;
   return true;
 }
 
@@ -94,8 +100,14 @@ export async function overwriteDisplayname(
     anyUnescaped(displayname) || displayname.length > 36 ||
     !isUsernameAllowed(displayname)
   ) return false;
+
+  const username = (await client.queryObject<{ username: string }>`
+    SELECT username FROM users WHERE user_id = ${user_id}`).rows[0]
+    .username;
+  const grams = [...generateNGrams(username), ...generateNGrams(displayname)];
+
   await client.queryArray`
-    UPDATE users SET displayname = ${displayname} WHERE user_id = ${user_id}`;
+    UPDATE users SET displayname = ${displayname}, grams = ${grams} WHERE user_id = ${user_id}`;
   return true;
 }
 
