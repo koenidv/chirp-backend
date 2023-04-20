@@ -1,5 +1,9 @@
 import client from "./db.ts";
-import { anyUnescaped, isUsernameAllowed } from "./dbMethods.ts";
+import {
+  anyUnescaped,
+  generateNGrams,
+  isUsernameAllowed,
+} from "./dbMethods.ts";
 
 export type UserData = {
   user_id: bigint;
@@ -26,11 +30,13 @@ export async function createUser(
     return false;
   }
 
+  const grams = [...generateNGrams(username), ...generateNGrams(displayname)];
+
   const transaction = client.createTransaction("createUser");
   await transaction.begin();
 
   const user_id = (await transaction.queryObject<{ user_id: bigint }>`
-    INSERT INTO users (username, displayname) VALUES (${username}, ${displayname}) RETURNING user_id`)
+    INSERT INTO users (username, displayname, grams) VALUES (${username}, ${displayname}, ${grams}) RETURNING user_id`)
     .rows[0].user_id;
 
   await transaction.queryArray`
@@ -100,7 +106,11 @@ export async function overwriteBio(user_id: string, bio: string) {
   return true;
 }
 
-export async function overwriteProfilePicture(user_id: string, picture_url: string, picture_id: string) {
+export async function overwriteProfilePicture(
+  user_id: string,
+  picture_url: string,
+  picture_id: string,
+) {
   await client.queryArray`
     UPDATE users SET profile_image_url = ${picture_url}, profile_image_id = ${picture_id} WHERE user_id = ${user_id}`;
   return true;
