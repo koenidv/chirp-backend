@@ -137,3 +137,37 @@ export async function queryProfilePictureIdByUserId(
       ?.profile_image_id || false
   );
 }
+
+export async function searchUsers(query: string) {
+  const grams = generateNGrams(query);
+
+  const result = await client.queryObject<{
+    score: number;
+    user_id: bigint;
+    username: string;
+    displayname: string;
+    profile_image_url: string;
+  }>`
+    WITH
+    match AS (
+      SELECT user_id, grams, 1 + ABS(ARRAY_LENGTH(grams, 1) - ARRAY_LENGTH(CAST(${grams} AS VARCHAR[]), 1)) as delta
+      FROM users
+      WHERE grams && CAST(${grams} AS VARCHAR[])
+    ),
+    score AS (
+      SELECT user_id, COUNT(*) as gram_matches FROM
+      (
+        SELECT user_id, UNNEST(grams) FROM match
+        INTERSECT
+        SELECT user_id, UNNEST(CAST(${grams} AS VARCHAR[])) FROM match
+      ) as intersections
+      GROUP BY user_id
+    )
+    SELECT ROUND(100*gram_matches/delta, 3) as score, match.user_id, u.username, u.displayname, u.profile_image_url
+    FROM match, score, users as u
+    WHERE match.user_id = score.user_id AND u.user_id = match.user_id
+    ORDER BY score DESC
+    LIMIT 20;
+  `;
+  return result.rows;
+}
