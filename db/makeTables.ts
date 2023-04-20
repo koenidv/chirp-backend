@@ -7,6 +7,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
     profile_image_url VARCHAR,
     profile_image_id VARCHAR(24),
     bio VARCHAR,
+    grams VARCHAR[],
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     CONSTRAINT picture_id_and_url
