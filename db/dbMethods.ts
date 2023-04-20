@@ -24,3 +24,11 @@ export function isUsernameAllowed(username: string) {
   if (prohibitedUsernames.includes(username.toLocaleLowerCase())) return false;
   return true;
 }
+
+export function generateNGrams(text: string, n = 3) {
+  const ngrams = [];
+  for (let i = 0; i < text.length - n + 1; i++) {
+    ngrams.push(text.slice(i, i + n));
+  }
+  return ngrams;
+}
