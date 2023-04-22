@@ -1,0 +1,65 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Chirp API"
+  description: Backend for Chirp - A Twitter clone
+
+servers:
+  - url: https://api.thechirp.de/v1
+    description: Production v1 API
+  - url: https://sandbox.api.thechirp.de/v1
+    description: Sandbox v1 API
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new auth account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: Unique email identifier for this auth option
+                  type: string
+                  pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+                password:
+                  description: Password this auth option
+                  type: string
+      responses:
+        200:
+          description: Auth option created
+        400:
+          description: Bad request
+        409:
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          description: Error code
+          type: string
+        message:
+          description: Short human readable error message
+          type: string
+        detail:
+          description: Human readable error detail
+          type: string
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+security:
+  - ApiKey: []
