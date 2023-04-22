@@ -178,11 +178,177 @@ paths:
         200:
           description: Your current identity
         401:
+          description: Invalid identity toke
+  #
+  # User
+  #
+  /user:
+    post:
+      summary: Create a user and associate to the current auth account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - displayname
+              properties:
+                username:
+                  description: Unique username
+                  type: string
+                displayname:
+                  description: Display name
+                  type: string
+      responses:
+        200:
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - jwt
+                  - refreshToken
+                  - user_id
+                  - username
+                  - displayname
+                properties:
+                  jwt:
+                    description: Identity token for the user; expires after 15 minutes
+                    type: string
+                  refreshToken:
+                    description: Refresh token for the user; expires after 1 year or session reset
+                    type: string
+                  user_id:
+                    description: User ID
+                    type: integer
+                  username:
+                    description: Chosen username
+                    type: string
+                  displayname:  
+                    description: Chosen display name
+                    type: string  
+        400:
+          description: Bad request, including prohibited or taken username
+        401:
           description: Invalid identity token
-  
+    delete:
+      summary: Delete user and associated auth account
+      responses:
+        200:
+          description: User deleted
+        401:
+          description: Invalid identity token
+    put:
+      summary: Update user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  description: Unique username
+                  type: string
+                displayname:
+                  description: Display name
+                  type: string
+                bio:
+                  description: User bio
+                  type: string
+      responses:
+        200:
+          description: User updated
+        400:
+          description: Bad request, including prohibited or taken username
+        401:
+          description: Invalid identity token
+  /user/profileimage:
+    put:
+      summary: Update user profile image
+      requestBody:
+        content:
+          mulipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: User profile image updated
+        401:
+          description: Invalid identity token
+  /user/me:
+    summary: Get current user
+    get:
+      responses:
+        200:
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:  
+          description: Invalid identity token
+  /user/{username}:
+    summary: Get user by ID
+    get:
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:  
+          description: Invalid identity token
+        404:
+          description: User not found
+    
 
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          description: Internal user ID
+          type: integer
+        username:
+          description: Username
+          type: string
+        displayname:
+          description: Display name
+          type: string
+        profile_image_url:
+          description: Profile image URL
+          type: string
+        bio:  
+          description: User bio
+          type: string
+        created_at: 
+          description: User creation timestamp
+          type: string
+          format: date-time
+        count_tweets:
+          description: Number of tweets
+          type: integer
+        count_followers:
+          description: Number of followers
+          type: integer
+        count_followings:
+          description: Number of followings
+          type: integer
     Error:
       type: object
       required:
