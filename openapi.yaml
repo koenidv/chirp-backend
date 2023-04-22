@@ -40,6 +40,70 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /auth/login:
+    post:
+      summary: Login using an auth account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: Email identifier for this auth option
+                  type: string
+                  pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+                password:
+                  description: Password this auth option
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  jwt:
+                    description: Identity token for the user; expires after 15 minutes
+                    type: string
+                  refreshToken:
+                    description: Refresh token for the user; expires after 1 year or session reset
+                    type: string   
+        401:
+          description: Invalid credentials
+  /auth/refresh:
+    post:
+      summary: Get a new identity token using a refresh token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  description: Refresh token for the user
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  jwt:
+                    description: New identity token for the user; expires after 15 minutes
+                    type: string 
+        401:
+          description: Invalid refresh token
 components:
   schemas:
     Error:
