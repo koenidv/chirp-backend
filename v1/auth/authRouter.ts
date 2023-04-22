@@ -156,7 +156,7 @@ MFARouter.post("/signout", async (ctx: Context) => {
   ctx.response.status = 200;
 });
 
-MFARouter.post("/signoutAll", async (ctx: Context) => {
+MFARouter.post("/signout/all", async (ctx: Context) => {
   const auth = await authenticateIncludingAuthId(ctx);
   if (!auth) {
     ctx.response.status = 401;
