@@ -14,6 +14,7 @@ paths:
   /auth/register:
     post:
       summary: Register a new auth account
+      security: []
       requestBody:
         content:
           application/json:
@@ -43,6 +44,7 @@ paths:
   /auth/login:
     post:
       summary: Login using an auth account
+      security: []
       requestBody:
         content:
           application/json:
@@ -79,6 +81,7 @@ paths:
   /auth/refresh:
     post:
       summary: Get a new identity token using a refresh token
+      security: []
       requestBody:
         content:
           application/json:
@@ -121,9 +124,9 @@ components:
           description: Human readable error detail
           type: string
   securitySchemes:
-    ApiKey:
-      type: apiKey
-      in: header
-      name: X-Api-Key
+    identityToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 security:
   - ApiKey: []
