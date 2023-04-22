@@ -107,6 +107,22 @@ paths:
                     type: string 
         401:
           description: Invalid refresh token
+  /auth/signout:
+    post:
+      summary: Invalidate current session
+      responses:
+        200:
+          description: Current session invalidated; will apply after next refresh
+        401:
+          description: Invalid identity token
+  /auth/signout/all:
+    post:
+      summary: Invalidate all sessions for current user
+      responses:
+        200:
+          description: User sessions invalidated; will apply after next refresh
+        401:
+          description: Invalid identity token
 components:
   schemas:
     Error:
