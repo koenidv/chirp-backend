@@ -1,0 +1,212 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Chirp API"
+  description: Backend for Chirp - A Twitter clone
+
+servers:
+  - url: https://api.thechirp.de/v1
+    description: Production v1 API
+  - url: https://sandbox.api.thechirp.de/v1
+    description: Sandbox v1 API
+
+paths:
+  #
+  # Auth
+  #
+  /auth/register:
+    post:
+      summary: Register a new auth account
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: Unique email identifier for this auth option
+                  type: string
+                  pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+                password:
+                  description: Password this auth option
+                  type: string
+      responses:
+        200:
+          description: Auth option created
+        400:
+          description: Bad request
+        409:
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete auth user with no user associated
+      description: If a user was created already, use delete user. This will also delete all associated auth options.
+      responses:
+        200:
+          description: Auth option deleted
+        401:
+          description: Invalid identity token
+  /auth/login:
+    post:
+      summary: Login using an auth account
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: Email identifier for this auth option
+                  type: string
+                  pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+                password:
+                  description: Password this auth option
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  jwt:
+                    description: Identity token for the user; expires after 15 minutes
+                    type: string
+                  refreshToken:
+                    description: Refresh token for the user; expires after 1 year or session reset
+                    type: string   
+        401:
+          description: Invalid credentials
+  /auth/refresh:
+    post:
+      summary: Get a new identity token using a refresh token
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  description: Refresh token for the user
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  jwt:
+                    description: New identity token for the user; expires after 15 minutes
+                    type: string 
+        401:
+          description: Invalid refresh token
+  /auth/signout:
+    post:
+      summary: Invalidate current session
+      responses:
+        200:
+          description: Current session invalidated; will apply after next refresh
+        401:
+          description: Invalid identity token
+  /auth/signout/all:
+    post:
+      summary: Invalidate all sessions for current user
+      responses:
+        200:
+          description: User sessions invalidated; will apply after next refresh
+        401:
+          description: Invalid identity token
+  /auth/resetpassword:
+    post:
+      summary: Request a password reset email
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+              properties:
+                email:
+                  description: Email identifier for this auth option
+                  type: string
+                  pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+      responses:
+        200:
+          description: Password reset email sent if user existed
+    put:
+      summary: Reset password using a password reset token
+      security:
+        - resetToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - newpassword
+              properties:
+                password:
+                  description: New password
+                  type: string
+      responses:
+        200:
+          description: Password reset
+        401:
+          description: Invalid password reset token
+  /auth/whoami:
+    post:
+      summary: Check your current identity
+      responses:
+        200:
+          description: Your current identity
+        401:
+          description: Invalid identity token
+  
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          description: Error code
+          type: string
+        message:
+          description: Short human readable error message
+          type: string
+        detail:
+          description: Human readable error detail
+          type: string
+  securitySchemes:
+    identityToken:
+      description: User identity token as JWT
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    resetToken:
+      description: Password reset token as JWT
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - identityToken: []
