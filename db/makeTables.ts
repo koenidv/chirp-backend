@@ -11,11 +11,11 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     CONSTRAINT picture_id_and_url
-        CHECK ((profile_image_url IS NOT NULL AND profile_image_id IS NOT NULL) OR (profile_image_url IS NULL AND profile_image_id IS NULL));
+        CHECK ((profile_image_url IS NOT NULL AND profile_image_id IS NOT NULL) OR (profile_image_url IS NULL AND profile_image_id IS NULL))
 );`;
 client.queryArray`CREATE INDEX IF NOT EXISTS username ON users(username);`; 
 client.queryArray`CREATE INDEX IF NOT EXISTS username_id ON users(username, user_id);`;
-client.queryArray`CREATE INDEX IF NOT EXISTS ON users USING GIN (grams);`;
+client.queryArray`CREATE INDEX IF NOT EXISTS gins ON users USING GIN (grams);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS auths (
     auth_id INT GENERATED ALWAYS AS IDENTITY,
