@@ -13,6 +13,8 @@ client.queryArray`CREATE TABLE IF NOT EXISTS users (
     CONSTRAINT picture_id_and_url
         CHECK ((profile_image_url IS NOT NULL AND profile_image_id IS NOT NULL) OR (profile_image_url IS NULL AND profile_image_id IS NULL));
 );`;
+client.queryArray`CREATE INDEX IF NOT EXISTS username ON users(username);`; 
+client.queryArray`CREATE INDEX IF NOT EXISTS username_id ON users(username, user_id);`;
 client.queryArray`CREATE INDEX IF NOT EXISTS ON users USING GIN (grams);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS auths (
@@ -26,6 +28,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS auths (
             REFERENCES users(user_id)
             ON DELETE CASCADE
 );`;
+client.queryArray`CREATE INDEX IF NOT EXISTS associatedUser ON auths(auth_id, user_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS follows (
     follower_id INT NOT NULL,
@@ -41,6 +44,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS follows (
             REFERENCES users(user_id)
             ON DELETE CASCADE
 );`;
+client.queryArray`CREATE INDEX IF NOT EXISTS follows ON follows(follower_id, following_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
     tweet_id BIGINT NOT NULL UNIQUE,
@@ -53,8 +57,8 @@ client.queryArray`CREATE TABLE IF NOT EXISTS tweets (
             REFERENCES users(user_id)
             ON DELETE CASCADE
 );`;
-client
-  .queryArray`COMMENT ON COLUMN tweets.tweet_id IS 'Generate snowflake id';`;
+client.queryArray`COMMENT ON COLUMN tweets.tweet_id IS 'Generate snowflake id';`;
+client.queryArray`CREATE INDEX IF NOT EXISTS author_id ON tweets(author_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS likes (
     author_id INT NOT NULL,
@@ -90,6 +94,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS comments (
 client
   .queryArray`COMMENT ON COLUMN comments.comment_id IS 'Generate snowflake id';`;
 client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON comments(tweet_id);`;
+client.queryArray`CREATE INDEX IF NOT EXISTS author_id ON comments(author_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS comment_likes (
     author_id INT NOT NULL,
@@ -123,6 +128,7 @@ client.queryArray`CREATE TABLE IF NOT EXISTS retweets (
 );`;
 client
   .queryArray`COMMENT ON COLUMN retweets.retweet_id IS 'Generate snowflake id';`;
+  client.queryArray`CREATE INDEX IF NOT EXISTS author_id ON retweets(author_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS mentions (
     mention_id INT GENERATED ALWAYS AS IDENTITY,
@@ -139,13 +145,14 @@ client.queryArray`CREATE TABLE IF NOT EXISTS mentions (
             ON DELETE CASCADE   
 );`;
 client.queryArray`CREATE INDEX IF NOT EXISTS tweet_id ON mentions(tweet_id);`;
+client.queryArray`CREATE INDEX IF NOT EXISTS user_id ON mentions(user_id);`;
 
 client.queryArray`CREATE TABLE IF NOT EXISTS reset_tokens (
     token_id VARCHAR NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) WITH (ttl_expire_after = '6 hours');`;
 
-client.queryArray(`CREATE TABLE IF NOT EXISTS SESSIONS (
+client.queryArray(`CREATE TABLE IF NOT EXISTS sessions (
     session_id VARCHAR NOT NULL UNIQUE,
     auth_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
