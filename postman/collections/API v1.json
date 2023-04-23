@@ -1,12 +1,4136 @@
 {
 	"info": {
-		"_postman_id": "ac07112c-700e-494b-9760-a77f65f044de",
+		"_postman_id": "9f30b926-23a9-4b29-aa8d-4557e186bf20",
 		"name": "API v1",
 		"description": "Backend for Chirp - A Twitter clone",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "18739960-ac07112c-700e-494b-9760-a77f65f044de"
+		"_uid": "18739960-9f30b926-23a9-4b29-aa8d-4557e186bf20"
 	},
 	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "{username}",
+					"item": [
+						{
+							"name": "tweets",
+							"item": [
+								{
+									"name": "Get tweets by user",
+									"id": "615f19c7-ac8d-4812-8203-6c8ef4ff98a4",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username/tweets?paginate=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username",
+												"tweets"
+											],
+											"query": [
+												{
+													"description": "Pagination key",
+													"key": "paginate",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "username",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "4c3ffaf3-f271-49aa-8c67-1a0f5d184e2e",
+											"name": "Tweets by user found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/tweets?paginate=<string>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"tweets"
+													],
+													"query": [
+														{
+															"description": "Pagination key",
+															"key": "paginate",
+															"value": "<string>"
+														}
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"chirps\": [\n    {\n      \"tweet_id\": \"<integer>\",\n      \"author\": \"<integer>\",\n      \"content\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"like_count\": \"<integer>\",\n      \"comment_count\": \"<integer>\",\n      \"array_agg\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"tweet_id\": \"<integer>\",\n      \"author\": \"<integer>\",\n      \"content\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"like_count\": \"<integer>\",\n      \"comment_count\": \"<integer>\",\n      \"array_agg\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"paginatekey\": \"<string>\"\n}"
+										},
+										{
+											"id": "add355d0-f7c3-4d30-80f9-0b7474c76abc",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/tweets?paginate=<string>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"tweets"
+													],
+													"query": [
+														{
+															"description": "Pagination key",
+															"key": "paginate",
+															"value": "<string>"
+														}
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "b2ea6ac6-4222-4e1e-857d-cc947ff1c099",
+											"name": "User not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/tweets?paginate=<string>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"tweets"
+													],
+													"query": [
+														{
+															"description": "Pagination key",
+															"key": "paginate",
+															"value": "<string>"
+														}
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "fbdb07f8-e744-4254-82f0-217b7e3d9145"
+						},
+						{
+							"name": "following",
+							"item": [
+								{
+									"name": "Get followings by user",
+									"id": "200360c3-1452-4ef0-8ab3-e4ef261dded6",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username/following",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username",
+												"following"
+											],
+											"variable": [
+												{
+													"key": "username",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "64d8b304-79da-40bf-a3a2-6c10c488b00e",
+											"name": "Followings by user found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/following",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"following"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"followings\": [\n    {\n      \"user_id\": \"<integer>\",\n      \"username\": \"<string>\",\n      \"displayname\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"profile_image_url\": \"<string>\",\n      \"bio\": \"<string>\",\n      \"count_tweets\": \"<integer>\",\n      \"count_followers\": \"<integer>\",\n      \"count_followings\": \"<integer>\"\n    },\n    {\n      \"user_id\": \"<integer>\",\n      \"username\": \"<string>\",\n      \"displayname\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"profile_image_url\": \"<string>\",\n      \"bio\": \"<string>\",\n      \"count_tweets\": \"<integer>\",\n      \"count_followers\": \"<integer>\",\n      \"count_followings\": \"<integer>\"\n    }\n  ]\n}"
+										},
+										{
+											"id": "4032770d-32ec-4619-a49c-2876c63486e1",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/following",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"following"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "d684b05f-fc21-4836-a2d6-e86a49dba0b2",
+											"name": "User not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/following",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"following"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "9db4a692-86a9-4a25-a9a7-52b2133f43cc"
+						},
+						{
+							"name": "followers",
+							"item": [
+								{
+									"name": "Get followers by user",
+									"id": "9a969f9e-15bf-4900-9b43-00710c86a0a2",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username/followers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username",
+												"followers"
+											],
+											"variable": [
+												{
+													"key": "username",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "c46d9949-6e59-41fb-a5c9-43e6a692765b",
+											"name": "Followers by user found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/followers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"followers"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"followers\": [\n    {\n      \"user_id\": \"<integer>\",\n      \"username\": \"<string>\",\n      \"displayname\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"profile_image_url\": \"<string>\",\n      \"bio\": \"<string>\",\n      \"count_tweets\": \"<integer>\",\n      \"count_followers\": \"<integer>\",\n      \"count_followings\": \"<integer>\"\n    },\n    {\n      \"user_id\": \"<integer>\",\n      \"username\": \"<string>\",\n      \"displayname\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"profile_image_url\": \"<string>\",\n      \"bio\": \"<string>\",\n      \"count_tweets\": \"<integer>\",\n      \"count_followers\": \"<integer>\",\n      \"count_followings\": \"<integer>\"\n    }\n  ]\n}"
+										},
+										{
+											"id": "f8436997-f567-48b2-b4c7-20627b752f4e",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/followers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"followers"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "c3207e0a-ae21-4822-b05f-6d7d96eab546",
+											"name": "User not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/followers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"followers"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "535eb77d-5bf7-4a3a-9f08-82f6f63a5aff"
+						},
+						{
+							"name": "follow",
+							"item": [
+								{
+									"name": "Follow/Unfollow user",
+									"id": "36c12353-bcb0-468e-b231-2011e7d519df",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username/follow",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username",
+												"follow"
+											],
+											"variable": [
+												{
+													"key": "username",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "30d96bb0-bcd4-4b77-a851-487aba887d13",
+											"name": "Check following",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/follow",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"follow"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "<boolean>"
+										},
+										{
+											"id": "ad7d1b41-cea2-473a-8787-016ea11c9f60",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/follow",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"follow"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "6f7eb7ff-d2ff-4eaf-b8e7-af538907894d",
+											"name": "User not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/follow",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"follow"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								},
+								{
+									"name": "Follow/Unfollow user",
+									"id": "32e0e345-6555-458c-be62-afa99af9d7bb",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<boolean>",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/user/:username/follow",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username",
+												"follow"
+											],
+											"variable": [
+												{
+													"key": "username",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "2ffa4973-da72-4532-918f-42b5c89917e3",
+											"name": "OK",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "<boolean>",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/follow",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"follow"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "929757b5-734b-4b1e-a29e-a6a87bb865db",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "<boolean>",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/follow",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"follow"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "b729ce61-10bd-4c3c-b575-4b08e719bbd0",
+											"name": "User not found",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "<boolean>",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/user/:username/follow",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														":username",
+														"follow"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "83181c68-1c34-41a1-b53b-c9c17ec14784"
+						},
+						{
+							"name": "Get user by username",
+							"id": "481ee727-e9da-4fdd-8299-ad2f2ca39d7e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/user/:username",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										":username"
+									],
+									"variable": [
+										{
+											"key": "username",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "b5abfe0c-d51f-4ec5-bea9-31ade69e968f",
+									"name": "User found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username"
+											],
+											"variable": [
+												{
+													"key": "username"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"user_id\": \"<integer>\",\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"profile_image_url\": \"<string>\",\n  \"bio\": \"<string>\",\n  \"count_tweets\": \"<integer>\",\n  \"count_followers\": \"<integer>\",\n  \"count_followings\": \"<integer>\"\n}"
+								},
+								{
+									"id": "04cdffa3-202b-4c7c-80f8-b1e265526df1",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username"
+											],
+											"variable": [
+												{
+													"key": "username"
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "21b1f18e-04ae-4432-9674-cc4e4432a849",
+									"name": "User not found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/:username",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												":username"
+											],
+											"variable": [
+												{
+													"key": "username"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "71e7ddf7-6183-44be-bb7d-4870ce8d394b"
+				},
+				{
+					"name": "profileimage",
+					"item": [
+						{
+							"name": "Update user profile image",
+							"id": "56a396b1-d4a3-4802-859b-d45c9dec90b1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "mulipart/form-data"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"file\": \"<string>\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user/profileimage",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"profileimage"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "7d32668b-6e8c-4b8c-ad43-961de4696fa4",
+									"name": "User profile image updated",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "mulipart/form-data"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"file\": \"<string>\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/user/profileimage",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												"profileimage"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "13fc53e2-0889-41a3-afe6-5b478889e21e",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "mulipart/form-data"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"file\": \"<string>\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/user/profileimage",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												"profileimage"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "e0b43c7e-5814-4e86-9903-b74a187cd9b8"
+				},
+				{
+					"name": "me",
+					"item": [
+						{
+							"name": "Get current user",
+							"id": "450986df-cdf9-4ab1-8fd9-ed7ca5bf6ff5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/user/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"me"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "182d8539-5982-4530-8920-d3d7763e0990",
+									"name": "User found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/me",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												"me"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"user_id\": \"<integer>\",\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"profile_image_url\": \"<string>\",\n  \"bio\": \"<string>\",\n  \"count_tweets\": \"<integer>\",\n  \"count_followers\": \"<integer>\",\n  \"count_followings\": \"<integer>\"\n}"
+								},
+								{
+									"id": "63ec4097-0795-446c-8b3b-d103ed48f4e7",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/me",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												"me"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "f1b91ed1-b4c3-4817-bd33-e8573402a39a"
+				},
+				{
+					"name": "istaken",
+					"item": [
+						{
+							"name": "{username}",
+							"item": [
+								{
+									"name": "Check if a username is taken",
+									"id": "5efd6e6f-51fe-4235-a9e7-fb4787b4a3fe",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/user/istaken/:username",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"user",
+												"istaken",
+												":username"
+											],
+											"variable": [
+												{
+													"key": "username",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "fc398827-38a6-4f41-a926-bb697d9a1997",
+											"name": "Username check",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/user/istaken/:username",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"user",
+														"istaken",
+														":username"
+													],
+													"variable": [
+														{
+															"key": "username"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"taken\": \"<boolean>\"\n}"
+										}
+									]
+								}
+							],
+							"id": "48dc34ad-ea28-4033-854a-92764b61c68e"
+						}
+					],
+					"id": "c2207b70-1c27-493c-a90b-dc45b6f9d663"
+				},
+				{
+					"name": "Create a user and associate to the current auth account",
+					"id": "41640a60-3e6a-42bb-96cd-8027e24f756c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "2d38461e-cf3c-49d7-8386-5d8a9f1a9aa7",
+							"name": "User created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"jwt\": \"<string>\",\n  \"refreshToken\": \"<string>\",\n  \"user_id\": \"<integer>\",\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\"\n}"
+						},
+						{
+							"id": "710c2951-2780-4031-904b-a1e05c52cd48",
+							"name": "Bad request, including prohibited or taken username",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						},
+						{
+							"id": "7c318d82-7817-4a22-865a-94d618921a71",
+							"name": "Invalid identity token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						}
+					]
+				},
+				{
+					"name": "Delete user and associated auth account",
+					"id": "6a254e18-782e-4176-a0ab-b804f81ec80d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "3b733bfe-9a5d-4e24-b11d-b462a3b002ae",
+							"name": "User deleted",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						},
+						{
+							"id": "5ba47260-a29c-44c4-8b7e-3be8b99eabe5",
+							"name": "Invalid identity token",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						}
+					]
+				},
+				{
+					"name": "Update user",
+					"id": "0030d57b-d15a-40b6-81a1-5994757a42ea",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\",\n  \"bio\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "65cbd8bc-454c-4971-a6ce-3c7843a3294e",
+							"name": "User updated",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\",\n  \"bio\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						},
+						{
+							"id": "6fcbc7ff-5a6f-4ef9-92e8-9b758aee896c",
+							"name": "Bad request, including prohibited or taken username",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\",\n  \"bio\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						},
+						{
+							"id": "2178bd60-aaaa-497b-a122-bf3f9a091ef4",
+							"name": "Invalid identity token",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"displayname\": \"<string>\",\n  \"bio\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						}
+					]
+				}
+			],
+			"id": "0eef6192-874c-435d-bfd7-db646281ae68"
+		},
+		{
+			"name": "tweet",
+			"item": [
+				{
+					"name": "{tweet_id}",
+					"item": [
+						{
+							"name": "like",
+							"item": [
+								{
+									"name": "all",
+									"item": [
+										{
+											"name": "List likes on a chirp",
+											"id": "fdca2d6b-97e4-4b00-b69d-af74727fb5ee",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like/all",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like",
+														"all"
+													],
+													"variable": [
+														{
+															"key": "tweet_id",
+															"value": "<integer>"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"id": "01916847-9bd1-4c5e-98ae-1c6138ed1bef",
+													"name": "Likes",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/like/all",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"like",
+																"all"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  \"<integer>\",\n  \"<integer>\"\n]"
+												},
+												{
+													"id": "e030de6c-4ace-437c-b930-2e0af729e1d3",
+													"name": "Invalid identity token",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/like/all",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"like",
+																"all"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																}
+															]
+														}
+													},
+													"status": "Unauthorized",
+													"code": 401,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "7efbc9ec-6c2c-45e1-a4c3-f16f7b2a5ccb",
+													"name": "Chirp not found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/like/all",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"like",
+																"all"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												}
+											]
+										}
+									],
+									"id": "ccaf8fa9-f3f9-4a56-a2de-a9f5afa9bc22"
+								},
+								{
+									"name": "Check if liked a chirp",
+									"id": "27251040-122f-41b9-ba5a-42d7be43e169",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id",
+												"like"
+											],
+											"variable": [
+												{
+													"key": "tweet_id",
+													"value": "<integer>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "196f920e-792b-4f77-98fa-17b380a27496",
+											"name": "Check like",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "<boolean>"
+										},
+										{
+											"id": "b476c2a8-f923-4ccd-b367-dd5094069f41",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "d062c9c8-97b4-464a-8676-e775adc85cdf",
+											"name": "Chirp not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								},
+								{
+									"name": "Like/Unlike chirp",
+									"id": "15855b29-219a-4aa7-95a0-6aad86830f0c",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<boolean>",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id",
+												"like"
+											],
+											"variable": [
+												{
+													"key": "tweet_id",
+													"value": "<integer>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "c739195f-7b04-4b34-96ea-04d1172ef57c",
+											"name": "OK",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "<boolean>",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "fe4251f2-a91a-4294-a0cc-04b062b65716",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "<boolean>",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "415014b2-c2df-4b13-99b4-0b191894cae4",
+											"name": "Chirp not found",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "<boolean>",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/like",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"like"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "52c890da-6855-48b4-b52f-6a767289a14b"
+						},
+						{
+							"name": "comment",
+							"item": [
+								{
+									"name": "{comment_id}",
+									"item": [
+										{
+											"name": "like",
+											"item": [
+												{
+													"name": "all",
+													"item": [
+														{
+															"name": "Check if liked a comment",
+															"id": "dbcdeba4-5c95-4c85-8ac1-8805519eca79",
+															"protocolProfileBehavior": {
+																"disableBodyPruning": true
+															},
+															"request": {
+																"method": "GET",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "application/json"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"tweet",
+																		":tweet_id",
+																		"comment",
+																		":comment_id",
+																		"like",
+																		"all"
+																	],
+																	"variable": [
+																		{
+																			"key": "tweet_id",
+																			"value": "<integer>"
+																		},
+																		{
+																			"key": "comment_id",
+																			"value": "<integer>"
+																		}
+																	]
+																}
+															},
+															"response": [
+																{
+																	"id": "7acf2933-1df1-426d-ba19-0cb1b98d8796",
+																	"name": "Check like",
+																	"originalRequest": {
+																		"method": "GET",
+																		"header": [
+																			{
+																				"description": "Added as a part of security scheme: bearer",
+																				"key": "Authorization",
+																				"value": "Bearer <token>"
+																			}
+																		],
+																		"url": {
+																			"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"tweet",
+																				":tweet_id",
+																				"comment",
+																				":comment_id",
+																				"like",
+																				"all"
+																			],
+																			"variable": [
+																				{
+																					"key": "tweet_id"
+																				},
+																				{
+																					"key": "comment_id"
+																				}
+																			]
+																		}
+																	},
+																	"status": "OK",
+																	"code": 200,
+																	"_postman_previewlanguage": "json",
+																	"header": [
+																		{
+																			"key": "Content-Type",
+																			"value": "application/json"
+																		}
+																	],
+																	"cookie": [],
+																	"body": "<boolean>"
+																},
+																{
+																	"id": "cea97aa8-9250-4cdc-915c-3584f1761aeb",
+																	"name": "Invalid identity token",
+																	"originalRequest": {
+																		"method": "GET",
+																		"header": [
+																			{
+																				"description": "Added as a part of security scheme: bearer",
+																				"key": "Authorization",
+																				"value": "Bearer <token>"
+																			}
+																		],
+																		"url": {
+																			"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"tweet",
+																				":tweet_id",
+																				"comment",
+																				":comment_id",
+																				"like",
+																				"all"
+																			],
+																			"variable": [
+																				{
+																					"key": "tweet_id"
+																				},
+																				{
+																					"key": "comment_id"
+																				}
+																			]
+																		}
+																	},
+																	"status": "Unauthorized",
+																	"code": 401,
+																	"_postman_previewlanguage": "text",
+																	"header": [],
+																	"cookie": []
+																},
+																{
+																	"id": "c13cae71-3c1d-47c1-9afe-0ac94396f02c",
+																	"name": "Comment not found",
+																	"originalRequest": {
+																		"method": "GET",
+																		"header": [
+																			{
+																				"description": "Added as a part of security scheme: bearer",
+																				"key": "Authorization",
+																				"value": "Bearer <token>"
+																			}
+																		],
+																		"url": {
+																			"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"tweet",
+																				":tweet_id",
+																				"comment",
+																				":comment_id",
+																				"like",
+																				"all"
+																			],
+																			"variable": [
+																				{
+																					"key": "tweet_id"
+																				},
+																				{
+																					"key": "comment_id"
+																				}
+																			]
+																		}
+																	},
+																	"status": "Not Found",
+																	"code": 404,
+																	"_postman_previewlanguage": "text",
+																	"header": [],
+																	"cookie": []
+																}
+															]
+														},
+														{
+															"name": "Like/Unlike comment",
+															"id": "f6b2cdb7-ae93-4cf1-89d5-4186404b19bd",
+															"protocolProfileBehavior": {
+																"disableBodyPruning": true
+															},
+															"request": {
+																"method": "PUT",
+																"header": [
+																	{
+																		"key": "Content-Type",
+																		"value": "application/json"
+																	}
+																],
+																"body": {
+																	"mode": "raw",
+																	"raw": "<boolean>",
+																	"options": {
+																		"raw": {
+																			"headerFamily": "json",
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"tweet",
+																		":tweet_id",
+																		"comment",
+																		":comment_id",
+																		"like",
+																		"all"
+																	],
+																	"variable": [
+																		{
+																			"key": "tweet_id",
+																			"value": "<integer>"
+																		},
+																		{
+																			"key": "comment_id",
+																			"value": "<integer>"
+																		}
+																	]
+																}
+															},
+															"response": [
+																{
+																	"id": "481efae7-e086-4fe8-961e-1a37c1c607a5",
+																	"name": "OK",
+																	"originalRequest": {
+																		"method": "PUT",
+																		"header": [
+																			{
+																				"key": "Content-Type",
+																				"value": "application/json"
+																			},
+																			{
+																				"description": "Added as a part of security scheme: bearer",
+																				"key": "Authorization",
+																				"value": "Bearer <token>"
+																			}
+																		],
+																		"body": {
+																			"mode": "raw",
+																			"raw": "<boolean>",
+																			"options": {
+																				"raw": {
+																					"headerFamily": "json",
+																					"language": "json"
+																				}
+																			}
+																		},
+																		"url": {
+																			"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"tweet",
+																				":tweet_id",
+																				"comment",
+																				":comment_id",
+																				"like",
+																				"all"
+																			],
+																			"variable": [
+																				{
+																					"key": "tweet_id"
+																				},
+																				{
+																					"key": "comment_id"
+																				}
+																			]
+																		}
+																	},
+																	"status": "OK",
+																	"code": 200,
+																	"_postman_previewlanguage": "text",
+																	"header": [],
+																	"cookie": []
+																},
+																{
+																	"id": "35de075b-11dc-4e19-bdbd-b1514ec87059",
+																	"name": "Invalid identity token",
+																	"originalRequest": {
+																		"method": "PUT",
+																		"header": [
+																			{
+																				"key": "Content-Type",
+																				"value": "application/json"
+																			},
+																			{
+																				"description": "Added as a part of security scheme: bearer",
+																				"key": "Authorization",
+																				"value": "Bearer <token>"
+																			}
+																		],
+																		"body": {
+																			"mode": "raw",
+																			"raw": "<boolean>",
+																			"options": {
+																				"raw": {
+																					"headerFamily": "json",
+																					"language": "json"
+																				}
+																			}
+																		},
+																		"url": {
+																			"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"tweet",
+																				":tweet_id",
+																				"comment",
+																				":comment_id",
+																				"like",
+																				"all"
+																			],
+																			"variable": [
+																				{
+																					"key": "tweet_id"
+																				},
+																				{
+																					"key": "comment_id"
+																				}
+																			]
+																		}
+																	},
+																	"status": "Unauthorized",
+																	"code": 401,
+																	"_postman_previewlanguage": "text",
+																	"header": [],
+																	"cookie": []
+																},
+																{
+																	"id": "2a68cd02-599a-4841-a557-3ae258245e86",
+																	"name": "Comment not found",
+																	"originalRequest": {
+																		"method": "PUT",
+																		"header": [
+																			{
+																				"key": "Content-Type",
+																				"value": "application/json"
+																			},
+																			{
+																				"description": "Added as a part of security scheme: bearer",
+																				"key": "Authorization",
+																				"value": "Bearer <token>"
+																			}
+																		],
+																		"body": {
+																			"mode": "raw",
+																			"raw": "<boolean>",
+																			"options": {
+																				"raw": {
+																					"headerFamily": "json",
+																					"language": "json"
+																				}
+																			}
+																		},
+																		"url": {
+																			"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id/like/all",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"tweet",
+																				":tweet_id",
+																				"comment",
+																				":comment_id",
+																				"like",
+																				"all"
+																			],
+																			"variable": [
+																				{
+																					"key": "tweet_id"
+																				},
+																				{
+																					"key": "comment_id"
+																				}
+																			]
+																		}
+																	},
+																	"status": "Not Found",
+																	"code": 404,
+																	"_postman_previewlanguage": "text",
+																	"header": [],
+																	"cookie": []
+																}
+															]
+														}
+													],
+													"id": "ef880f7f-0fc1-4e08-b651-2dbec9242d60"
+												}
+											],
+											"id": "26201b71-825b-4788-8d51-d29bfcbe47e2"
+										},
+										{
+											"name": "Delete comment",
+											"id": "b8c23a0f-8c98-4f0e-9e22-beeaf699b37f",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment",
+														":comment_id"
+													],
+													"variable": [
+														{
+															"key": "tweet_id",
+															"value": "<integer>"
+														},
+														{
+															"key": "comment_id",
+															"value": "<integer>"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"id": "16201d85-9c74-4331-b67e-3f7ab297eea7",
+													"name": "Comment deleted",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"comment",
+																":comment_id"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																},
+																{
+																	"key": "comment_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "6e8e0038-018a-4b19-9087-d59e7f836896",
+													"name": "Unathorized for this action",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"comment",
+																":comment_id"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																},
+																{
+																	"key": "comment_id"
+																}
+															]
+														}
+													},
+													"status": "Unauthorized",
+													"code": 401,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "4b42af11-9df4-4163-b480-1c39cf14c82f",
+													"name": "Comment not found",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"comment",
+																":comment_id"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																},
+																{
+																	"key": "comment_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												}
+											]
+										},
+										{
+											"name": "Get comment on tweet",
+											"id": "f36c41e5-7055-46d3-a6de-9fc37466731c",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment",
+														":comment_id"
+													],
+													"variable": [
+														{
+															"key": "tweet_id",
+															"value": "<integer>"
+														},
+														{
+															"key": "comment_id",
+															"value": "<integer>"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"id": "edc7b080-0e7f-4f7f-886c-d1ad4cac8f96",
+													"name": "Comment found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"comment",
+																":comment_id"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																},
+																{
+																	"key": "comment_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"comment_id\": \"<integer>\",\n  \"author_id\": \"<integer>\",\n  \"content\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"likes\": \"<integer>\"\n}"
+												},
+												{
+													"id": "95eae13b-20d3-4db0-a34f-e571df9560d7",
+													"name": "Invalid identity token",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"comment",
+																":comment_id"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																},
+																{
+																	"key": "comment_id"
+																}
+															]
+														}
+													},
+													"status": "Unauthorized",
+													"code": 401,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "598c4749-7e93-418f-b860-12681115cbdd",
+													"name": "Comment not found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: bearer",
+																"key": "Authorization",
+																"value": "Bearer <token>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/tweet/:tweet_id/comment/:comment_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"tweet",
+																":tweet_id",
+																"comment",
+																":comment_id"
+															],
+															"variable": [
+																{
+																	"key": "tweet_id"
+																},
+																{
+																	"key": "comment_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												}
+											]
+										}
+									],
+									"id": "b51c8534-fc6d-478c-8a57-b42c67c7ab8d"
+								},
+								{
+									"name": "Comment on a chirp",
+									"id": "081ba396-e730-4e1e-89fe-17a27f237a21",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"content\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id",
+												"comment"
+											],
+											"variable": [
+												{
+													"key": "tweet_id",
+													"value": "<integer>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "14f806e8-1951-4cba-8b50-3b8d6be6619a",
+											"name": "Comment created",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"content\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "494831be-f63b-4e3b-8e39-06c93597a671",
+											"name": "Bad request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"content\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "999c7c4a-1c2e-4a26-809e-86a02e34fe21",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"content\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "35c1466b-febe-4e33-a9e5-7f7e3e0ef0e4",
+											"name": "Chirp not found",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"content\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								},
+								{
+									"name": "Get comments on a chirp",
+									"id": "346c7655-9b1f-4523-afcc-3238b6c2496e",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id",
+												"comment"
+											],
+											"variable": [
+												{
+													"key": "tweet_id",
+													"value": "<integer>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "a83dec62-f3ed-40f0-b41c-e33a487ad397",
+											"name": "Comments",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"comment_id\": \"<integer>\",\n    \"author_id\": \"<integer>\",\n    \"content\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"likes\": \"<integer>\"\n  },\n  {\n    \"comment_id\": \"<integer>\",\n    \"author_id\": \"<integer>\",\n    \"content\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"likes\": \"<integer>\"\n  }\n]"
+										},
+										{
+											"id": "fc755dc6-2b89-4ac6-a346-fb23feed2002",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "5caa14ee-0008-487b-a7d7-a103c523be2e",
+											"name": "Chirp not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/tweet/:tweet_id/comment",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"tweet",
+														":tweet_id",
+														"comment"
+													],
+													"variable": [
+														{
+															"key": "tweet_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "747e26e7-d825-41e7-befb-158734040042"
+						},
+						{
+							"name": "Get chirp by ID",
+							"id": "741a50a2-17ec-494c-8bb7-d604c3dfd8f0",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tweet/:tweet_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet",
+										":tweet_id"
+									],
+									"variable": [
+										{
+											"key": "tweet_id",
+											"value": "<integer>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "5c84cd84-18e9-4372-940e-ad084c38727d",
+									"name": "Chirp found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id"
+											],
+											"variable": [
+												{
+													"key": "tweet_id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"tweet_id\": \"<integer>\",\n  \"author\": \"<integer>\",\n  \"content\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"like_count\": \"<integer>\",\n  \"comment_count\": \"<integer>\",\n  \"array_agg\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
+								},
+								{
+									"id": "68c6112a-6137-48c0-9213-812b5e27553a",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id"
+											],
+											"variable": [
+												{
+													"key": "tweet_id"
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "6b5d855e-d014-4a85-b2bd-8e04277b3501",
+									"name": "Chirp not found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id"
+											],
+											"variable": [
+												{
+													"key": "tweet_id"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						},
+						{
+							"name": "Delete chirp",
+							"id": "25af1049-1355-4364-9237-56fd926fdadc",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tweet/:tweet_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet",
+										":tweet_id"
+									],
+									"variable": [
+										{
+											"key": "tweet_id",
+											"value": "<integer>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "020ee505-0445-45f2-8d51-5e70ca9b4f5b",
+									"name": "Chirp deleted",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id"
+											],
+											"variable": [
+												{
+													"key": "tweet_id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "7fcf4c01-d1cd-46d6-bc27-94991da9c2d9",
+									"name": "Unathorized for this action",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id"
+											],
+											"variable": [
+												{
+													"key": "tweet_id"
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "e66d410e-3c56-4fc8-af73-abe6cbf6d579",
+									"name": "Chirp not found",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/:tweet_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												":tweet_id"
+											],
+											"variable": [
+												{
+													"key": "tweet_id"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "916f9499-256c-475f-a0f5-b147d33879b8"
+				},
+				{
+					"name": "extend",
+					"item": [
+						{
+							"name": "Get extended feed",
+							"id": "37abb4c1-d678-44d0-8a01-bb84302b40c6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tweet/extend?paginate=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet",
+										"extend"
+									],
+									"query": [
+										{
+											"description": "Pagination key",
+											"key": "paginate",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "cea71e66-c1c5-4ebc-a020-54833b7d3261",
+									"name": "Feed",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/extend?paginate=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												"extend"
+											],
+											"query": [
+												{
+													"description": "Pagination key",
+													"key": "paginate",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"chirps\": [\n    {\n      \"tweet_id\": \"<integer>\",\n      \"author\": \"<integer>\",\n      \"content\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"like_count\": \"<integer>\",\n      \"comment_count\": \"<integer>\",\n      \"array_agg\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"tweet_id\": \"<integer>\",\n      \"author\": \"<integer>\",\n      \"content\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"like_count\": \"<integer>\",\n      \"comment_count\": \"<integer>\",\n      \"array_agg\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"paginatekey\": \"<string>\"\n}"
+								},
+								{
+									"id": "f6c9b87a-770c-4b8a-ad8f-1dd3dfaf2d95",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/tweet/extend?paginate=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tweet",
+												"extend"
+											],
+											"query": [
+												{
+													"description": "Pagination key",
+													"key": "paginate",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "93d4d5fd-960a-46bf-af86-a1a50b13a62c"
+				},
+				{
+					"name": "Create a chirp",
+					"id": "80ff3124-f1ea-478d-9f97-5bee267692af",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"<string>\",\n  \"mentions\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tweet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tweet"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "a0c7abf8-89b2-44ee-ab8a-258444be7087",
+							"name": "Chirp created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"<string>\",\n  \"mentions\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tweet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"tweet_id\": \"<integer>\"\n}"
+						},
+						{
+							"id": "dd26cda3-ce1e-43de-8595-8b5e57c01444",
+							"name": "Bad request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"<string>\",\n  \"mentions\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tweet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						},
+						{
+							"id": "f04ac2f5-3a1e-49fb-a32d-c8e8cc40741e",
+							"name": "Invalid identity token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"<string>\",\n  \"mentions\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tweet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						}
+					]
+				},
+				{
+					"name": "Get own feed",
+					"id": "92784d38-6a22-44ac-a6d0-aa764893e983",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tweet?paginate=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tweet"
+							],
+							"query": [
+								{
+									"description": "Pagination key",
+									"key": "paginate",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "f7bc632e-fb31-452a-a4b5-e0d863bdce56",
+							"name": "Feed",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tweet?paginate=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet"
+									],
+									"query": [
+										{
+											"description": "Pagination key",
+											"key": "paginate",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"chirps\": [\n    {\n      \"tweet_id\": \"<integer>\",\n      \"author\": \"<integer>\",\n      \"content\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"like_count\": \"<integer>\",\n      \"comment_count\": \"<integer>\",\n      \"array_agg\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"tweet_id\": \"<integer>\",\n      \"author\": \"<integer>\",\n      \"content\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"like_count\": \"<integer>\",\n      \"comment_count\": \"<integer>\",\n      \"array_agg\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"paginatekey\": \"<string>\"\n}"
+						},
+						{
+							"id": "db862cac-a3d0-4d98-a79a-2b73756b7321",
+							"name": "Invalid identity token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tweet?paginate=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tweet"
+									],
+									"query": [
+										{
+											"description": "Pagination key",
+											"key": "paginate",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": []
+						}
+					]
+				}
+			],
+			"id": "950387c2-503a-4f78-8e68-6f9f3e1a2f9c"
+		},
+		{
+			"name": "search",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "{query}",
+							"item": [
+								{
+									"name": "Search users",
+									"id": "bdeddc0d-78d0-46b1-b46e-9406e7e2b489",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/search/users/:query",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"search",
+												"users",
+												":query"
+											],
+											"variable": [
+												{
+													"key": "query",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "ff2495f9-2da0-4df6-b9b4-dd48630fed0d",
+											"name": "Users",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/search/users/:query",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"search",
+														"users",
+														":query"
+													],
+													"variable": [
+														{
+															"key": "query"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"user_id\": \"<integer>\",\n    \"username\": \"<string>\",\n    \"displayname\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"profile_image_url\": \"<string>\",\n    \"bio\": \"<string>\",\n    \"count_tweets\": \"<integer>\",\n    \"count_followers\": \"<integer>\",\n    \"count_followings\": \"<integer>\"\n  },\n  {\n    \"user_id\": \"<integer>\",\n    \"username\": \"<string>\",\n    \"displayname\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"profile_image_url\": \"<string>\",\n    \"bio\": \"<string>\",\n    \"count_tweets\": \"<integer>\",\n    \"count_followers\": \"<integer>\",\n    \"count_followings\": \"<integer>\"\n  }\n]"
+										},
+										{
+											"id": "ba8498c8-df8d-4032-8cd3-682499a7ea52",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/search/users/:query",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"search",
+														"users",
+														":query"
+													],
+													"variable": [
+														{
+															"key": "query"
+														}
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "f211cea2-edce-4239-bb78-1339f7499b02"
+						}
+					],
+					"id": "6fefff11-2e08-4666-b312-2aa35b025a94"
+				}
+			],
+			"id": "3ea43612-8e68-47b7-8b84-dd2f6ac3860c"
+		},
 		{
 			"name": "auth",
 			"item": [
@@ -15,7 +4139,7 @@
 					"item": [
 						{
 							"name": "Check your current identity",
-							"id": "ef56deb6-1ce5-46ae-8a83-439aef99c724",
+							"id": "93fcd5b3-cc10-45d1-9893-6cc7d12ba217",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -35,7 +4159,7 @@
 							},
 							"response": [
 								{
-									"id": "3cba4032-f830-4f4b-80c5-3e4b1684a7de",
+									"id": "c77155ca-87b7-41c0-a482-5ca4b1f0891f",
 									"name": "Your current identity",
 									"originalRequest": {
 										"method": "POST",
@@ -64,8 +4188,8 @@
 									"cookie": []
 								},
 								{
-									"id": "5210a337-0c9d-475a-878d-5e7303afe4a8",
-									"name": "Invalid identity token",
+									"id": "9ffbdf9a-ec58-4359-bdf8-691fbcbe99e2",
+									"name": "Invalid identity toke",
 									"originalRequest": {
 										"method": "POST",
 										"header": [
@@ -95,7 +4219,7 @@
 							]
 						}
 					],
-					"id": "51cbb9e1-c2c0-43d4-b311-c563c1a312d3"
+					"id": "c4b4499e-ce32-4c18-ad67-7b4d0322af36"
 				},
 				{
 					"name": "signout",
@@ -105,7 +4229,7 @@
 							"item": [
 								{
 									"name": "Invalidate all sessions for current user",
-									"id": "d55604d8-4084-421d-8ad1-d8ccfe6a8da5",
+									"id": "4578de53-342a-4cef-9358-a327d0997ab2",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -126,7 +4250,7 @@
 									},
 									"response": [
 										{
-											"id": "d739ec30-27e3-46bf-9459-c62a109cbcce",
+											"id": "e2df42fd-94ee-4c02-a08a-db965dded9a5",
 											"name": "User sessions invalidated; will apply after next refresh",
 											"originalRequest": {
 												"method": "POST",
@@ -156,7 +4280,7 @@
 											"cookie": []
 										},
 										{
-											"id": "b81c8e57-b6c6-4c73-8ba3-fbb11b2aa90c",
+											"id": "c08d111e-e1ae-436c-a7b3-4010f72f742f",
 											"name": "Invalid identity token",
 											"originalRequest": {
 												"method": "POST",
@@ -188,11 +4312,11 @@
 									]
 								}
 							],
-							"id": "324967e6-27cc-468f-bd19-964fba91fd63"
+							"id": "8aa6e7d2-352f-40ab-a7b4-595668449b10"
 						},
 						{
 							"name": "Invalidate current session",
-							"id": "efe9a763-5ed3-45fa-8e8a-cc9697e969af",
+							"id": "71a703a4-02dc-4bc1-9a98-8989b55c486c",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -212,7 +4336,7 @@
 							},
 							"response": [
 								{
-									"id": "7ad2a139-8f8e-42a5-a7c7-5108cebb9b44",
+									"id": "1a2525e3-b108-4f32-a095-e02c52572ba8",
 									"name": "Current session invalidated; will apply after next refresh",
 									"originalRequest": {
 										"method": "POST",
@@ -241,7 +4365,7 @@
 									"cookie": []
 								},
 								{
-									"id": "63965629-1b89-4846-af06-dd6d5fb85a54",
+									"id": "3e4a827f-29c6-46bd-bcdb-98b6d168d69d",
 									"name": "Invalid identity token",
 									"originalRequest": {
 										"method": "POST",
@@ -272,14 +4396,14 @@
 							]
 						}
 					],
-					"id": "39fe2c95-3e07-4cf2-bba1-0e3ae1a300df"
+					"id": "508d848e-bfeb-4c11-b512-6a537e6f9dea"
 				},
 				{
 					"name": "resetpassword",
 					"item": [
 						{
 							"name": "Request a password reset email",
-							"id": "38612766-2033-4526-b499-543c43355d3a",
+							"id": "8c52ea35-95e1-46ce-9a00-9e45c4c11331",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -293,7 +4417,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"/=x.q5ae86fx{^m.r&|/#~.9.?.t2i-._/iyhh_{x.dkx?7=e.an+~~8scu#b.-@y9req.s.fdnjfg.dyf7.g36tv9.5g2r.b.k.q.ktlnt1icj-b.7bxbky/\"\n}",
+									"raw": "{\n  \"email\": \"/h5dx_o.x238r'.6w*=.f_=bs%%jgmz.#bc/a_@6.6.kj.m.yzxkcq.e0covsk.qoozn3klz95.ib-g.2.le.gwbexqvx7/\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -314,7 +4438,7 @@
 							},
 							"response": [
 								{
-									"id": "4182859c-e717-431b-bfef-0d8dd1e2ad2f",
+									"id": "79c465a8-01c7-4614-915f-4fafec6725d1",
 									"name": "Password reset email sent if user existed",
 									"originalRequest": {
 										"method": "POST",
@@ -331,7 +4455,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"email\": \"/=x.q5ae86fx{^m.r&|/#~.9.?.t2i-._/iyhh_{x.dkx?7=e.an+~~8scu#b.-@y9req.s.fdnjfg.dyf7.g36tv9.5g2r.b.k.q.ktlnt1icj-b.7bxbky/\"\n}",
+											"raw": "{\n  \"email\": \"/h5dx_o.x238r'.6w*=.f_=bs%%jgmz.#bc/a_@6.6.kj.m.yzxkcq.e0covsk.qoozn3klz95.ib-g.2.le.gwbexqvx7/\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -360,7 +4484,7 @@
 						},
 						{
 							"name": "Reset password using a password reset token",
-							"id": "a6df4a88-3d10-403b-86ea-7911c7d040f3",
+							"id": "49937982-a27e-432a-9eba-e4f4528ec166",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -405,7 +4529,7 @@
 							},
 							"response": [
 								{
-									"id": "3a4dc792-e688-4b52-9e7a-79c4a086dba5",
+									"id": "e0ad3303-233e-4023-ae0e-c5c1406a24b8",
 									"name": "Password reset",
 									"originalRequest": {
 										"method": "PUT",
@@ -448,7 +4572,7 @@
 									"cookie": []
 								},
 								{
-									"id": "a7b1b690-05ed-405b-8b54-42a97e329abd",
+									"id": "147d6ced-c4dd-417c-9940-5b8cdd41fedc",
 									"name": "Invalid password reset token",
 									"originalRequest": {
 										"method": "PUT",
@@ -493,14 +4617,14 @@
 							]
 						}
 					],
-					"id": "8aeec998-f690-4c74-97cd-f79380ba654f"
+					"id": "ef910af8-dbe6-4945-ba1a-71cffa7cbe57"
 				},
 				{
 					"name": "register",
 					"item": [
 						{
 							"name": "Register a new auth account",
-							"id": "354e2c56-c1d4-4c89-8f3e-3fc3f9dab90d",
+							"id": "b56da034-aae7-4486-bbcc-8610142ee922",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -518,7 +4642,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+									"raw": "{\n  \"email\": \"/2uy$}l@n.49e6ao2rr.l.wxx4bg02m/\",\n  \"password\": \"<string>\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -539,7 +4663,7 @@
 							},
 							"response": [
 								{
-									"id": "3f81c6aa-fe3a-4a15-b0b6-a8c7efa0cc65",
+									"id": "65ac5cc3-ccac-4b01-8563-f4fad0f0975f",
 									"name": "Auth option created",
 									"originalRequest": {
 										"method": "POST",
@@ -556,7 +4680,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+											"raw": "{\n  \"email\": \"/2uy$}l@n.49e6ao2rr.l.wxx4bg02m/\",\n  \"password\": \"<string>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -582,7 +4706,7 @@
 									"cookie": []
 								},
 								{
-									"id": "f532f936-f8ea-4ba2-8b4c-b3a728deaa71",
+									"id": "29c3cf86-83ea-4f46-bfab-38038e0f59cc",
 									"name": "Bad request",
 									"originalRequest": {
 										"method": "POST",
@@ -599,7 +4723,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+											"raw": "{\n  \"email\": \"/2uy$}l@n.49e6ao2rr.l.wxx4bg02m/\",\n  \"password\": \"<string>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -625,7 +4749,7 @@
 									"cookie": []
 								},
 								{
-									"id": "c27637ac-73bc-4adb-835b-0c0666ca3c79",
+									"id": "ae4cedb3-4b09-4a79-9dfc-03689480a5d2",
 									"name": "Email already registered",
 									"originalRequest": {
 										"method": "POST",
@@ -642,7 +4766,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+											"raw": "{\n  \"email\": \"/2uy$}l@n.49e6ao2rr.l.wxx4bg02m/\",\n  \"password\": \"<string>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -677,7 +4801,7 @@
 						},
 						{
 							"name": "Delete auth user with no user associated",
-							"id": "0ef63205-2057-43e4-af69-854ee867c03c",
+							"id": "eec0a880-072b-41f3-a73d-153aa70da6eb",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -698,7 +4822,7 @@
 							},
 							"response": [
 								{
-									"id": "148799a7-b860-49bc-906c-3c3a1fc6ec66",
+									"id": "c1560ee3-09c2-48f4-8cbd-a27a35f18408",
 									"name": "Auth option deleted",
 									"originalRequest": {
 										"method": "DELETE",
@@ -727,7 +4851,7 @@
 									"cookie": []
 								},
 								{
-									"id": "b5cf3174-671d-41ff-a8f7-e656c376fe21",
+									"id": "5bca2ecd-d182-4500-8979-001c9aaa2abc",
 									"name": "Invalid identity token",
 									"originalRequest": {
 										"method": "DELETE",
@@ -758,14 +4882,14 @@
 							]
 						}
 					],
-					"id": "a2999a0a-de07-410e-b9d6-3a4ae737a3a7"
+					"id": "c3b738ee-de19-42e5-b232-52bee8123397"
 				},
 				{
 					"name": "refresh",
 					"item": [
 						{
 							"name": "Get a new identity token using a refresh token",
-							"id": "76308e64-359b-4f05-9600-a3ea2cd24b4f",
+							"id": "3eb0b44b-1ccb-40c1-b4c8-b8c46563e3ed",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -804,7 +4928,7 @@
 							},
 							"response": [
 								{
-									"id": "ab0f21d0-fdbc-4d15-989c-9c8b6b2139b7",
+									"id": "11e4c168-27d5-4be4-981b-dedb4b388333",
 									"name": "OK",
 									"originalRequest": {
 										"method": "POST",
@@ -853,7 +4977,7 @@
 									"body": "{\n  \"jwt\": \"<string>\"\n}"
 								},
 								{
-									"id": "2f7c4b96-3727-4287-a190-15c59d367ae1",
+									"id": "d7651109-60e6-4f80-aad3-6f495a729322",
 									"name": "Invalid refresh token",
 									"originalRequest": {
 										"method": "POST",
@@ -898,14 +5022,14 @@
 							]
 						}
 					],
-					"id": "5fe85cf6-1350-4c56-a547-fc14e4bb01a7"
+					"id": "1f2cfd65-7fbd-4aa8-a13d-4653e15cdabd"
 				},
 				{
 					"name": "login",
 					"item": [
 						{
 							"name": "Login using an auth account",
-							"id": "93caa23f-8420-4d52-982c-3be50da4f14a",
+							"id": "6e09fd9b-c6ee-4f8c-9c51-2865a741866d",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -923,7 +5047,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"email\": \"/%qe3_4u!.&.*.8/w9o^?o}s8.q8+1bxtzj-p.6f+2^y.%yx{jco/$.844#y@x.mc.tg8.s59jpi.2uyap7pl0d.x.ii61.j.8im.tvzmkb/\",\n  \"password\": \"<string>\"\n}",
+									"raw": "{\n  \"email\": \"/al$61kgr8%.#nmh{q?h.wb5.~v+%=q%g3.nx6hz18q.ychawfq}1.~b?{=.?#*{1nz?}e=.zyp7_y@x3.rdi08sgu1h.ksv0g.v.7.o.u.muqqhualbftj.9.j/\",\n  \"password\": \"<string>\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -944,7 +5068,7 @@
 							},
 							"response": [
 								{
-									"id": "352cd916-a070-4d12-ad1d-a3b18e27ab6d",
+									"id": "8dceb4d7-fdee-4b5d-9a3c-5803186a07a4",
 									"name": "OK",
 									"originalRequest": {
 										"method": "POST",
@@ -961,7 +5085,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"email\": \"/%qe3_4u!.&.*.8/w9o^?o}s8.q8+1bxtzj-p.6f+2^y.%yx{jco/$.844#y@x.mc.tg8.s59jpi.2uyap7pl0d.x.ii61.j.8im.tvzmkb/\",\n  \"password\": \"<string>\"\n}",
+											"raw": "{\n  \"email\": \"/al$61kgr8%.#nmh{q?h.wb5.~v+%=q%g3.nx6hz18q.ychawfq}1.~b?{=.?#*{1nz?}e=.zyp7_y@x3.rdi08sgu1h.ksv0g.v.7.o.u.muqqhualbftj.9.j/\",\n  \"password\": \"<string>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -993,7 +5117,7 @@
 									"body": "{\n  \"jwt\": \"<string>\",\n  \"refreshToken\": \"<string>\"\n}"
 								},
 								{
-									"id": "61e62063-e0dd-414e-8718-a390ff5853bf",
+									"id": "b08168cb-0f42-4a4e-ba66-5c54e0bb126b",
 									"name": "Invalid credentials",
 									"originalRequest": {
 										"method": "POST",
@@ -1010,7 +5134,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"email\": \"/%qe3_4u!.&.*.8/w9o^?o}s8.q8+1bxtzj-p.6f+2^y.%yx{jco/$.844#y@x.mc.tg8.s59jpi.2uyap7pl0d.x.ii61.j.8im.tvzmkb/\",\n  \"password\": \"<string>\"\n}",
+											"raw": "{\n  \"email\": \"/al$61kgr8%.#nmh{q?h.wb5.~v+%=q%g3.nx6hz18q.ychawfq}1.~b?{=.?#*{1nz?}e=.zyp7_y@x3.rdi08sgu1h.ksv0g.v.7.o.u.muqqhualbftj.9.j/\",\n  \"password\": \"<string>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -1038,10 +5162,10 @@
 							]
 						}
 					],
-					"id": "452aeec2-aa00-4537-bcee-bdea2c6ea8fd"
+					"id": "09bf6143-845a-49a2-9c7f-30b0c4dce35e"
 				}
 			],
-			"id": "2ebb4769-4296-4f6a-bd36-2e261da0c471"
+			"id": "37f3de82-3eec-47af-b292-5b3daee6e170"
 		}
 	],
 	"auth": {
@@ -1056,7 +5180,7 @@
 	},
 	"variable": [
 		{
-			"id": "669f5d00-ea81-4eef-a6ee-22a59bad7273",
+			"id": "63298f7e-ea5c-45f4-a3e4-a1a0ef6bfd32",
 			"key": "baseUrl",
 			"value": "https://api.thechirp.de/v1"
 		}

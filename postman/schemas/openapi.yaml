@@ -11,12 +11,16 @@ servers:
     description: Sandbox v1 API
 
 paths:
+
   #
   # Auth
   #
+
   /auth/register:
     post:
       summary: Register a new auth account
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -29,6 +33,7 @@ paths:
                 email:
                   description: Unique email identifier for this auth option
                   type: string
+                  example: someone@email.com
                   pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
                 password:
                   description: Password this auth option
@@ -47,14 +52,19 @@ paths:
     delete:
       summary: Delete auth user with no user associated
       description: If a user was created already, use delete user. This will also delete all associated auth options.
+      tags:
+        - auth
       responses:
         200:
           description: Auth option deleted
         401:
           description: Invalid identity token
+  
   /auth/login:
     post:
       summary: Login using an auth account
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -67,6 +77,7 @@ paths:
                 email:
                   description: Email identifier for this auth option
                   type: string
+                  example: someone@email.com
                   pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
                 password:
                   description: Password this auth option
@@ -89,9 +100,12 @@ paths:
                     type: string   
         401:
           description: Invalid credentials
+  
   /auth/refresh:
     post:
       summary: Get a new identity token using a refresh token
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -118,25 +132,34 @@ paths:
                     type: string 
         401:
           description: Invalid refresh token
+  
   /auth/signout:
     post:
       summary: Invalidate current session
+      tags:
+        - auth
       responses:
         200:
           description: Current session invalidated; will apply after next refresh
         401:
           description: Invalid identity token
+  
   /auth/signout/all:
     post:
       summary: Invalidate all sessions for current user
+      tags:
+        - auth
       responses:
         200:
           description: User sessions invalidated; will apply after next refresh
         401:
           description: Invalid identity token
+  
   /auth/resetpassword:
     post:
       summary: Request a password reset email
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -148,12 +171,15 @@ paths:
                 email:
                   description: Email identifier for this auth option
                   type: string
+                  example: someone@email.com
                   pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
       responses:
         200:
           description: Password reset email sent if user existed
     put:
       summary: Reset password using a password reset token
+      tags:
+        - auth
       security:
         - resetToken: []
       requestBody:
@@ -171,18 +197,883 @@ paths:
           description: Password reset
         401:
           description: Invalid password reset token
+  
   /auth/whoami:
     post:
       summary: Check your current identity
+      tags:
+        - auth
       responses:
         200:
           description: Your current identity
         401:
+          description: Invalid identity toke
+
+    #
+    # User
+    #
+
+  /user:
+    post:
+      summary: Create a user and associate to the current auth account
+      tags:
+        - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - displayname
+              properties:
+                username:
+                  description: Unique username
+                  type: string
+                displayname:
+                  description: Display name
+                  type: string
+      responses:
+        200:
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - jwt
+                  - refreshToken
+                  - user_id
+                  - username
+                  - displayname
+                properties:
+                  jwt:
+                    description: Identity token for the user; expires after 15 minutes
+                    type: string
+                  refreshToken:
+                    description: Refresh token for the user; expires after 1 year or session reset
+                    type: string
+                  user_id:
+                    description: User ID
+                    type: integer
+                  username:
+                    description: Chosen username
+                    type: string
+                  displayname:  
+                    description: Chosen display name
+                    type: string  
+        400:
+          description: Bad request, including prohibited or taken username
+        401:
           description: Invalid identity token
+    delete:
+      summary: Delete user and associated auth account
+      tags:
+        - user
+        - auth
+      responses:
+        200:
+          description: User deleted
+        401:
+          description: Invalid identity token
+    put:
+      summary: Update user
+      tags:
+        - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  description: Unique username
+                  type: string
+                displayname:
+                  description: Display name
+                  type: string
+                bio:
+                  description: User bio
+                  type: string
+      responses:
+        200:
+          description: User updated
+        400:
+          description: Bad request, including prohibited or taken username
+        401:
+          description: Invalid identity token
+
+  /user/profileimage:
+    put:
+      summary: Update user profile image
+      tags: 
+        - user
+      requestBody:
+        content:
+          mulipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: User profile image updated
+        401:
+          description: Invalid identity token
+
+  /user/istaken/{username}:
+    summary: Check if a username is taken
+    get:
+      summary: Check if a username is taken
+      tags:
+        - user
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Username check
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - taken
+                properties:
+                  taken:
+                    description: Whether the username is taken
+                    type: boolean
+
+  /user/me:
+    summary: Get current user
+    get:
+      summary: Get current user
+      tags:
+        - user
+      responses:
+        200:
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:  
+          description: Invalid identity token
+
+  /user/{username}:
+    summary: Get user by username
+    get:
+      summary: Get user by username
+      tags:
+        - user
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:  
+          description: Invalid identity token
+        404:
+          description: User not found
+
+  /user/{username}/tweets:
+    summary: Get tweets by user
+    get:
+      summary: Get tweets by user
+      tags:
+        - user
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+        - name: paginate
+          in: query
+          description: Pagination key
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Tweets by user found
+          content:
+            application/json:
+              schema:
+                required:
+                  - chirps
+                properties:
+                  paginatekey:
+                    description: Key to use for pagination
+                    type: string
+                  chirps:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tweet'  
+        401:  
+          description: Invalid identity token
+        404:
+          description: User not found
+    
+  /user/{username}/followers:
+      summary: Get followers by user
+      get:
+        summary: Get followers by user
+        tags:
+          - user
+          - follow
+        parameters:
+          - name: username
+            in: path
+            description: Username
+            required: true
+            schema:
+              type: string
+        responses:
+          200:
+            description: Followers by user found
+            content:
+              application/json:
+                schema:
+                  required:
+                    - followers
+                  properties:
+                    followers:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/User'  
+          401:  
+            description: Invalid identity token
+          404:
+            description: User not found
+        
+  /user/{username}/following:
+      summary: Get followings by user
+      get:
+        summary: Get followings by user
+        tags:
+          - user
+          - follow
+        parameters:
+          - name: username
+            in: path
+            description: Username
+            required: true
+            schema:
+              type: string
+        responses:
+          200:
+            description: Followings by user found
+            content:
+              application/json:
+                schema:
+                  required:
+                    - followings
+                  properties:
+                    followings:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/User'  
+          401:  
+            description: Invalid identity token
+          404:
+            description: User not found
   
+  /user/{username}/follow:
+    summary: Follow / Check if following
+    get:
+      summary: Follow/Unfollow user
+      tags:
+        - user
+        - follow
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Check following
+          content:
+            application/json:
+              schema:
+                type: boolean
+                description: Whether the user is following the other user
+        401:  
+          description: Invalid identity token
+        404:
+          description: User not found
+    put:
+      summary: Follow/Unfollow user  
+      tags:
+        - user
+        - follow
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              description: Whether to follow (true) or unfollow (false) the user
+      responses:
+        200:
+          description: OK
+        401:  
+          description: Invalid identity token
+        404:
+          description: User not found
+
+    #
+    # Chirps
+    #
+
+  /tweet:
+    summary: Chirp
+    post:
+      summary: Create a chirp
+      tags:
+        - chirp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - content
+              properties:
+                content:
+                  description: Chirp text
+                  type: string
+                mentions:
+                  type: array
+                  items:
+                    type: string
+                    description: Mentioned username
+      responses:
+        200:
+          description: Chirp created
+          content:
+            application/json:
+              schema:
+                required:
+                  - tweet_id
+                properties:
+                  tweet_id:
+                    description: Tweet ID
+                    type: integer
+        400:
+          description: Bad request
+        401:
+          description: Invalid identity token
+    get:
+      summary: Get own feed
+      tags:
+        - chirp
+      parameters:
+        - name: paginate
+          in: query
+          description: Pagination key
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Feed
+          content:
+            application/json:
+              schema:
+                required:
+                  - chirps
+                properties:
+                  paginatekey:
+                    description: Key to use for pagination
+                    type: string
+                  chirps:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tweet'  
+        401:  
+          description: Invalid identity token
+
+  /tweet/extend:
+    summary: Get extended feed  
+    get:
+      summary: Get extended feed
+      tags:
+        - chirp
+      parameters:
+        - name: paginate
+          in: query
+          description: Pagination key
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Feed
+          content:
+            application/json:
+              schema:
+                required:
+                  - chirps
+                properties:
+                  paginatekey:
+                    description: Key to use for pagination
+                    type: string
+                  chirps:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tweet'  
+        401:  
+          description: Invalid identity token
+    
+  /tweet/{tweet_id}:
+    summary: Get chirp by ID
+    get:
+      summary: Get chirp by ID
+      tags:
+        - chirp
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Chirp found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tweet'
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+    delete:
+      summary: Delete chirp
+      tags:
+        - chirp
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Chirp deleted
+        401:  
+          description: Unathorized for this action
+        404:
+          description: Chirp not found
+
+  # Likes
+
+  /tweet/{tweet_id}/like:
+    summary: Like / Check if liked
+    get:
+      summary: Check if liked a chirp
+      tags:
+        - chirp
+        - like
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Check like
+          content:
+            application/json:
+              schema:
+                type: boolean
+                description: Whether the user liked the chirp
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+    put:
+      summary: Like/Unlike chirp  
+      tags:
+        - chirp
+        - like
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              description: Whether to like (true) or unlike (false) the chirp
+      responses:
+        200:
+          description: OK
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+
+  /tweet/{tweet_id}/like/all:
+    summary: List likes on a chirp
+    get:
+      summary: List likes on a chirp
+      tags:
+        - chirp
+        - like
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Likes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  description: User ID
+                  type: integer
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+  
+  # Comments
+
+  /tweet/{tweet_id}/comment:
+    post:
+      summary: Comment on a chirp
+      tags:
+        - chirp
+        - comment
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - content
+              properties:
+                content:
+                  description: Comment text
+                  type: string
+      responses:
+        200:
+          description: Comment created
+        400:
+          description: Bad request
+        401:
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+    get:
+      summary: Get comments on a chirp
+      tags:
+        - chirp
+        - comment
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+
+  /tweet/{tweet_id}/comment/{comment_id}:
+    delete:
+      summary: Delete comment
+      tags:
+        - chirp
+        - comment
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Comment deleted
+        401:  
+          description: Unathorized for this action
+        404:
+          description: Comment not found
+    get: 
+      summary: Get comment on tweet
+      tags:
+        - chirp
+        - comment
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Comment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:  
+          description: Invalid identity token
+        404:
+          description: Comment not found
+
+  /tweet/{tweet_id}/comment/{comment_id}/like/all:
+    summary: Like / Check if liked
+    get:
+      summary: Check if liked a comment
+      tags:
+        - chirp
+        - comment
+        - like
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Check like
+          content:
+            application/json:
+              schema:
+                type: boolean
+                description: Whether the user liked the comment
+        401:  
+          description: Invalid identity token
+        404:
+          description: Comment not found
+    put:
+      summary: Like/Unlike comment  
+      tags:
+        - chirp
+        - comment
+        - like
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              description: Whether to like (true) or unlike (false) the comment
+      responses:
+        200:
+          description: OK
+        401:  
+          description: Invalid identity token
+        404:
+          description: Comment not found
+
+  #
+  # Search
+  #
+
+  /search/users/{query}:
+    summary: Search users
+    get:
+      summary: Search users
+      tags:
+        - search
+        - user
+      parameters:
+        - name: query
+          in: path
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:  
+          description: Invalid identity token
+
+
 
 components:
   schemas:
+    User:
+      type: object
+      required:
+        - user_id
+        - username
+        - displayname
+        - created_at
+      properties:
+        user_id:
+          description: Internal user ID
+          type: integer
+        username:
+          description: Username
+          type: string
+        displayname:
+          description: Display name
+          type: string
+        profile_image_url:
+          description: Profile image URL
+          type: string
+        bio:  
+          description: User bio
+          type: string
+        created_at: 
+          description: User creation timestamp
+          type: string
+          format: date-time
+        count_tweets:
+          description: Number of tweets
+          type: integer
+        count_followers:
+          description: Number of followers
+          type: integer
+        count_followings:
+          description: Number of followings
+          type: integer
+    Tweet:
+      type: object
+      properties:
+        tweet_id:
+          description: Chirp Snowflake ID
+          type: integer
+        author:
+          description: Author user ID
+          type: integer
+        content:
+          description: Chirp content
+          type: string
+        created_at:
+          description: Chirp creation timestamp
+          type: string
+          format: date-time
+        like_count:
+          description: Number of likes
+          type: integer
+        comment_count:
+          description: Number of comments
+          type: integer
+        array_agg:
+          description: Mentioned usernames
+          type: array
+          items:
+            type: string
+    Comment:
+      type: object
+      properties:
+        comment_id:
+          description: Comment Snowflake ID
+          type: integer
+        author_id:
+          description: Author user ID
+          type: integer
+        content:
+          description: Comment content
+          type: string
+        created_at:
+          description: Comment creation timestamp
+          type: string
+          format: date-time
+        likes:
+          description: Number of likes
+          type: integer
     Error:
       type: object
       required:
