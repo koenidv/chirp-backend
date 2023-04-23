@@ -19,6 +19,8 @@ paths:
   /auth/register:
     post:
       summary: Register a new auth account
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -49,6 +51,8 @@ paths:
     delete:
       summary: Delete auth user with no user associated
       description: If a user was created already, use delete user. This will also delete all associated auth options.
+      tags:
+        - auth
       responses:
         200:
           description: Auth option deleted
@@ -58,6 +62,8 @@ paths:
   /auth/login:
     post:
       summary: Login using an auth account
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -96,6 +102,8 @@ paths:
   /auth/refresh:
     post:
       summary: Get a new identity token using a refresh token
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -126,6 +134,8 @@ paths:
   /auth/signout:
     post:
       summary: Invalidate current session
+      tags:
+        - auth
       responses:
         200:
           description: Current session invalidated; will apply after next refresh
@@ -135,6 +145,8 @@ paths:
   /auth/signout/all:
     post:
       summary: Invalidate all sessions for current user
+      tags:
+        - auth
       responses:
         200:
           description: User sessions invalidated; will apply after next refresh
@@ -144,6 +156,8 @@ paths:
   /auth/resetpassword:
     post:
       summary: Request a password reset email
+      tags:
+        - auth
       security: []
       requestBody:
         content:
@@ -161,6 +175,8 @@ paths:
           description: Password reset email sent if user existed
     put:
       summary: Reset password using a password reset token
+      tags:
+        - auth
       security:
         - resetToken: []
       requestBody:
@@ -182,6 +198,8 @@ paths:
   /auth/whoami:
     post:
       summary: Check your current identity
+      tags:
+        - auth
       responses:
         200:
           description: Your current identity
@@ -195,6 +213,8 @@ paths:
   /user:
     post:
       summary: Create a user and associate to the current auth account
+      tags:
+        - user
       requestBody:
         content:
           application/json:
@@ -244,6 +264,9 @@ paths:
           description: Invalid identity token
     delete:
       summary: Delete user and associated auth account
+      tags:
+        - user
+        - auth
       responses:
         200:
           description: User deleted
@@ -251,6 +274,8 @@ paths:
           description: Invalid identity token
     put:
       summary: Update user
+      tags:
+        - user
       requestBody:
         content:
           application/json:
@@ -276,6 +301,8 @@ paths:
   /user/profileimage:
     put:
       summary: Update user profile image
+      tags: 
+        - user
       requestBody:
         content:
           mulipart/form-data:
@@ -296,6 +323,9 @@ paths:
   /user/istaken/{username}:
     summary: Check if a username is taken
     get:
+      summary: Check if a username is taken
+      tags:
+        - user
       parameters:
         - name: username
           in: path
@@ -320,6 +350,9 @@ paths:
   /user/me:
     summary: Get current user
     get:
+      summary: Get current user
+      tags:
+        - user
       responses:
         200:
           description: User found
@@ -331,8 +364,11 @@ paths:
           description: Invalid identity token
 
   /user/{username}:
-    summary: Get user by ID
+    summary: Get user by username
     get:
+      summary: Get user by username
+      tags:
+        - user
       parameters:
         - name: username
           in: path
@@ -355,6 +391,9 @@ paths:
   /user/{username}/tweets:
     summary: Get tweets by user
     get:
+      summary: Get tweets by user
+      tags:
+        - user
       parameters:
         - name: username
           in: path
@@ -392,6 +431,10 @@ paths:
   /user/{username}/followers:
       summary: Get followers by user
       get:
+        summary: Get followers by user
+        tags:
+          - user
+          - follow
         parameters:
           - name: username
             in: path
@@ -420,6 +463,10 @@ paths:
   /user/{username}/following:
       summary: Get followings by user
       get:
+        summary: Get followings by user
+        tags:
+          - user
+          - follow
         parameters:
           - name: username
             in: path
@@ -449,6 +496,9 @@ paths:
     summary: Follow / Check if following
     get:
       summary: Follow/Unfollow user
+      tags:
+        - user
+        - follow
       parameters:
         - name: username
           in: path
@@ -470,6 +520,9 @@ paths:
           description: User not found
     put:
       summary: Follow/Unfollow user  
+      tags:
+        - user
+        - follow
       parameters:
         - name: username
           in: path
@@ -499,6 +552,8 @@ paths:
     summary: Chirp
     post:
       summary: Create a chirp
+      tags:
+        - chirp
       requestBody:
         content:
           application/json:
@@ -532,6 +587,8 @@ paths:
           description: Invalid identity token
     get:
       summary: Get own feed
+      tags:
+        - chirp
       parameters:
         - name: paginate
           in: query
@@ -561,6 +618,9 @@ paths:
   /tweet/extend:
     summary: Get extended feed  
     get:
+      summary: Get extended feed
+      tags:
+        - chirp
       parameters:
         - name: paginate
           in: query
@@ -590,6 +650,9 @@ paths:
   /tweet/{tweet_id}:
     summary: Get chirp by ID
     get:
+      summary: Get chirp by ID
+      tags:
+        - chirp
       parameters:
         - name: tweet_id
           in: path
@@ -610,6 +673,8 @@ paths:
           description: Chirp not found
     delete:
       summary: Delete chirp
+      tags:
+        - chirp
       parameters:
         - name: tweet_id
           in: path
@@ -631,6 +696,9 @@ paths:
     summary: Like / Check if liked
     get:
       summary: Check if liked a chirp
+      tags:
+        - chirp
+        - like
       parameters:
         - name: tweet_id
           in: path
@@ -652,6 +720,9 @@ paths:
           description: Chirp not found
     put:
       summary: Like/Unlike chirp  
+      tags:
+        - chirp
+        - like
       parameters:
         - name: tweet_id
           in: path
@@ -676,6 +747,10 @@ paths:
   /tweet/{tweet_id}/like/all:
     summary: List likes on a chirp
     get:
+      summary: List likes on a chirp
+      tags:
+        - chirp
+        - like
       parameters:
         - name: tweet_id
           in: path
@@ -703,6 +778,9 @@ paths:
   /tweet/{tweet_id}/comment:
     post:
       summary: Comment on a chirp
+      tags:
+        - chirp
+        - comment
       parameters:
         - name: tweet_id
           in: path
@@ -731,6 +809,9 @@ paths:
           description: Chirp not found
     get:
       summary: Get comments on a chirp
+      tags:
+        - chirp
+        - comment
       parameters:
         - name: tweet_id
           in: path
@@ -755,6 +836,9 @@ paths:
   /tweet/{tweet_id}/comment/{comment_id}:
     delete:
       summary: Delete comment
+      tags:
+        - chirp
+        - comment
       parameters:
         - name: tweet_id
           in: path
@@ -777,6 +861,9 @@ paths:
           description: Comment not found
     get: 
       summary: Get comment on tweet
+      tags:
+        - chirp
+        - comment
       parameters:
         - name: tweet_id
           in: path
@@ -806,6 +893,10 @@ paths:
     summary: Like / Check if liked
     get:
       summary: Check if liked a comment
+      tags:
+        - chirp
+        - comment
+        - like
       parameters:
         - name: tweet_id
           in: path
@@ -833,6 +924,10 @@ paths:
           description: Comment not found
     put:
       summary: Like/Unlike comment  
+      tags:
+        - chirp
+        - comment
+        - like
       parameters:
         - name: tweet_id
           in: path
@@ -867,6 +962,10 @@ paths:
   /search/users/{query}:
     summary: Search users
     get:
+      summary: Search users
+      tags:
+        - search
+        - user
       parameters:
         - name: query
           in: path
