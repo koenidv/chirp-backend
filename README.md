@@ -34,7 +34,7 @@ If you'd rather deploy on your own infrastructure, a Dockerfile is set up.
 However, the database will not be set up automatically and you will have to run ./db/makeTables.ts manually.
 
 ### Project Architecture
-![Project Architecture](https://user-images.githubusercontent.com/32238636/233811626-123ae315-ac88-430c-b723-9f759e9084e2.png)
+![Project Architecture](https://user-images.githubusercontent.com/32238636/233854019-5bfee5fc-1a73-400d-8c81-5ff4a6721313.png)
 
 ### Data Model
 ![ERD](https://user-images.githubusercontent.com/32238636/233807862-48738e40-b229-41fc-9754-92294f36f34a.png)
