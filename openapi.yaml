@@ -33,6 +33,7 @@ paths:
                 email:
                   description: Unique email identifier for this auth option
                   type: string
+                  example: someone@email.com
                   pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
                 password:
                   description: Password this auth option
@@ -76,6 +77,7 @@ paths:
                 email:
                   description: Email identifier for this auth option
                   type: string
+                  example: someone@email.com
                   pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
                 password:
                   description: Password this auth option
@@ -169,6 +171,7 @@ paths:
                 email:
                   description: Email identifier for this auth option
                   type: string
+                  example: someone@email.com
                   pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
       responses:
         200:
