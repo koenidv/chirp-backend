@@ -18,6 +18,9 @@ app.use(oakCors({
   origin: /.*/,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
+router.get("/health", (ctx) => {
+  ctx.response.body = "OK";
+});
 app.use(router.routes());
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
