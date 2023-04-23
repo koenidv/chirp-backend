@@ -188,9 +188,9 @@ paths:
         401:
           description: Invalid identity toke
 
-  #
-  # User
-  #
+    #
+    # User
+    #
 
   /user:
     post:
@@ -491,6 +491,402 @@ paths:
         404:
           description: User not found
 
+    #
+    # Chirps
+    #
+
+  /tweet:
+    summary: Chirp
+    post:
+      summary: Create a chirp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - content
+              properties:
+                content:
+                  description: Chirp text
+                  type: string
+                mentions:
+                  type: array
+                  items:
+                    type: string
+                    description: Mentioned username
+      responses:
+        200:
+          description: Chirp created
+          content:
+            application/json:
+              schema:
+                required:
+                  - tweet_id
+                properties:
+                  tweet_id:
+                    description: Tweet ID
+                    type: integer
+        400:
+          description: Bad request
+        401:
+          description: Invalid identity token
+    get:
+      summary: Get own feed
+      parameters:
+        - name: paginate
+          in: query
+          description: Pagination key
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Feed
+          content:
+            application/json:
+              schema:
+                required:
+                  - chirps
+                properties:
+                  paginatekey:
+                    description: Key to use for pagination
+                    type: string
+                  chirps:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tweet'  
+        401:  
+          description: Invalid identity token
+
+  /tweet/extend:
+    summary: Get extended feed  
+    get:
+      parameters:
+        - name: paginate
+          in: query
+          description: Pagination key
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Feed
+          content:
+            application/json:
+              schema:
+                required:
+                  - chirps
+                properties:
+                  paginatekey:
+                    description: Key to use for pagination
+                    type: string
+                  chirps:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tweet'  
+        401:  
+          description: Invalid identity token
+    
+  /tweet/{tweet_id}:
+    summary: Get chirp by ID
+    get:
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Chirp found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tweet'
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+    delete:
+      summary: Delete chirp
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Chirp deleted
+        401:  
+          description: Unathorized for this action
+        404:
+          description: Chirp not found
+
+  # Likes
+
+  /tweet/{tweet_id}/like:
+    summary: Like / Check if liked
+    get:
+      summary: Check if liked a chirp
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Check like
+          content:
+            application/json:
+              schema:
+                type: boolean
+                description: Whether the user liked the chirp
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+    put:
+      summary: Like/Unlike chirp  
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              description: Whether to like (true) or unlike (false) the chirp
+      responses:
+        200:
+          description: OK
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+
+  /tweet/{tweet_id}/like/all:
+    summary: List likes on a chirp
+    get:
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Likes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  description: User ID
+                  type: integer
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+  
+  # Comments
+
+  /tweet/{tweet_id}/comment:
+    post:
+      summary: Comment on a chirp
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - content
+              properties:
+                content:
+                  description: Comment text
+                  type: string
+      responses:
+        200:
+          description: Comment created
+        400:
+          description: Bad request
+        401:
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+    get:
+      summary: Get comments on a chirp
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        401:  
+          description: Invalid identity token
+        404:
+          description: Chirp not found
+
+  /tweet/{tweet_id}/comment/{comment_id}:
+    delete:
+      summary: Delete comment
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Comment deleted
+        401:  
+          description: Unathorized for this action
+        404:
+          description: Comment not found
+    get: 
+      summary: Get comment on tweet
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Comment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:  
+          description: Invalid identity token
+        404:
+          description: Comment not found
+
+  /tweet/{tweet_id}/comment/{comment_id}/like/all:
+    summary: Like / Check if liked
+    get:
+      summary: Check if liked a comment
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Check like
+          content:
+            application/json:
+              schema:
+                type: boolean
+                description: Whether the user liked the comment
+        401:  
+          description: Invalid identity token
+        404:
+          description: Comment not found
+    put:
+      summary: Like/Unlike comment  
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Chirp ID
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          description: Comment ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              description: Whether to like (true) or unlike (false) the comment
+      responses:
+        200:
+          description: OK
+        401:  
+          description: Invalid identity token
+        404:
+          description: Comment not found
+
+  #
+  # Search
+  #
+
+  /search/users/{query}:
+    summary: Search users
+    get:
+      parameters:
+        - name: query
+          in: path
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:  
+          description: Invalid identity token
+
+
 
 components:
   schemas:
@@ -557,6 +953,25 @@ components:
           type: array
           items:
             type: string
+    Comment:
+      type: object
+      properties:
+        comment_id:
+          description: Comment Snowflake ID
+          type: integer
+        author_id:
+          description: Author user ID
+          type: integer
+        content:
+          description: Comment content
+          type: string
+        created_at:
+          description: Comment creation timestamp
+          type: string
+          format: date-time
+        likes:
+          description: Number of likes
+          type: integer
     Error:
       type: object
       required:
