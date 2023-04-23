@@ -9,10 +9,14 @@ id = 15277022-5be5-4bf6-b392-4d909e436d00
 
 [config.relations.collections]
 rootDirectory = postman/collections
+files[] = {"id":"18739960-ac07112c-700e-494b-9760-a77f65f044de","path":"API v1.json","metaData":{"generateCollectionPreferences":"{\"requestNameSource\":\"Fallback\",\"indentCharacter\":\"Space\",\"parametersResolution\":\"Schema\",\"folderStrategy\":\"Paths\",\"includeAuthInfoInExample\":true,\"keepImplicitHeaders\":false,\"includeDeprecated\":true,\"updateCollectionSync\":true,\"requestParametersResolution\":\"Schema\",\"exampleParametersResolution\":\"Schema\"}"}}
 
 [config.relations.collections.metaData]
 
 [config.relations.apiDefinition]
 rootDirectory = postman/schemas
+files[] = {"path":"openapi.yaml","metaData":{}}
 
 [config.relations.apiDefinition.metaData]
+type = openapi:3
+rootFiles[] = openapi.yaml

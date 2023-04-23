@@ -1,0 +1,1064 @@
+{
+	"info": {
+		"_postman_id": "ac07112c-700e-494b-9760-a77f65f044de",
+		"name": "API v1",
+		"description": "Backend for Chirp - A Twitter clone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "18739960-ac07112c-700e-494b-9760-a77f65f044de"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "whoami",
+					"item": [
+						{
+							"name": "Check your current identity",
+							"id": "ef56deb6-1ce5-46ae-8a83-439aef99c724",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/auth/whoami",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"whoami"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "3cba4032-f830-4f4b-80c5-3e4b1684a7de",
+									"name": "Your current identity",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/auth/whoami",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"whoami"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "5210a337-0c9d-475a-878d-5e7303afe4a8",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/auth/whoami",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"whoami"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "51cbb9e1-c2c0-43d4-b311-c563c1a312d3"
+				},
+				{
+					"name": "signout",
+					"item": [
+						{
+							"name": "all",
+							"item": [
+								{
+									"name": "Invalidate all sessions for current user",
+									"id": "d55604d8-4084-421d-8ad1-d8ccfe6a8da5",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/auth/signout/all",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"signout",
+												"all"
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "d739ec30-27e3-46bf-9459-c62a109cbcce",
+											"name": "User sessions invalidated; will apply after next refresh",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/auth/signout/all",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"auth",
+														"signout",
+														"all"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "b81c8e57-b6c6-4c73-8ba3-fbb11b2aa90c",
+											"name": "Invalid identity token",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: bearer",
+														"key": "Authorization",
+														"value": "Bearer <token>"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/auth/signout/all",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"auth",
+														"signout",
+														"all"
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										}
+									]
+								}
+							],
+							"id": "324967e6-27cc-468f-bd19-964fba91fd63"
+						},
+						{
+							"name": "Invalidate current session",
+							"id": "efe9a763-5ed3-45fa-8e8a-cc9697e969af",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/auth/signout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"signout"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "7ad2a139-8f8e-42a5-a7c7-5108cebb9b44",
+									"name": "Current session invalidated; will apply after next refresh",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/auth/signout",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"signout"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "63965629-1b89-4846-af06-dd6d5fb85a54",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/auth/signout",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"signout"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "39fe2c95-3e07-4cf2-bba1-0e3ae1a300df"
+				},
+				{
+					"name": "resetpassword",
+					"item": [
+						{
+							"name": "Request a password reset email",
+							"id": "38612766-2033-4526-b499-543c43355d3a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"/=x.q5ae86fx{^m.r&|/#~.9.?.t2i-._/iyhh_{x.dkx?7=e.an+~~8scu#b.-@y9req.s.fdnjfg.dyf7.g36tv9.5g2r.b.k.q.ktlnt1icj-b.7bxbky/\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/resetpassword",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"resetpassword"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "4182859c-e717-431b-bfef-0d8dd1e2ad2f",
+									"name": "Password reset email sent if user existed",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"/=x.q5ae86fx{^m.r&|/#~.9.?.t2i-._/iyhh_{x.dkx?7=e.an+~~8scu#b.-@y9req.s.fdnjfg.dyf7.g36tv9.5g2r.b.k.q.ktlnt1icj-b.7bxbky/\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/resetpassword",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"resetpassword"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						},
+						{
+							"name": "Reset password using a password reset token",
+							"id": "a6df4a88-3d10-403b-86ea-7911c7d040f3",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/resetpassword",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"resetpassword"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "3a4dc792-e688-4b52-9e7a-79c4a086dba5",
+									"name": "Password reset",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/resetpassword",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"resetpassword"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "a7b1b690-05ed-405b-8b54-42a97e329abd",
+									"name": "Invalid password reset token",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/resetpassword",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"resetpassword"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "8aeec998-f690-4c74-97cd-f79380ba654f"
+				},
+				{
+					"name": "register",
+					"item": [
+						{
+							"name": "Register a new auth account",
+							"id": "354e2c56-c1d4-4c89-8f3e-3fc3f9dab90d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "3f81c6aa-fe3a-4a15-b0b6-a8c7efa0cc65",
+									"name": "Auth option created",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"register"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "f532f936-f8ea-4ba2-8b4c-b3a728deaa71",
+									"name": "Bad request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"register"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "c27637ac-73bc-4adb-835b-0c0666ca3c79",
+									"name": "Email already registered",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"/r9.174i&.8={q|/ba@lqzckgrot.k.w.8.ir.o.x.x1zv.b.ms.323pg7v.h/\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"register"
+											]
+										}
+									},
+									"status": "Conflict",
+									"code": 409,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"detail\": \"<string>\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete auth user with no user associated",
+							"id": "0ef63205-2057-43e4-af69-854ee867c03c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/auth/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								},
+								"description": "If a user was created already, use delete user. This will also delete all associated auth options."
+							},
+							"response": [
+								{
+									"id": "148799a7-b860-49bc-906c-3c3a1fc6ec66",
+									"name": "Auth option deleted",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/auth/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"register"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "b5cf3174-671d-41ff-a8f7-e656c376fe21",
+									"name": "Invalid identity token",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/auth/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"register"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "a2999a0a-de07-410e-b9d6-3a4ae737a3a7"
+				},
+				{
+					"name": "refresh",
+					"item": [
+						{
+							"name": "Get a new identity token using a refresh token",
+							"id": "76308e64-359b-4f05-9600-a3ea2cd24b4f",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/refresh",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "ab0f21d0-fdbc-4d15-989c-9c8b6b2139b7",
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/refresh",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"refresh"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"jwt\": \"<string>\"\n}"
+								},
+								{
+									"id": "2f7c4b96-3727-4287-a190-15c59d367ae1",
+									"name": "Invalid refresh token",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/refresh",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"refresh"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "5fe85cf6-1350-4c56-a547-fc14e4bb01a7"
+				},
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "Login using an auth account",
+							"id": "93caa23f-8420-4d52-982c-3be50da4f14a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"/%qe3_4u!.&.*.8/w9o^?o}s8.q8+1bxtzj-p.6f+2^y.%yx{jco/$.844#y@x.mc.tg8.s59jpi.2uyap7pl0d.x.ii61.j.8im.tvzmkb/\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "352cd916-a070-4d12-ad1d-a3b18e27ab6d",
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"/%qe3_4u!.&.*.8/w9o^?o}s8.q8+1bxtzj-p.6f+2^y.%yx{jco/$.844#y@x.mc.tg8.s59jpi.2uyap7pl0d.x.ii61.j.8im.tvzmkb/\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"jwt\": \"<string>\",\n  \"refreshToken\": \"<string>\"\n}"
+								},
+								{
+									"id": "61e62063-e0dd-414e-8718-a390ff5853bf",
+									"name": "Invalid credentials",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"/%qe3_4u!.&.*.8/w9o^?o}s8.q8+1bxtzj-p.6f+2^y.%yx{jco/$.844#y@x.mc.tg8.s59jpi.2uyap7pl0d.x.ii61.j.8im.tvzmkb/\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						}
+					],
+					"id": "452aeec2-aa00-4537-bcee-bdea2c6ea8fd"
+				}
+			],
+			"id": "2ebb4769-4296-4f6a-bd36-2e261da0c471"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"id": "669f5d00-ea81-4eef-a6ee-22a59bad7273",
+			"key": "baseUrl",
+			"value": "https://api.thechirp.de/v1"
+		}
+	]
+}
