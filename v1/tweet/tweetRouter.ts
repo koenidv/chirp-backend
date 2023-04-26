@@ -65,7 +65,7 @@ router.post("/", async (ctx) => {
     return;
   }
 
-  mentions.forEach((mention: bigint) => {
+  mentions?.forEach((mention: bigint) => {
     createMention(tweet_id, mention);
   });
 
