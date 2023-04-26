@@ -1,1 +1,8 @@
 .env
+/locust/shelf/
+/locust/workspace.xml
+/locust/httpRequests/
+/locust/dataSources/
+/locust/dataSources.local.xml
+/locust/.idea/
+/locust/__pycache__/

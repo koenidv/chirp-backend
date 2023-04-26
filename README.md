@@ -12,6 +12,15 @@ The system additionally interacts with [MailerSend](https://mailersend.com) for 
 
 [The frontend repository can be found here](https://github.com/TobiasAschenbrenner/twitter-clone-frontend)
 
+### Servers
+The API is publicly accessible using the proper user.
+authentication.
+
+Production Server: `https://api.thechirp.de`  
+Sandbox Server: `https://sandbox.api.thechirp.de`
+
+If you stumble across a *chirp.koenidv.de*, it is equivalent to *thechirp.de*.
+
 ### Running locally
 1. If you haven't already, [install deno](https://deno.land/manual@v1.32.1/getting_started/installation)
 2. Get the .env or new keys for each [environment variable](#environment-variables)
@@ -20,6 +29,18 @@ The system additionally interacts with [MailerSend](https://mailersend.com) for 
 ### Documentation
 The public interactive API documentation can be found at [docs.api.thechirp.de](https://docs.api.thechirp.de).  
 If you prefer using Postman, you can refer to the badge above. Please note joining the Postman Team requires manual approval.
+
+
+### Testing
+todo
+
+### Load Testing
+Load testing is done using [Locust](https://locust.io) against *localhost* (testing database integration) or the sandbox server.
+
+To start Locus, use:  
+`locust -f ./locust/locustfile.py --headless -H http://sandbox.api.thechirp.de/v1 -u 15 -r 1 -t 5m`
+
+Refer to the [Locust documentation](https://docs.locust.io/en/stable/configuration.html) for more information.
 
 ### Environment Variables
 Make sure to include these paramters in your environment to make the service work:

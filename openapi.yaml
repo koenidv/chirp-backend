@@ -521,7 +521,7 @@ paths:
           description: Invalid identity token
         404:
           description: User not found
-    put:
+    post:
       summary: Follow/Unfollow user  
       tags:
         - user
