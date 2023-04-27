@@ -32,7 +32,7 @@ export function generateSessionId(): string {
 export async function createJWT(
   session_id: string,
   auth_id: string,
-  user_id: string | null
+  user_id: string | null,
 ): Promise<string> {
   return await create(
     { alg: "HS512", typ: "JWT" },
@@ -50,7 +50,7 @@ export async function createJWT(
 export async function createRefreshToken(
   session_id: string,
   auth_id: string,
-  user_id: string | null
+  user_id: string | null,
 ): Promise<string> {
   return await create(
     { alg: "HS512", typ: "JWT" },
@@ -67,6 +67,20 @@ export async function createRefreshToken(
   );
 }
 
+export async function verifyJWT(jwt: string) {
+  let payload;
+  try {
+    payload = await verify(
+      jwt,
+      Deno.env.get("JWT_KEY")!,
+      "HS512",
+    );
+  } catch (_e) {
+    return false;
+  }
+  return payload;
+}
+
 export async function authenticate(ctx: any): Promise<string | false> {
   const withAuth = await authenticateIncludingAuthId(ctx);
   if (!withAuth) return false;
@@ -75,23 +89,16 @@ export async function authenticate(ctx: any): Promise<string | false> {
 
 export async function authenticateIncludingAuthId(
   ctx: any,
-): Promise<{ token_id: string, auth_id: string; user_id: string } | false> {
+): Promise<{ token_id: string; auth_id: string; user_id: string } | false> {
   const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!jwt) return false;
-  try {
-    const payload = await verify(
-      jwt,
-      Deno.env.get("JWT_KEY")!,
-      "HS512",
-    );
-    return {
-      token_id: payload?.id as string,
-      auth_id: payload?.auth_id as string,
-      user_id: payload?.user_id as string,
-    };
-  } catch (_e) {
-    return false;
-  }
+  const payload = await verifyJWT(jwt);
+  if (!payload) return false;
+  return {
+    token_id: payload?.id as string,
+    auth_id: payload?.auth_id as string,
+    user_id: payload?.user_id as string,
+  };
 }
 
 export async function useRefreshToken(
@@ -101,19 +108,14 @@ export async function useRefreshToken(
   let auth_id: string;
   let user_id: string | undefined;
 
-  try {
-    const payload = await verify(
-      refreshToken,
-      Deno.env.get("JWT_KEY")!,
-      "HS512",
-    );
-    if (payload.aud !== "refresh") return false;
-    session = payload?.session as string;
-    auth_id = payload?.auth_id as string;
-    user_id = payload?.user_id as string;
-  } catch (_e) {
-    return false;
-  }
+  const payload = await verifyJWT(
+    refreshToken,
+  );
+  if (!payload) return false;
+  if (payload.aud !== "refresh") return false;
+  session = payload?.session as string;
+  auth_id = payload?.auth_id as string;
+  user_id = payload?.user_id as string;
 
   if (
     !await sessionExists(session) ||
