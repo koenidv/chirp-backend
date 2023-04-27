@@ -35,7 +35,7 @@ If you prefer using Postman, you can refer to the badge above. Please note joini
 
 ## Testing
 
-Run tests using `deno test`.
+Run tests using `deno test --allow-read --allow-env`.
 
 ### Mock Server
 
