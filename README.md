@@ -35,11 +35,11 @@ If you prefer using Postman, you can refer to the badge above. Please note joini
 
 ## Testing
 
-todo
+Run tests using `deno test`.
 
 ### Mock Server
 
-The *GET* methods at and below */v1/tweet* and */v1/user* are available as mocked endpoints for testing. Simply direct your requests to `https://a092a8fb-fc57-4e0e-b09f-3f41170486b0.mock.pstmn.io`.
+The *GET* methods at and below */v1/tweet* and */v1/user* are available as mocked endpoints for frontend testing. Simply direct your requests to `https://a092a8fb-fc57-4e0e-b09f-3f41170486b0.mock.pstmn.io`.
 
 Mocked user: *halbunsichtbar*  
 Mocked tweet: *72969718891000*  
