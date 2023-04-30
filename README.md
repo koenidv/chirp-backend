@@ -1,6 +1,6 @@
 # Backend for Chirp: A Twitter clone
 
-We created Chirp, a very simple copy of Twitter to learn about Agile Process Management, Colaboration, Web Technologies and Relational Databases. This repository contains the backend code for Chirp.
+We created Chirp, a very simple copy of Twitter to learn about Agile Process Management, Collaboration, Web Technologies and Relational Databases. This repository contains the backend code for Chirp.
 
 [![Website](https://img.shields.io/website?down_message=Offline&label=API%20Status&up_message=Online&url=https%3A%2F%2Fapi.thechirp.de%2Fhealth)](https://api.thechirp.de)
 [![Frontend Repository](https://img.shields.io/badge/Repository-Frontend-blue)](https://github.com/TobiasAschenbrenner/twitter-clone-frontend)
