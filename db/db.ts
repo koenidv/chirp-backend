@@ -3,7 +3,7 @@ import "https://deno.land/std@0.180.0/dotenv/load.ts";
 
 const pool = new Pool(
   Deno.env.get(
-    Deno.args.includes("-s") ? "SANDBOX_DATABASE_URL" : "DATABASE_URL",
+    Deno.args.includes("-s") ? "SANDBOX_DATABASE_URL_NOCACHE" : "DATABASE_URL_NOCACHE",
   ),
   4, /* why 4? → https://www.cockroachlabs.com/docs/stable/connection-pooling.html */
   true,
