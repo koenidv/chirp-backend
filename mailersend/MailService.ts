@@ -32,6 +32,25 @@ export class MailService {
         });
     }
 
+    sendLoginInfo(
+        ip: string,
+    ) {
+        return new Promise((resolve, reject) => {
+            this.send(
+                "yzkq340pdq3ld796",
+                {
+                    ip: ip,
+                }
+            ).then(() => {
+                resolve(true);
+            }).catch((err) => {
+                console.error("Error sending login info email for user", this.username);
+                console.error(err);
+                reject(false);
+            })
+        });
+    }
+
     // deno-lint-ignore no-explicit-any
     private send(template: string, data: any): Promise<void> {
         return new Promise((resolve, reject) => {

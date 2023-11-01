@@ -19,6 +19,7 @@ export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
 import { invalidateSession, invalidateUser, registerSession } from "../../db/sessions.ts";
+import { MailService } from "../../mailersend/MailService.ts";
 MFARouter.use(
   "/resetpassword",
   resetRouter.routes(),
@@ -85,6 +86,8 @@ MFARouter.post("/login", async (ctx: Context) => {
 
   const session_id = generateSessionId();
   await registerSession(session_id, validatedUser.auth_id.toString());
+
+  await new MailService(validatedUser.username || "Chirp User", email).sendLoginInfo(ctx.request.ip)
 
   ctx.response.body = {
     jwt: await createJWT(
