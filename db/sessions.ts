@@ -35,7 +35,7 @@ export async function sessionExists(session_id: string) {
   return result.rows[0].exists;
 }
 
-export async function getSessionsForUser(auth_id: string) {
+export async function getSessionsForUser(auth_id: string): Promise<{ session_id: string; auth_id: string; created_at: Date }[]> {
   return await db(async (client) =>
     (await client.queryObject<
       { session_id: string; auth_id: string; created_at: Date }

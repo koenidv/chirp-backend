@@ -41,6 +41,7 @@ export class SecurityLog {
                     WHEN sessions.session_id IS NOT NULL THEN true
                     ELSE false
                 END AS session_active,
+                s.session_id as session_id,
                 s.ip as ip,
                 s.timestamp as timestamp
             FROM users

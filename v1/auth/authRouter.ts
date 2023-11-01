@@ -187,7 +187,8 @@ MFARouter.post("/signout/:session_id", async (ctx: Context) => {
     return;
   }
 
-  const session_id = ctx.request.url.searchParams.get("session_id");
+  // @ts-ignore params is on context but not correctly typed
+  const { session_id } = ctx.params;
   if (!session_id) {
     ctx.response.status = 400;
     return;
@@ -205,5 +206,8 @@ MFARouter.get("/sessions", async (ctx: Context) => {
     return;
   }
 
-  ctx.response.body = await getSessionsForUser(auth.auth_id!);
+  ctx.response.body = (await getSessionsForUser(auth.auth_id!)).map((session) => ({
+    ...session,
+    is_self: session.session_id === auth.session,
+  }));
 });
