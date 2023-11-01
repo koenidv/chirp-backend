@@ -36,7 +36,7 @@ router.post("/", async (ctx) => {
   }
 
   ctx.response.status = await new Promise((resolve) =>
-    MailService.sendPasswordReset(email, username || "Chirper", token)
+    new MailService(username, email).sendPasswordReset(token)
       .then(() => {
         ctx.response.status = 200;
         resolve(200)

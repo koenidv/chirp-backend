@@ -1,29 +1,27 @@
-import { Mail } from "./mailersend.types.ts";
+import { Mail, MailProps } from "./MailService.types.ts";
 
-const MAILERSEND_BASE_URL = "https://api.mailersend.com/v1/email"
+const DEFAULT_BASE_URL = "https://api.mailersend.com/v1/email"
 
 export class MailService {
+    username: string;
+    useremail: string;
+    base_url: string;
 
-    static sendPasswordReset(
-        email: string,
-        username: string,
+    constructor(username: string, email: string, base_url: string = DEFAULT_BASE_URL) {
+        this.useremail = email;
+        this.username = username;
+        this.base_url = base_url;
+    }
+
+    sendPasswordReset(
         token: string,
     ): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this.send({
-                from: {
-                    email: "florian@koeni.dev",
-                    name: "Chirp Account",
-                },
-                to: [{
-                    email: email,
-                    name: username,
-                }],
                 subject: "Reset your password for Chirp",
                 personalization: [{
-                    email: email,
                     data: {
-                        name: username,
+                        name: this.username,
                         token: token,
                     },
                 }],
@@ -31,23 +29,32 @@ export class MailService {
             }).then(() => {
                 resolve(true);
             }).catch((err) => {
-                console.error("Error sending password reset email for user", username);
+                console.error("Error sending password reset email for user", this.username);
                 console.error(err);
                 reject(false);
             })
         });
     }
 
-
-    private static send(mail: Mail): Promise<void> {
+    private send(mail: MailProps): Promise<void> {
         return new Promise((resolve, reject) => {
-            fetch(MAILERSEND_BASE_URL, {
+            fetch(this.base_url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${Deno.env.get("MAILERSEND_KEY")}`,
                 },
-                body: JSON.stringify(mail),
+                body: JSON.stringify({
+                    from: {
+                        email: "florian@koeni.dev",
+                        name: "Chirp Account",
+                    },
+                    to: [{
+                        email: this.useremail,
+                        name: this.username,
+                    }],
+                    ...mail
+                } as Mail),
             }).then((result) => {
                 if (result.status === 200) resolve();
                 else reject(result.statusText);
