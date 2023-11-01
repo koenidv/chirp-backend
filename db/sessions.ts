@@ -34,3 +34,12 @@ export async function sessionExists(session_id: string) {
   );
   return result.rows[0].exists;
 }
+
+export async function getSessionsForUser(auth_id: string) {
+  return await db(async (client) =>
+    (await client.queryObject<
+      { session_id: string; auth_id: string; created_at: Date }
+    >`SELECT session_id, auth_id, created_at FROM sessions WHERE auth_id=${auth_id} ORDER BY created_at DESC`
+    ).rows
+  );
+}
