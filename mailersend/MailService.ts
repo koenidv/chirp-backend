@@ -17,16 +17,12 @@ export class MailService {
         token: string,
     ): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.send({
-                subject: "Reset your password for Chirp",
-                personalization: [{
-                    data: {
-                        name: this.username,
-                        token: token,
-                    },
-                }],
-                template_id: "neqvygmn6r540p7w",
-            }).then(() => {
+            this.send(
+                "neqvygmn6r540p7w",
+                {
+                    token: token,
+                }
+            ).then(() => {
                 resolve(true);
             }).catch((err) => {
                 console.error("Error sending password reset email for user", this.username);
@@ -36,7 +32,8 @@ export class MailService {
         });
     }
 
-    private send(mail: MailProps): Promise<void> {
+    // deno-lint-ignore no-explicit-any
+    private send(template: string, data: any): Promise<void> {
         return new Promise((resolve, reject) => {
             fetch(this.base_url, {
                 method: "POST",
@@ -45,15 +42,18 @@ export class MailService {
                     "Authorization": `Bearer ${Deno.env.get("MAILERSEND_KEY")}`,
                 },
                 body: JSON.stringify({
-                    from: {
-                        email: "florian@koeni.dev",
-                        name: "Chirp Account",
-                    },
+                    template_id: template,
                     to: [{
                         email: this.useremail,
                         name: this.username,
                     }],
-                    ...mail
+                    personalization: [{
+                        email: this.useremail,
+                        data: {
+                            name: this.username,
+                            ...data
+                        },
+                    }],
                 } as Mail),
             }).then((result) => {
                 if (result.status === 200) resolve();
