@@ -20,6 +20,12 @@ export async function invalidateUser(auth_id: string) {
   );
 }
 
+export async function invalidateSessionForUser(auth_id: string, session_id: string) {
+  await db(async (client) =>
+    await client.queryObject`DELETE FROM sessions WHERE auth_id=${auth_id} AND session_id=${session_id}`
+  );
+}
+
 export async function sessionExists(session_id: string) {
   const result = await db(async (client) =>
     await client.queryObject<

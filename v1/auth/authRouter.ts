@@ -18,7 +18,7 @@ export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
 import logsRouter from "./securitylog.ts";
-import { invalidateSession, invalidateUser, registerSession } from "../../db/sessions.ts";
+import { invalidateSession, invalidateSessionForUser, invalidateUser, registerSession } from "../../db/sessions.ts";
 import { MailService } from "../../mailersend/MailService.ts";
 import { SecurityAction, SecurityLog } from "../../db/SecurityLogs.ts";
 
@@ -164,7 +164,7 @@ MFARouter.post("/signout", async (ctx: Context) => {
     return;
   }
 
-  await invalidateSession(auth.token_id!)
+  await invalidateSession(auth.session!)
   ctx.response.status = 200;
 });
 
@@ -177,5 +177,23 @@ MFARouter.post("/signout/all", async (ctx: Context) => {
 
   await invalidateUser(auth.auth_id!)
   await SecurityLog.insertLog(SecurityAction.CLOSE_ALL_SESSIONS, BigInt(auth.auth_id!), auth.session, ctx.request.ip)
+  ctx.response.status = 200;
+});
+
+MFARouter.post("/signout/:session_id", async (ctx: Context) => {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  const session_id = ctx.request.url.searchParams.get("session_id");
+  if (!session_id) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  await invalidateSessionForUser(auth.auth_id, session_id);
+  await SecurityLog.insertLog(SecurityAction.CLOSE_SESSION, BigInt(auth.auth_id!), session_id, ctx.request.ip);
   ctx.response.status = 200;
 });
