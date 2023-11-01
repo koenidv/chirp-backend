@@ -28,15 +28,26 @@ router.post("/", async (ctx) => {
   const token_id = generateTokenId();
 
   const token = await createPasswordResetToken(token_id, auth_id);
-  if (
-    !await savePasswordResetTokenId(token_id) ||
-    !await MailService.sendPasswordReset(email, username || "Chirper", token)
-  ) {
+
+  const saveSuccess = await savePasswordResetTokenId(token_id);
+  if (!saveSuccess) {
     ctx.response.status = 500;
     return;
   }
 
-  ctx.response.status = 200;
+  ctx.response.status = await new Promise((resolve) =>
+    MailService.sendPasswordReset(email, username || "Chirper", token)
+      .then(() => {
+        ctx.response.status = 200;
+        resolve(200)
+      })
+      .catch(() => {
+        // if sending the email fails, consume the token to disable it
+        consumePasswordResetTokenid(token_id);
+        ctx.response.status = 500;
+        resolve(500)
+      })
+  );
 });
 
 router.put("/", async (ctx) => {

@@ -33,7 +33,7 @@ export class MailService {
             }).catch((err) => {
                 console.error("Error sending password reset email for user", username);
                 console.error(err);
-                resolve(false); // fixme use resolve/reject, needs impl from v1\auth\resetPassword.ts
+                reject(false);
             })
         });
     }
