@@ -75,7 +75,7 @@ export class MailService {
                     }],
                 } as Mail),
             }).then((result) => {
-                if (result.status === 200) resolve();
+                if (result.status === 202) resolve();
                 else reject(result.statusText);
             });
         });
