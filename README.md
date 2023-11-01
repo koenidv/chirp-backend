@@ -14,8 +14,7 @@ The system additionally interacts with [MailerSend](https://mailersend.com) for 
 
 ## Servers
 
-The API is publicly accessible using the proper user.
-authentication.
+The API is publicly accessible using the proper user authentication.
 
 Production Server: `https://api.thechirp.de`  
 Sandbox Server: `https://sandbox.api.thechirp.de`

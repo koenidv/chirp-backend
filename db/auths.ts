@@ -35,10 +35,11 @@ export async function createEmailAuth(
   return auth_id;
 }
 
+type AuthUser = { auth_id: bigint; user_id: bigint | null; username: string | null }
 export async function checkEmailAuth(
   email: string,
   password: string,
-): Promise<false | { auth_id: bigint; user_id: bigint }> {
+): Promise<AuthUser | false> {
   if (anyUnescaped(email, password)) {
     console.log("Denied inserting unescaped data");
     return false;
@@ -47,12 +48,15 @@ export async function checkEmailAuth(
 
   const result = await db(async (client) =>
     await client.queryObject<
-      { auth_id: bigint; user_id: bigint; passwordhash: string }
-    >`SELECT auth_id, user_id, passwordhash FROM auths WHERE email=${email}`
+      AuthUser & { passwordHash: string }
+    >`SELECT auth_id, auths.user_id, username, passwordhash FROM auths LEFT JOIN users on auths.user_id = users.user_id WHERE email=${email}` // fixme do not use template strings :((
   );
 
-  if (await comparePassword(password, result.rows[0].passwordhash)) {
-    return { auth_id: result.rows[0].auth_id, user_id: result.rows[0].user_id };
+  if (comparePassword(password, result.rows[0].passwordhash)) {
+    return {
+      ...result.rows[0],
+      passwordhash: undefined,
+    }
   } else return false;
 }
 
