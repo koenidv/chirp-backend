@@ -17,14 +17,20 @@ const MFARouter = new Router();
 export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
+import logsRouter from "./securitylog.ts";
 import { invalidateSession, invalidateUser, registerSession } from "../../db/sessions.ts";
 import { MailService } from "../../mailersend/MailService.ts";
 import { SecurityAction, SecurityLog } from "../../db/SecurityLogs.ts";
+
 MFARouter.use(
   "/resetpassword",
   resetRouter.routes(),
   resetRouter.allowedMethods(),
 );
+MFARouter.use(
+  logsRouter.routes(),
+  logsRouter.allowedMethods(),
+)
 
 MFARouter.post("/register", async (ctx: Context) => {
   const { email, password } = await ctx.request.body().value;

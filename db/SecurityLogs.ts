@@ -22,4 +22,34 @@ export class SecurityLog {
         });
     }
 
+    static async getLogsForUser(user_id: bigint) {
+        const userid = BigInt(user_id);
+        return await db(async (client) => (
+            await client.queryObject<
+                {
+                    action: SecurityAction;
+                    auth_id: bigint;
+                    session_active: boolean;
+                    ip: string;
+                    timestamp: Date;
+                }
+            >`
+            SELECT
+                s.action as action,
+                s.auth_id as auth_id,
+                CASE
+                    WHEN sessions.session_id IS NOT NULL THEN true
+                    ELSE false
+                END AS session_active,
+                s.ip as ip,
+                s.timestamp as timestamp
+            FROM users
+                JOIN auths on users.user_id = auths.user_id
+                JOIN security_log s on auths.auth_id = s.auth_id
+                LEFT JOIN sessions on s.session_id = sessions.session_id
+            WHERE users.user_id = ${userid}
+            `
+        ).rows);
+    }
+
 }
