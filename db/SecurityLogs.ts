@@ -48,6 +48,7 @@ export class SecurityLog {
                 JOIN security_log s on auths.auth_id = s.auth_id
                 LEFT JOIN sessions on s.session_id = sessions.session_id
             WHERE users.user_id = ${userid}
+            ORDER BY id DESC
             `
         ).rows);
     }
