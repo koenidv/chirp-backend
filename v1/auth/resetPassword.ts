@@ -2,7 +2,6 @@ import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
 import {
   createPasswordResetToken,
   generateTokenId,
-  sendPasswordResetEmail,
 } from "../../auth/passwordResetMethods.ts";
 import {
   queryAuthIdAndUsernameByEmail,
@@ -14,6 +13,7 @@ import {
 } from "../../db/reset_tokens.ts";
 import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import { invalidateUser } from "../../db/sessions.ts";
+import { MailService } from "../../mailersend/MailService.ts";
 const router = new Router();
 export default router;
 
@@ -30,7 +30,7 @@ router.post("/", async (ctx) => {
   const token = await createPasswordResetToken(token_id, auth_id);
   if (
     !await savePasswordResetTokenId(token_id) ||
-    !await sendPasswordResetEmail(email, username || "Chirper", token)
+    !await MailService.sendPasswordReset(email, username || "Chirper", token)
   ) {
     ctx.response.status = 500;
     return;
