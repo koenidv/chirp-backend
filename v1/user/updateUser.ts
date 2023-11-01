@@ -17,6 +17,7 @@ import {
 } from "../../auth/authMethods.ts";
 import { registerSession } from "../../db/sessions.ts";
 import { deleteFile, uploadFile } from "../../cdn/cdn.ts";
+import { SecurityAction, SecurityLog } from "../../db/SecurityLogs.ts";
 const router = new Router();
 export default router;
 
@@ -68,18 +69,20 @@ router.post("/", async (ctx) => {
 });
 
 router.put("/", async (ctx) => {
-  const user_id = await authenticate(ctx);
-  if (!user_id) {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
     ctx.response.status = 401;
     return;
   }
-
+  const { user_id, auth_id, session } = auth;
+  
   const { username, displayname, bio } = await ctx.request.body().value;
 
   ctx.response.status = 400;
 
   if (username) {
     overwriteUsername(user_id, username);
+    SecurityLog.insertLog(SecurityAction.CHANGE_USERNAME, BigInt(auth_id), session, ctx.request.ip)
     ctx.response.status = 200;
   }
   if (displayname) {
