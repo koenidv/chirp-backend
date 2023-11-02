@@ -8,6 +8,7 @@
 - x-permitted-cross-domain-policies
 - x-content-type-options
 - x-powered-by (vorfahrt example)
+- cross-origin-resource-policy
 
 ### CORS
 - asks browsers to only allow requests from out front-end
@@ -53,4 +54,3 @@ Deno, explain please.
 - shorter key validity (til refresh)
 - csp violation report endpoint https://stackoverflow.com/a/45631261/7649198
 - clear-site-data header on logout
-- cross-origin-resource-policy header https://owasp.org/www-project-secure-headers/#cross-origin-resource-policy
