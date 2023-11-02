@@ -46,11 +46,9 @@ Deno, explain please.
 
 ### todo
 - rate-limiting
-- hsts & force-https
-- other headers
 - different signing keys local & prod
 - (long) ttl for sessions
 - remember last session use time (on refresh)
 - shorter key validity (til refresh)
-- csp violation report endpoint https://stackoverflow.com/a/45631261/7649198
-- clear-site-data header on logout
+- validate inputs
+- sanitize uploads
