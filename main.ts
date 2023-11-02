@@ -22,9 +22,11 @@ app.use(oakCors({
   maxAge: 86400,
 }));
 app.use((ctx, next) => {
-  ctx.response = snelm.snelm(ctx.request, ctx.response);
-  next();
-})
+  return new Promise<void>((resolve) => {
+    ctx.response = snelm.snelm(ctx.request, ctx.response);
+    resolve();
+  }).then(next);
+});
 
 app.use(logger.logger);
 app.use(logger.responseTime);
