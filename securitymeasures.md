@@ -52,3 +52,5 @@ Deno, explain please.
 - remember last session use time (on refresh)
 - shorter key validity (til refresh)
 - csp violation report endpoint https://stackoverflow.com/a/45631261/7649198
+- clear-site-data header on logout
+- cross-origin-resource-policy header https://owasp.org/www-project-secure-headers/#cross-origin-resource-policy

@@ -16,17 +16,22 @@ router.use("/v1", v1Router.routes(), v1Router.allowedMethods());
 
 const app = new Application();
 
+// configure cors
 app.use(oakCors({
   origin: (Deno.args.includes("-l") ? /http:\/\/localhost:.*/ : "https://thechirp.de"),
   methods: ["GET", "POST", "PUT", "OPTIONS"],
   maxAge: 86400,
 }));
-app.use((ctx, next) => {
-  return new Promise<void>((resolve) => {
-    ctx.response = snelm.snelm(ctx.request, ctx.response);
-    resolve();
-  }).then(next);
+// add various security-related headers
+app.use(async (ctx, next) => {
+  ctx.response = snelm.snelm(ctx.request, ctx.response);
+  await next()
 });
+// add must-revalidate cache header to every request
+app.use(async (ctx, next) => {
+  await next();
+  ctx.response.headers.append("Cache-Control", "must-revalidate");
+})
 
 app.use(logger.logger);
 app.use(logger.responseTime);
@@ -38,9 +43,8 @@ app.use(router.routes());
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
   console.log(
-    `Listening on: ${secure ? "https://" : "http://"}${
-      hostname ??
-        "localhost"
+    `Listening on: ${secure ? "https://" : "http://"}${hostname ??
+    "localhost"
     }:${port}`,
   );
 });
