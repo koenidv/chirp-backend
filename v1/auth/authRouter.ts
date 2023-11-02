@@ -166,6 +166,8 @@ MFARouter.post("/signout", async (ctx: Context) => {
 
   await invalidateSession(auth.session!)
   ctx.response.status = 200;
+  // requests browsers to clear site data
+  ctx.response.headers.append("Clear-Site-Data", '"cache","storage","executionContexts"')
 });
 
 MFARouter.post("/signout/all", async (ctx: Context) => {
@@ -178,6 +180,7 @@ MFARouter.post("/signout/all", async (ctx: Context) => {
   await invalidateUser(auth.auth_id!)
   await SecurityLog.insertLog(SecurityAction.CLOSE_ALL_SESSIONS, BigInt(auth.auth_id!), auth.session, ctx.request.ip)
   ctx.response.status = 200;
+  ctx.response.headers.append("Clear-Site-Data", '"cache","storage","executionContexts"')
 });
 
 MFARouter.post("/signout/:session_id", async (ctx: Context) => {
@@ -197,6 +200,9 @@ MFARouter.post("/signout/:session_id", async (ctx: Context) => {
   await invalidateSessionForUser(auth.auth_id, session_id);
   await SecurityLog.insertLog(SecurityAction.CLOSE_SESSION, BigInt(auth.auth_id!), session_id, ctx.request.ip);
   ctx.response.status = 200;
+  if (auth.session === session_id) {
+    ctx.response.headers.append("Clear-Site-Data", '"cache","storage","executionContexts"')
+  }
 });
 
 MFARouter.get("/sessions", async (ctx: Context) => {

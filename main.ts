@@ -4,6 +4,7 @@ import logger from "https://deno.land/x/oak_logger@1.0.0/mod.ts";
 import mockRouter from "./mock/MockRouter.ts";
 import v1Router from "./v1/v1Router.ts";
 import "https://deno.land/std@0.180.0/dotenv/load.ts";
+import { snelm } from "./snelm.ts";
 
 const router = new Router();
 router.get("/", (ctx) => {
@@ -15,10 +16,24 @@ router.use("/v1", v1Router.routes(), v1Router.allowedMethods());
 
 const app = new Application();
 
+// configure cors
 app.use(oakCors({
-  origin: /.*/,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: (Deno.args.includes("-l") ? /http:\/\/localhost:.*/ : "https://thechirp.de"),
+  methods: ["GET", "POST", "PUT", "OPTIONS"],
+  maxAge: 86400,
 }));
+// add various security-related headers
+app.use(async (ctx, next) => {
+  ctx.response = snelm.snelm(ctx.request, ctx.response);
+  await next()
+});
+// add must-revalidate cache and corp headers to every request
+app.use(async (ctx, next) => {
+  await next();
+  ctx.response.headers.append("Cache-Control", "must-revalidate");
+  ctx.response.headers.append("Cross-Origin-Resource-Policy", "same-site");
+});
+
 app.use(logger.logger);
 app.use(logger.responseTime);
 
@@ -29,9 +44,8 @@ app.use(router.routes());
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
   console.log(
-    `Listening on: ${secure ? "https://" : "http://"}${
-      hostname ??
-        "localhost"
+    `Listening on: ${secure ? "https://" : "http://"}${hostname ??
+    "localhost"
     }:${port}`,
   );
 });
