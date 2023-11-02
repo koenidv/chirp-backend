@@ -52,6 +52,7 @@ export async function checkEmailAuth(
     >`SELECT auth_id, auths.user_id, username, passwordhash FROM auths LEFT JOIN users on auths.user_id = users.user_id WHERE email=${email}` // fixme do not use template strings :((
   );
 
+  if (!result.rows[0]) return false;
   if (comparePassword(password, result.rows[0].passwordhash)) {
     return {
       ...result.rows[0],
