@@ -1,14 +1,18 @@
 ### Auth
-
+- salt/hash (was it sha256 or sha512?)
+- bcrypt (wasnt there some vulnerability?)
+- jwt things
 
 ### Header things
-
+- many only relevant for froentend
+- x-permitted-cross-domain-policies
+- x-content-type-options
+- x-powered-by (vorfahrt example)
 
 ### CORS
 - asks browsers to only allow requests from out front-end
 
 ### SQL injection
-
 
 ### Prepared SQL queries
 Prepared SQL queries are a way to prevent SQL injection attacks.
@@ -22,6 +26,8 @@ Deno, explain please.
 ### CSRF
 
 ### HTTPS / HSTS
+- enforced https (via deno deploy)
+- hsts requires https for a year
 
 ### env
 
@@ -45,3 +51,4 @@ Deno, explain please.
 - (long) ttl for sessions
 - remember last session use time (on refresh)
 - shorter key validity (til refresh)
+- csp violation report endpoint https://stackoverflow.com/a/45631261/7649198

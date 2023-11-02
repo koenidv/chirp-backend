@@ -1,109 +1,77 @@
 import { Snelm } from "https://deno.land/x/snelm@1.3.0/mod.ts";
 
-// crossDomain config
+// X-Permitted-Cross-Domain-Policies - https://owasp.org/www-project-secure-headers/#x-permitted-cross-domain-policies
 const crossDomainConfig = {
-    permittedPolicies: 'none',
+    permittedPolicies: 'none', // don't allow any cross-domain policy files
 };
 
-// csp config
-const cspConfig = { 
+// Content-Security-Policy - little to no advantage on a backend api, but it's also basically free
+const cspConfig = {
     // Specify directives as normal.
     directives: {
-    defaultSrc: ["'self'", 'default.com'],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ['style.com'],
-        fontSrc: ["'self'", 'fonts.com'],
-        imgSrc: ['img.com', 'data:'],
-        sandbox: ['allow-forms', 'allow-scripts'],
-        reportUri: '/report-violation',
+        defaultSrc: ["'none'"],
+        scriptSrc: ["'none'"],
+        styleSrc: ["'none'"],
+        fontSrc: ["'none'"],
+        imgSrc: ["'none'"],
+        sandbox: true,
         objectSrc: ["'none'"],
         upgradeInsecureRequests: true,
-        workerSrc: false  // This is not set.
+        blockAllMixedContent: true,
+        manifestSrc: ["'none'"]
     },
- 
-    // This module will detect common mistakes in your directives and throw errors
-    // if it finds any. To disable this, enable "loose mode".
-    loose: false,
- 
     // Set to true if you only want browsers to report errors, not block them.
     // You may also set this to a function(req, res) in order to decide dynamically
     // whether to use reportOnly mode, e.g., to allow for a dynamic kill switch.
-    reportOnly: false,
- 
-    // Set to true if you want to blindly set all headers: Content-Security-Policy,
-    // X-WebKit-CSP, and X-Content-Security-Policy.
-    setAllHeaders: false,
- 
-    // Set to true if you want to disable CSP on Android where it can be buggy.
-    disableAndroid: false,
- 
-    // Set to false if you want to completely disable any user-agent sniffing.
-    // This may make the headers less compatible but it will be much faster.
-    // This defaults to `true`.
-    browserSniff: true
+    reportOnly: false, // also set reportUri
+    setAllHeaders: true, // set csp, webkit-csp, x-csp
+    disableAndroid: false, // csp can be buggy on old android versions, don't care
+    browserSniff: false // disable different headers for different user agents
 };
 
-// dnsPrefetchControl config
+// X-DNS-Prefetch-Control - will not make a difference in the backend
 const dnsPrefetchControlConfig = {
     allow: true,
 };
 
-// todo dontSniffMimetype
+// X-Content-Type-Options - Prevent browsers from sniffing the mime type; prevents non-script from being run
+const dontSniffMimetypeConfig = true;
 
-// expectCt config
-const expectCtConfig = {
-    enforce: true,
-    maxAge: 30,
-    reportUri: 'https://example.com/report'
-};
+// Expect-CT is deprecated - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
+const expectCtConfig = null;
 
-// featurePolicy config
-const featurePolicyConfig = {
-    features: {
-        fullscreen: ["'self'"],
-        vibrate: ["'none'"],
-        payment: ['example.com'],
-        syncXhr: ["'none'"]
-    }
-};
+// Feature-Policy - replaced by Permissions-Policy and irrelevant for the backend
+const featurePolicyConfig = null;
 
-// frameguard config
+// X-Frame-Options - irrelevant for a json-based api but doesn't hurt either
 const frameguardConfig = {
-    action: 'allow-from',
-    domain: 'https://example.com'
+    action: 'deny'
 };
 
-// hidePoweredBy config
+// Hides the Oak X-Powered-By header - only interesting if we're using an outdated/vulnerable oak version lol
 const hidePoweredByConfig = {
-    setTo: 'PHP 4.2.0',
+    setTo: 'caffeine',
 };
 
-// hsts config
+// HSTS - asks browsers to enforce HTTPS for a year (only the api domain)
 const hstsConfig = {
     maxAge: 31536000,
-    includeSubDomains: true,
+    includeSubDomains: false,
     preload: true,
 };
 
-// todo ieNoOpen
+// Referrer-Policy - irrelevant for the backend
+const referrerPolicyConfig = null;
 
-// referrerPolicy config
-const referrerPolicyConfig = {
-    policy: 'same-origin',
-};
-
-// xssProtection config
-const xssProtectionConfig = {
-    setOnOldIE: true,
-    reportUri: '/report-xss-violation',
-    mode: null,
-};
+// X-XSS-Protection should be disabled - https://github.com/OWASP/CheatSheetSeries/issues/376
+const xssProtectionConfig = null;
 
 // Adding configuration to snelm
-export const snelm = new Snelm("oak", { 
+export const snelm = new Snelm("oak", {
     crossDomain: crossDomainConfig,
     csp: cspConfig,
     dnsPrefetchControl: dnsPrefetchControlConfig,
+    dontSniffMimetype: dontSniffMimetypeConfig,
     expectCt: expectCtConfig,
     featurePolicy: featurePolicyConfig,
     frameguard: frameguardConfig,
