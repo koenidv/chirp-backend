@@ -32,8 +32,7 @@ app.use(async (ctx, next) => {
   await next();
   ctx.response.headers.append("Cache-Control", "must-revalidate");
   ctx.response.headers.append("Cross-Origin-Resource-Policy", "same-site");
-  ctx.response.
-})
+});
 
 app.use(logger.logger);
 app.use(logger.responseTime);
