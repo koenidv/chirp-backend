@@ -25,6 +25,18 @@ Deno, explain please.
 
 ### env
 
+### Snelm
+- crossDomain
+- dnsPrefetchControl
+- expectCt
+- featurePolicy
+- frameguard
+- hidePoweredBy
+- hsts
+- ieNoOpen
+- referrerPolicy
+- xssProtection
+
 ### todo
 - rate-limiting
 - hsts & force-https
@@ -32,3 +44,4 @@ Deno, explain please.
 - different signing keys local & prod
 - (long) ttl for sessions
 - remember last session use time (on refresh)
+- shorter key validity (til refresh)

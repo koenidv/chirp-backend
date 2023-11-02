@@ -4,6 +4,7 @@ import logger from "https://deno.land/x/oak_logger@1.0.0/mod.ts";
 import mockRouter from "./mock/MockRouter.ts";
 import v1Router from "./v1/v1Router.ts";
 import "https://deno.land/std@0.180.0/dotenv/load.ts";
+import { snelm } from "./snelm.ts";
 
 const router = new Router();
 router.get("/", (ctx) => {
@@ -20,6 +21,11 @@ app.use(oakCors({
   methods: ["GET", "POST", "PUT", "OPTIONS"],
   maxAge: 86400,
 }));
+app.use((ctx, next) => {
+  ctx.response = snelm.snelm(ctx.request, ctx.response);
+  next();
+})
+
 app.use(logger.logger);
 app.use(logger.responseTime);
 
