@@ -154,6 +154,26 @@ paths:
           description: User sessions invalidated; will apply after next refresh
         401:
           description: Invalid identity token
+
+  /auth/signout/{session_id}:
+    post:
+      summary: Invalidate a specific session for current user
+      tags:
+        - auth
+      parameters:
+        - in: path
+          name: session_id
+          schema:
+            type: string
+          required: true
+          description: Session ID to invalidate - has to be associated to the current account
+      responses:
+        200:
+          description: Session invalidated; will apply after next refresh
+        400:
+          description: Invalid session ID
+        401:
+          description: Invalid identity token
   
   /auth/resetpassword:
     post:
@@ -199,7 +219,7 @@ paths:
           description: Invalid password reset token
   
   /auth/whoami:
-    post:
+    get:
       summary: Check your current identity
       tags:
         - auth
@@ -208,6 +228,18 @@ paths:
           description: Your current identity
         401:
           description: Invalid identity toke
+
+  /auth/logs:
+    get:
+      summary: Get security logs
+      tags:
+        - auth
+      responses:
+        200:
+          description: Security logs
+        401:
+          description: Invalid identity token
+
 
     #
     # User

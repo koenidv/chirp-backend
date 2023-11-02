@@ -14,6 +14,7 @@ import {
 import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import { invalidateUser } from "../../db/sessions.ts";
 import { MailService } from "../../mailersend/MailService.ts";
+import { SecurityAction, SecurityLog } from "../../db/SecurityLogs.ts";
 const router = new Router();
 export default router;
 
@@ -26,6 +27,8 @@ router.post("/", async (ctx) => {
 
   const { auth_id, username } = await queryAuthIdAndUsernameByEmail(email);
   const token_id = generateTokenId();
+
+  await SecurityLog.insertLog(SecurityAction.REQUEST_PASSWORD_RESET, auth_id, undefined, ctx.request.ip)
 
   const token = await createPasswordResetToken(token_id, auth_id);
 
@@ -84,8 +87,9 @@ router.put("/", async (ctx) => {
     return;
   }
 
-  updatePasswordForAuthId(auth_id, newpassword);
-  invalidateUser(auth_id);
+  await SecurityLog.insertLog(SecurityAction.CHANGE_PASSWORD, BigInt(auth_id), undefined, ctx.request.ip)
+  await updatePasswordForAuthId(auth_id, newpassword);
+  await invalidateUser(auth_id);
 
   ctx.response.status = 200;
 });

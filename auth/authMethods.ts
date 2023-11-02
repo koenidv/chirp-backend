@@ -89,7 +89,7 @@ export async function authenticate(ctx: any): Promise<string | false> {
 
 export async function authenticateIncludingAuthId(
   ctx: any,
-): Promise<{ token_id: string; auth_id: string; user_id: string } | false> {
+): Promise<{ token_id: string; auth_id: string; user_id: string, session: string } | false> {
   const jwt = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!jwt) return false;
   const payload = await verifyJWT(jwt);
@@ -98,6 +98,7 @@ export async function authenticateIncludingAuthId(
     token_id: payload?.id as string,
     auth_id: payload?.auth_id as string,
     user_id: payload?.user_id as string,
+    session: payload?.session as string,
   };
 }
 

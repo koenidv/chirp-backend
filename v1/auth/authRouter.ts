@@ -1,5 +1,4 @@
 import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
 import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,
@@ -18,13 +17,20 @@ const MFARouter = new Router();
 export default MFARouter;
 
 import resetRouter from "./resetPassword.ts";
-import { invalidateSession, invalidateUser, registerSession } from "../../db/sessions.ts";
+import logsRouter from "./securitylog.ts";
+import { getSessionsForUser, invalidateSession, invalidateSessionForUser, invalidateUser, registerSession } from "../../db/sessions.ts";
 import { MailService } from "../../mailersend/MailService.ts";
+import { SecurityAction, SecurityLog } from "../../db/SecurityLogs.ts";
+
 MFARouter.use(
   "/resetpassword",
   resetRouter.routes(),
   resetRouter.allowedMethods(),
 );
+MFARouter.use(
+  logsRouter.routes(),
+  logsRouter.allowedMethods(),
+)
 
 MFARouter.post("/register", async (ctx: Context) => {
   const { email, password } = await ctx.request.body().value;
@@ -59,6 +65,8 @@ MFARouter.post("/register", async (ctx: Context) => {
   const session_id = generateSessionId();
   await registerSession(session_id, auth_id.toString());
 
+  await SecurityLog.insertLog(SecurityAction.REGISTER, auth_id, session_id, ctx.request.ip)
+
   ctx.response.body = {
     jwt: await createJWT(session_id, auth_id.toString(), null),
     refreshToken: await createRefreshToken(
@@ -87,6 +95,7 @@ MFARouter.post("/login", async (ctx: Context) => {
   const session_id = generateSessionId();
   await registerSession(session_id, validatedUser.auth_id.toString());
 
+  await SecurityLog.insertLog(SecurityAction.LOGIN, validatedUser.auth_id, session_id, ctx.request.ip)
   await new MailService(validatedUser.username || "Chirp User", email).sendLoginInfo(ctx.request.ip)
 
   ctx.response.body = {
@@ -155,7 +164,7 @@ MFARouter.post("/signout", async (ctx: Context) => {
     return;
   }
 
-  await invalidateSession(auth.token_id!)
+  await invalidateSession(auth.session!)
   ctx.response.status = 200;
 });
 
@@ -167,5 +176,38 @@ MFARouter.post("/signout/all", async (ctx: Context) => {
   }
 
   await invalidateUser(auth.auth_id!)
+  await SecurityLog.insertLog(SecurityAction.CLOSE_ALL_SESSIONS, BigInt(auth.auth_id!), auth.session, ctx.request.ip)
   ctx.response.status = 200;
+});
+
+MFARouter.post("/signout/:session_id", async (ctx: Context) => {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  // @ts-ignore params is on context but not correctly typed
+  const { session_id } = ctx.params;
+  if (!session_id) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  await invalidateSessionForUser(auth.auth_id, session_id);
+  await SecurityLog.insertLog(SecurityAction.CLOSE_SESSION, BigInt(auth.auth_id!), session_id, ctx.request.ip);
+  ctx.response.status = 200;
+});
+
+MFARouter.get("/sessions", async (ctx: Context) => {
+  const auth = await authenticateIncludingAuthId(ctx);
+  if (!auth) {
+    ctx.response.status = 401;
+    return;
+  }
+
+  ctx.response.body = (await getSessionsForUser(auth.auth_id!)).map((session) => ({
+    ...session,
+    is_self: session.session_id === auth.session,
+  }));
 });
