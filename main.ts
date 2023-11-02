@@ -16,8 +16,9 @@ router.use("/v1", v1Router.routes(), v1Router.allowedMethods());
 const app = new Application();
 
 app.use(oakCors({
-  origin: /.*/,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: (Deno.args.includes("-l") ? /http:\/\/localhost:.*/ : "https://thechirp.de"),
+  methods: ["GET", "POST", "PUT", "OPTIONS"],
+  maxAge: 86400,
 }));
 app.use(logger.logger);
 app.use(logger.responseTime);

@@ -5,7 +5,7 @@
 
 
 ### CORS
-
+- asks browsers to only allow requests from out front-end
 
 ### SQL injection
 
@@ -28,7 +28,7 @@ Deno, explain please.
 ### todo
 - rate-limiting
 - hsts & force-https
-- cors & other headers
+- other headers
 - different signing keys local & prod
 - (long) ttl for sessions
 - remember last session use time (on refresh)
