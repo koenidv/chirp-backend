@@ -125,14 +125,15 @@ MFARouter.post("/refresh", async (ctx: Context) => {
     return;
   }
 
-  const jwt = await useRefreshToken(refreshToken);
-  if (!jwt) {
+  const jwtAndExp = await useRefreshToken(refreshToken);
+  if (!jwtAndExp) {
     ctx.response.status = 401;
     return;
   }
 
   ctx.response.body = {
-    jwt: jwt,
+    exp: jwtAndExp.exp,
+    jwt: jwtAndExp.jwt,
   };
 });
 

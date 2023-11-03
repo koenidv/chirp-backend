@@ -108,7 +108,7 @@ export async function authenticateIncludingAuthId(
 
 export async function useRefreshToken(
   refreshToken: string,
-): Promise<string | false> {
+): Promise<{jwt: string, exp: number} | false> {
   let session: string;
   let auth_id: string;
   let user_id: string | undefined;
