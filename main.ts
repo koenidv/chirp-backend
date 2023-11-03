@@ -5,6 +5,7 @@ import mockRouter from "./mock/MockRouter.ts";
 import v1Router from "./v1/v1Router.ts";
 import "https://deno.land/std@0.180.0/dotenv/load.ts";
 import { snelm } from "./snelm.ts";
+import { ratelimit } from "./ratelimit.ts";
 
 const router = new Router();
 router.get("/", (ctx) => {
@@ -33,6 +34,9 @@ app.use(async (ctx, next) => {
   ctx.response.headers.append("Cache-Control", "must-revalidate");
   ctx.response.headers.append("Cross-Origin-Resource-Policy", "same-site");
 });
+
+// @ts-expect-error type is incorrect but works
+app.use(await ratelimit);
 
 app.use(logger.logger);
 app.use(logger.responseTime);

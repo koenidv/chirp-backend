@@ -30,8 +30,6 @@ Deno, explain please.
 - enforced https (via deno deploy)
 - hsts requires https for a year
 
-### env
-
 ### Snelm
 - crossDomain
 - dnsPrefetchControl
@@ -44,8 +42,12 @@ Deno, explain please.
 - referrerPolicy
 - xssProtection
 
+### env
+
+### Protected Branch
+
 ### todo
-- rate-limiting
+- rate-limiting for different users 
 - different signing keys local & prod
 - (long) ttl for sessions
 - remember last session use time (on refresh)
