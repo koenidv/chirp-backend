@@ -67,8 +67,11 @@ MFARouter.post("/register", async (ctx: Context) => {
 
   await SecurityLog.insertLog(SecurityAction.REGISTER, auth_id, session_id, ctx.request.ip)
 
+  const jwtAndExp = await createJWT(session_id, auth_id.toString(), null)
+
   ctx.response.body = {
-    jwt: await createJWT(session_id, auth_id.toString(), null),
+    exp: jwtAndExp.exp,
+    jwt: jwtAndExp.jwt,
     refreshToken: await createRefreshToken(
       session_id,
       auth_id.toString(),
@@ -98,12 +101,15 @@ MFARouter.post("/login", async (ctx: Context) => {
   await SecurityLog.insertLog(SecurityAction.LOGIN, validatedUser.auth_id, session_id, ctx.request.ip)
   await new MailService(validatedUser.username || "Chirp User", email).sendLoginInfo(ctx.request.ip)
 
+  const jwtAndExp = await createJWT(
+    session_id,
+    validatedUser.auth_id.toString(),
+    validatedUser.user_id ? validatedUser.user_id.toString() : null,
+  );
+
   ctx.response.body = {
-    jwt: await createJWT(
-      session_id,
-      validatedUser.auth_id.toString(),
-      validatedUser.user_id ? validatedUser.user_id.toString() : null,
-    ),
+    exp: jwtAndExp.exp,
+    jwt: jwtAndExp.jwt,
     refreshToken: await createRefreshToken(
       session_id,
       validatedUser.auth_id.toString(),
