@@ -33,19 +33,23 @@ export async function createJWT(
   session_id: string,
   auth_id: string,
   user_id: string | null,
-): Promise<string> {
-  return await create(
-    { alg: "HS512", typ: "JWT" },
-    {
-      session: session_id,
-      auth_id: auth_id,
-      user_id: user_id,
-      iss: "https://api.chirp.koenidv.de",
-      iat: getNumericDate(0),
-      exp: getNumericDate(60 * 15), // expires after 15 minutes
-    },
-    Deno.env.get("JWT_KEY")!,
-  );
+): Promise<{ jwt: string, exp: number }> {
+  const exp = getNumericDate(60 * 1); // expires after 1 minute
+  return {
+    jwt: await create(
+      { alg: "HS512", typ: "JWT" },
+      {
+        session: session_id,
+        auth_id: auth_id,
+        user_id: user_id,
+        iss: "https://api.chirp.koenidv.de",
+        iat: getNumericDate(0),
+        exp: exp,
+      },
+      Deno.env.get("JWT_KEY")!,
+    ),
+    exp: exp
+  };
 }
 export async function createRefreshToken(
   session_id: string,
@@ -104,7 +108,7 @@ export async function authenticateIncludingAuthId(
 
 export async function useRefreshToken(
   refreshToken: string,
-): Promise<string | false> {
+): Promise<{jwt: string, exp: number} | false> {
   let session: string;
   let auth_id: string;
   let user_id: string | undefined;

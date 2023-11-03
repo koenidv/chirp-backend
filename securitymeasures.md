@@ -2,6 +2,10 @@
 - salt/hash (was it sha256 or sha512?)
 - bcrypt (wasnt there some vulnerability?)
 - jwt things
+- tokens are valid for 1 minute, then have to be refreshed (theoretical max of 192 requests)
+- sessions (refresh tokens) are valid for 28days after the last login
+- could be improved: refresh tokens should only be usable once
+- password reset is valid for 6hours
 
 ### Header things
 - many only relevant for froentend
@@ -42,15 +46,17 @@ Deno, explain please.
 - referrerPolicy
 - xssProtection
 
+### rate limit
+- 8 requests per 2.5 seconds seem like a nice balance
+- could be improved with different limits for anonymous / signed in / possibly administrator
+
 ### env
 
 ### Protected Branch
 
+### testing
+
 ### todo
-- rate-limiting for different users 
 - different signing keys local & prod
-- (long) ttl for sessions
-- remember last session use time (on refresh)
-- shorter key validity (til refresh)
 - validate inputs
 - sanitize uploads

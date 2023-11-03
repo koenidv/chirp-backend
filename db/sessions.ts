@@ -1,9 +1,11 @@
 import db from "./db.ts";
 
-export async function registerSession(session_id: string, auth_id: string) {
+// the sessions table has ttl enabled for 28 days after last_used
+
+export async function registerSession(session_id: string, auth_id: string, ip: string) {
   await db(async (client) =>
     await client
-      .queryObject`INSERT INTO sessions (session_id, auth_id) VALUES (${session_id}, ${auth_id})`
+      .queryObject`INSERT INTO sessions (session_id, auth_id, last_ip, last_used) VALUES (${session_id}, ${auth_id}, ${ip}, ${new Date().toISOString()})`
   );
 }
 
@@ -35,11 +37,13 @@ export async function sessionExists(session_id: string) {
   return result.rows[0].exists;
 }
 
-export async function getSessionsForUser(auth_id: string): Promise<{ session_id: string; auth_id: string; created_at: Date }[]> {
+export async function getSessionsForUser(auth_id: string): Promise<
+  { session_id: string, auth_id: string, last_ip: string, last_used: Date, created_at: Date }[]
+> {
   return await db(async (client) =>
     (await client.queryObject<
-      { session_id: string; auth_id: string; created_at: Date }
-    >`SELECT session_id, auth_id, created_at FROM sessions WHERE auth_id=${auth_id} ORDER BY created_at DESC`
+      { session_id: string, auth_id: string, last_ip: string, last_used: Date, created_at: Date }
+    >`SELECT session_id, auth_id, last_ip, last_used, created_at FROM sessions WHERE auth_id=${auth_id} ORDER BY last_used DESC`
     ).rows
   );
 }

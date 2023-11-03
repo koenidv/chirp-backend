@@ -63,12 +63,15 @@ MFARouter.post("/register", async (ctx: Context) => {
   }
 
   const session_id = generateSessionId();
-  await registerSession(session_id, auth_id.toString());
+  await registerSession(session_id, auth_id.toString(), ctx.request.ip);
 
   await SecurityLog.insertLog(SecurityAction.REGISTER, auth_id, session_id, ctx.request.ip)
 
+  const jwtAndExp = await createJWT(session_id, auth_id.toString(), null)
+
   ctx.response.body = {
-    jwt: await createJWT(session_id, auth_id.toString(), null),
+    exp: jwtAndExp.exp,
+    jwt: jwtAndExp.jwt,
     refreshToken: await createRefreshToken(
       session_id,
       auth_id.toString(),
@@ -93,17 +96,20 @@ MFARouter.post("/login", async (ctx: Context) => {
   }
 
   const session_id = generateSessionId();
-  await registerSession(session_id, validatedUser.auth_id.toString());
+  await registerSession(session_id, validatedUser.auth_id.toString(), ctx.request.ip);
 
   await SecurityLog.insertLog(SecurityAction.LOGIN, validatedUser.auth_id, session_id, ctx.request.ip)
   await new MailService(validatedUser.username || "Chirp User", email).sendLoginInfo(ctx.request.ip)
 
+  const jwtAndExp = await createJWT(
+    session_id,
+    validatedUser.auth_id.toString(),
+    validatedUser.user_id ? validatedUser.user_id.toString() : null,
+  );
+
   ctx.response.body = {
-    jwt: await createJWT(
-      session_id,
-      validatedUser.auth_id.toString(),
-      validatedUser.user_id ? validatedUser.user_id.toString() : null,
-    ),
+    exp: jwtAndExp.exp,
+    jwt: jwtAndExp.jwt,
     refreshToken: await createRefreshToken(
       session_id,
       validatedUser.auth_id.toString(),
@@ -119,14 +125,15 @@ MFARouter.post("/refresh", async (ctx: Context) => {
     return;
   }
 
-  const jwt = await useRefreshToken(refreshToken);
-  if (!jwt) {
+  const jwtAndExp = await useRefreshToken(refreshToken);
+  if (!jwtAndExp) {
     ctx.response.status = 401;
     return;
   }
 
   ctx.response.body = {
-    jwt: jwt,
+    exp: jwtAndExp.exp,
+    jwt: jwtAndExp.jwt,
   };
 });
 

@@ -41,6 +41,22 @@ paths:
       responses:
         200:
           description: Auth option created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  exp:
+                    description: Expiry unix timestamp for the JWT
+                    type: number
+                  jwt:
+                    description: Identity token for the user; expires after 15 minutes
+                    type: string
+                  refreshToken:
+                    description: Refresh token for the user; expires after 1 year or session reset
+                    type: string   
         400:
           description: Bad request
         409:
@@ -92,6 +108,9 @@ paths:
                 required:
                   - token
                 properties:
+                  exp:
+                    description: Expiry unix timestamp for the JWT
+                    type: number
                   jwt:
                     description: Identity token for the user; expires after 15 minutes
                     type: string

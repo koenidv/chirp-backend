@@ -68,7 +68,7 @@ Deno.test("JWT validation expired", async () => {
 Deno.test("JWT creation", async () => {
   const jwt = await m.createJWT("-1", "-1", "-1");
   assert(jwt);
-  const payload = await m.verifyJWT(jwt);
+  const payload = await m.verifyJWT(jwt.jwt);
   assert(payload);
   assertEquals(payload.session, "-1");
   assertEquals(payload.auth_id, "-1");

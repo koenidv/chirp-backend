@@ -52,10 +52,12 @@ router.post("/", async (ctx) => {
 
   if (user_id) {
     const session_id = generateSessionId();
-    await registerSession(session_id, auth.auth_id);
+    await registerSession(session_id, auth.auth_id, ctx.request.ip);
 
+    const newJwtAndExp = await createJWT(session_id, auth.auth_id, user_id.toString());
     ctx.response.body = {
-      jwt: await createJWT(session_id, auth.auth_id, user_id.toString()),
+      exp: newJwtAndExp.exp,
+      jwt: newJwtAndExp.jwt,
       refreshToken: await createRefreshToken(
         session_id,
         auth.auth_id.toString(),
