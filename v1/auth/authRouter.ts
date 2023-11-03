@@ -63,7 +63,7 @@ MFARouter.post("/register", async (ctx: Context) => {
   }
 
   const session_id = generateSessionId();
-  await registerSession(session_id, auth_id.toString());
+  await registerSession(session_id, auth_id.toString(), ctx.request.ip);
 
   await SecurityLog.insertLog(SecurityAction.REGISTER, auth_id, session_id, ctx.request.ip)
 
@@ -96,7 +96,7 @@ MFARouter.post("/login", async (ctx: Context) => {
   }
 
   const session_id = generateSessionId();
-  await registerSession(session_id, validatedUser.auth_id.toString());
+  await registerSession(session_id, validatedUser.auth_id.toString(), ctx.request.ip);
 
   await SecurityLog.insertLog(SecurityAction.LOGIN, validatedUser.auth_id, session_id, ctx.request.ip)
   await new MailService(validatedUser.username || "Chirp User", email).sendLoginInfo(ctx.request.ip)
