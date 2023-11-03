@@ -54,3 +54,4 @@ Deno, explain please.
 - shorter key validity (til refresh)
 - validate inputs
 - sanitize uploads
+- refresh tokens should only be usable once

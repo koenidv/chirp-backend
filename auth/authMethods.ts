@@ -34,7 +34,7 @@ export async function createJWT(
   auth_id: string,
   user_id: string | null,
 ): Promise<{ jwt: string, exp: number }> {
-  const exp = getNumericDate(60 * 15); // expires after 15 minutes
+  const exp = getNumericDate(60 * 1); // expires after 1 minute
   return {
     jwt: await create(
       { alg: "HS512", typ: "JWT" },
