@@ -6,11 +6,14 @@ import {
   deleteEmailAuth,
 } from "../../db/auths.ts";
 import {
+  PasswordValidationResult,
   authenticateIncludingAuthId,
   createJWT,
   createRefreshToken,
   generateSessionId,
   useRefreshToken,
+  validateEmailSchema,
+  validatePasswordSchema,
 } from "../../auth/authMethods.ts";
 
 const MFARouter = new Router();
@@ -37,6 +40,25 @@ MFARouter.post("/register", async (ctx: Context) => {
 
   if (!email || !password) {
     ctx.response.status = 400;
+    return;
+  }
+
+  if (!validateEmailSchema(email)) {
+    ctx.response.status = 400;
+    ctx.response.body = {
+      error: "auth-invalid-email",
+      message: "Invalid email address",
+    };
+    return;
+  }
+
+  const passwordValidation = await validatePasswordSchema(password);
+  if (passwordValidation !== PasswordValidationResult.valid) {
+    ctx.response.status = 400;
+    ctx.response.body = {
+      error: "auth-invalid-password",
+      message: passwordValidation === PasswordValidationResult.invalid_pwned ? "Password was breached before" : "Invalid password",
+    };
     return;
   }
 

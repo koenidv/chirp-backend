@@ -19,7 +19,6 @@ export async function createEmailAuth(
     console.log("Denied inserting unescaped data");
     return false;
   }
-  if (!validateEmailSchema(email)) return false;
 
   const passwordhash = hashPassword(password);
 
