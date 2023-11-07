@@ -49,7 +49,7 @@ export async function checkEmailAuth(
   const result = await db(async (client) =>
     await client.queryObject<
       AuthUser & { passwordHash: string }
-    >`SELECT auth_id, auths.user_id, username, passwordhash FROM auths LEFT JOIN users on auths.user_id = users.user_id WHERE email=${email}` // fixme do not use template strings :((
+    >`SELECT auth_id, auths.user_id, username, passwordhash FROM auths LEFT JOIN users on auths.user_id = users.user_id WHERE email=${email}`
   );
 
   if (!result.rows[0]) return false;

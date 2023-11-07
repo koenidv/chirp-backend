@@ -13,7 +13,7 @@ export function validateEmailSchema(email: string): boolean {
 }
 
 export function hashPassword(password: string): string {
-  const salt = bcrypt.genSaltSync(8); // using sync because workers don't work on deno deploy yet
+  const salt = bcrypt.genSaltSync(); // using sync because workers don't work on deno deploy yet
   const hash = bcrypt.hashSync(password, salt);
   return hash;
 }

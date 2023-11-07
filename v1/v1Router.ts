@@ -15,5 +15,6 @@ v1Router.use("/search", searchRouter.routes(), searchRouter.allowedMethods());
 v1Router.get("/openapi", async (ctx) => {
   ctx.response.body = await Deno.readFile("./openapi.yaml");
   ctx.response.headers.set("Content-Type", "text/vnd.yaml");
+  ctx.response.headers.set("Access-Control-Allow-Origin", "https://docs.api.thechirp.de")
   ctx.response.status = 200;
 });
