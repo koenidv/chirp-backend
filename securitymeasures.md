@@ -8,6 +8,10 @@
 - password reset is valid for 6hours
 - jwt could theoretically be bound to an ip, but difficult for mobile users if it's invalid right after creating the token
 
+### Password requirements
+- min 8 characters
+- checked against haveibeenpwned
+
 ### Header things
 - many only relevant for froentend
 - x-permitted-cross-domain-policies
@@ -66,10 +70,7 @@ Deno, explain please.
 - limited key for database connection (mailersend implemented, cdn?)
 - paginate logs & sessions
 - deps file
-- check password requirements
-- check passwords against haveibeenpwned
 - security contact (is there a standard?)
-- consider append client-generated secret to refresh token (can the refresh token be stolen without the secret?)
 - database backups (potientally incremental?)
 - monitoring (accounts created, sign in requests ...) - (sentry, sonarqube, grafana, prometheus, datadog, new relic, logz.io, loggly, logr)
 - generate new refresh token after using it
@@ -81,3 +82,6 @@ Deno, explain please.
 - tools to keep dependencies up to date (dependabot, snyk, greenkeeper) - in CI pipeline!
 - testing
 - describe how i tested restoring a database backup lol
+- understand how a request flows, including the (osi) layers and checks that are performed
+- other emails (signup, username changed)
+- gpt4 turbo check entire project haha
