@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { Router } from "../../deps.ts";
 import { createMention } from "../../db/mentions.ts";
 import {
   createTweet,
@@ -92,7 +92,16 @@ router.get("/", async (ctx) => {
     return;
   }
 
-  ctx.response.body = await queryTweetsSubscribed(user_id);
+  const offset = Number(ctx.request.url.searchParams.get("offset"));
+  const limit = Number(Deno.env.get("TWEET_PAGE_LIMIT")) || 20;
+
+  const posts = await queryTweetsSubscribed(user_id, limit, offset);
+  const nextOffset = posts.length === limit ? offset + limit : undefined;
+
+  ctx.response.body = {
+    nextOffset: nextOffset,
+    data: posts,
+  };
 });
 
 router.get("/extend", async (ctx) => {
@@ -102,7 +111,16 @@ router.get("/extend", async (ctx) => {
     return;
   }
 
-  ctx.response.body = await queryTweetsSubscribedExtended(user_id);
+  const offset = Number(ctx.request.url.searchParams.get("offset"));
+  const limit = Number(Deno.env.get("TWEET_PAGE_LIMIT")) || 20;
+
+  const posts = await queryTweetsSubscribedExtended(user_id, limit, offset);
+  const nextOffset = posts.length === limit ? offset + limit : undefined;
+
+  ctx.response.body = {
+    nextOffset: nextOffset,
+    data: posts,
+  };
 });
 
 // Get a tweet

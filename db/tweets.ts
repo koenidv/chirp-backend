@@ -56,7 +56,7 @@ export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
   return tweet.rows[0] || false;
 }
 
-export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
+export async function queryTweetsSubscribed(user_id: string, limit: number, offset: number): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
   // todo include retweets
 
@@ -70,7 +70,9 @@ export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
     LEFT JOIN tweets t on f.following_id = t.author_id
   WHERE f.follower_id = ${user_id}
   GROUP BY t.tweet_id, t.author_id, t.content, t.created_at
-  ORDER BY t.created_at DESC`
+  ORDER BY t.created_at DESC
+  LIMIT ${limit}
+  OFFSET ${offset}`
   );
 
   return tweets.rows;
@@ -78,6 +80,8 @@ export async function queryTweetsSubscribed(user_id: string): Promise<Tweet[]> {
 
 export async function queryTweetsSubscribedExtended(
   user_id: string,
+  limit: number,
+  offset: number,
 ): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
   // todo include retweets
@@ -93,7 +97,9 @@ export async function queryTweetsSubscribedExtended(
       LEFT JOIN tweets t on f2.following_id = t.author_id
     WHERE f.follower_id = ${user_id}
     GROUP BY t.tweet_id, t.author_id, t.content, t.created_at
-    ORDER BY t.created_at DESC`
+    ORDER BY t.created_at DESC
+    LIMIT ${limit}
+    OFFSET ${offset}`
   );
 
   return tweets.rows;
@@ -101,6 +107,8 @@ export async function queryTweetsSubscribedExtended(
 
 export async function queryTweetsByUsername(
   username: string,
+  limit: number,
+  offset: number,
 ): Promise<Tweet[]> {
   const tweets = await db(async (client) =>
     await client.queryObject<Tweet>`
@@ -111,7 +119,9 @@ export async function queryTweetsByUsername(
     FROM tweets as t
       WHERE t.author_id = (SELECT user_id FROM users WHERE username = ${username})
     GROUP BY t.tweet_id, t.author_id, t.content, t.created_at
-    ORDER BY t.created_at DESC`
+    ORDER BY t.created_at DESC
+    LIMIT ${limit}
+    OFFSET ${offset}`
   );
 
   return tweets.rows;

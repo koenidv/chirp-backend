@@ -1,5 +1,5 @@
-import { isEscape } from "https://deno.land/x/escape@1.4.2/mod.ts";
-import createFlakeID53 from "https://cdn.jsdelivr.net/npm/flakeid53/index.js";
+import { isEscape } from "../deps.ts";
+import { createFlakeID53 } from "../deps.ts";
 import prohibitedUsernames from "./prohibitedUsernames.ts";
 
 export function anyUnescaped(...args: string[]): boolean {

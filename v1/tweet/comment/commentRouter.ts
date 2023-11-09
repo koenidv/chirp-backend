@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { Router } from "../../../deps.ts";
 import { extractIds as extractIdsOuter } from "../tweetRouter.ts";
 const router = new Router();
 export default router;
