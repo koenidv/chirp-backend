@@ -73,12 +73,11 @@ Deno, explain please.
 
 ### dependency management
 - deps are listed in deps.ts and pinned to a specific version
-- ... dotenv, createFlake53, logger
+- checked for outdated dependencies using [denopendabot](https://github.com/hasundue/denopendabot)
 
 ### todo
 - validate inputs (especially media upload)
 - sanitize uploads
-- deps file
 - security contact (is there a standard?)
 - database backups (potientally incremental?)
 - monitoring (accounts created, sign in requests ...) - (sentry, sonarqube, grafana, prometheus, datadog, new relic, logz.io, loggly, logr)
