@@ -12,6 +12,7 @@
 - could be improved: refresh tokens should only be usable once
 - password reset is valid for 6hours
 - jwt could theoretically be bound to an ip, but difficult for mobile users if it's invalid right after creating the token
+- email notifications when registering and for new sign ins
 
 ### Password requirements
 - min 8 characters
@@ -83,16 +84,23 @@ Deno, explain please.
 - checked for outdated dependencies using [denopendabot](https://github.com/hasundue/denopendabot)
 
 ### todo
-- validate inputs (especially media upload)
-- sanitize uploads
-- database backups (potientally incremental?)
-- monitoring (accounts created, sign in requests ...) - (sentry, sonarqube, grafana, prometheus, datadog, new relic, logz.io, loggly, logr)
-- generate new refresh token after using it
-- hardware token for accessing the system
-- how are admin devices secured?
-- test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan things
-- canary tokens, "fake user" - if this user ever shows up, there was a breach. tools to get notified about this (canarytokens.org)
-- describe how i tested restoring a database backup lol
-- understand how a request flows, including the (osi) layers and checks that are performed
-- other emails (signup, username changed)
-- gpt4 turbo check entire project haha
+- general
+  - validate inputs (especially media upload)
+  - sanitize uploads
+- backups
+  - database backups (potientally incremental?)
+  - describe how i tested restoring a database backup lol
+- devsec
+  - hardware token for accessing the system
+  - how are admin devices secured?
+- observability
+  - monitoring (accounts created, sign in requests ...) - (sentry, sonarqube, grafana, prometheus, datadog, new relic, logz.io, loggly, logr)
+  - canary tokens, "fake user" - if this user ever shows up, there was a breach. tools to get notified about this (canarytokens.org)
+- analysis
+  - test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan things
+  - understand how a request flows, including the (osi) layers and checks that are performed
+  - gpt4 turbo check entire project haha
+- concepts
+  - xss
+  - csrf
+  - sqli

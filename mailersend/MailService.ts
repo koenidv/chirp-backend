@@ -1,5 +1,3 @@
-import { Mail, MailProps } from "./MailService.types.ts";
-
 const DEFAULT_BASE_URL = "https://api.mailersend.com/v1/email"
 
 export class MailService {
@@ -51,6 +49,23 @@ export class MailService {
         });
     }
 
+    sendRegisteredInfo(ip: string) {
+        return new Promise((resolve, reject) => {
+            this.send(
+                "v69oxl5vrjr4785k",
+                {
+                    ip: ip,
+                }
+            ).then(() => {
+                resolve(true);
+            }).catch((err) => {
+                console.error("Error sending registered info email for user", this.username);
+                console.error(err);
+                reject(false);
+            })
+        });
+    }
+
     // deno-lint-ignore no-explicit-any
     private send(template: string, data: any): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -73,7 +88,7 @@ export class MailService {
                             ...data
                         },
                     }],
-                } as Mail),
+                }),
             }).then((result) => {
                 if (result.status === 202) resolve();
                 else reject(result.statusText);
