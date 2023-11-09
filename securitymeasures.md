@@ -58,7 +58,12 @@ Deno, explain please.
 - 8 requests per 2.5 seconds seem like a nice balance
 - could be improved with different limits for anonymous / signed in / possibly administrator
 
-### env
+### env & keys
+- env variables are used for sensitive data (deno deploy's env variables are write-only for users)
+- uses different jwt signing for test deploy, prod deploy, and local machines
+- uses different api keys for each env (mailersend, database, imagekit)
+- api keys can be quickly reset
+- api keys only allow for specific actions (mailersend: manage emails, imagekit: read/write images)
 
 ### Protected Branch
 - cannot push directly to main, but a pull request must be created
@@ -67,10 +72,8 @@ Deno, explain please.
 ### testing
 
 ### todo
-- different signing keys local & prod
 - validate inputs (especially media upload)
 - sanitize uploads
-- limited key for database connection (mailersend implemented, cdn?)
 - deps file
 - security contact (is there a standard?)
 - database backups (potientally incremental?)
@@ -78,7 +81,6 @@ Deno, explain please.
 - generate new refresh token after using it
 - hardware token for accessing the system
 - how are admin devices secured?
-- different mailersend & cdn keys for local & prod
 - test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan things
 - canary tokens, "fake user" - if this user ever shows up, there was a breach. tools to get notified about this (canarytokens.org)
 - tools to keep dependencies up to date (dependabot, snyk, greenkeeper) - in CI pipeline!
