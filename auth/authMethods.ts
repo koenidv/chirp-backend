@@ -1,13 +1,6 @@
-import { email as emailvalidate } from "https://deno.land/x/validation@v0.4.0/mod.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
-import {
-  create,
-  getNumericDate,
-  verify,
-} from "https://deno.land/x/djwt@v2.2/mod.ts";
+import { emailvalidate, bcrypt, jwtCreate, getNumericDate, jwtVerify, encodeHex } from "../deps.ts";
 import { checkAuthAndUserStillValid } from "../db/auths.ts";
 import { sessionExists } from "../db/sessions.ts";
-import { encodeHex } from "https://deno.land/std@0.205.0/encoding/hex.ts";
 
 export function validateEmailSchema(email: string): boolean {
   return emailvalidate.valid(email);
@@ -33,7 +26,7 @@ async function testPasswordPwned(password: string): Promise<boolean> {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -61,7 +54,7 @@ export async function createJWT(
 ): Promise<{ jwt: string, exp: number }> {
   const exp = getNumericDate(60 * 1); // expires after 1 minute
   return {
-    jwt: await create(
+    jwt: await jwtCreate(
       { alg: "HS512", typ: "JWT" },
       {
         session: session_id,
@@ -81,7 +74,7 @@ export async function createRefreshToken(
   auth_id: string,
   user_id: string | null,
 ): Promise<string> {
-  return await create(
+  return await jwtCreate(
     { alg: "HS512", typ: "JWT" },
     {
       session: session_id,
@@ -99,7 +92,7 @@ export async function createRefreshToken(
 export async function verifyJWT(jwt: string) {
   let payload;
   try {
-    payload = await verify(
+    payload = await jwtVerify(
       jwt,
       Deno.env.get("JWT_KEY")!,
       "HS512",
@@ -133,7 +126,7 @@ export async function authenticateIncludingAuthId(
 
 export async function useRefreshToken(
   refreshToken: string,
-): Promise<{jwt: string, exp: number} | false> {
+): Promise<{ jwt: string, exp: number } | false> {
   let session: string;
   let auth_id: string;
   let user_id: string | undefined;

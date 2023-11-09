@@ -1,11 +1,11 @@
-import { Application, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import logger from "https://deno.land/x/oak_logger@1.0.0/mod.ts";
 import mockRouter from "./mock/MockRouter.ts";
 import v1Router from "./v1/v1Router.ts";
-import "https://deno.land/std@0.180.0/dotenv/load.ts";
+import { Application, Router, oakCors } from "./deps.ts";
 import { snelm } from "./snelm.ts";
 import { ratelimit } from "./ratelimit.ts";
+
+import "https://deno.land/std@0.180.0/dotenv/load.ts";
+import logger from "https://deno.land/x/oak_logger@1.0.0/mod.ts";
 
 const router = new Router();
 router.get("/", (ctx) => {

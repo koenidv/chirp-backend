@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { Router } from "../../deps.ts";
 import { createMention } from "../../db/mentions.ts";
 import {
   createTweet,

@@ -71,6 +71,10 @@ Deno, explain please.
 
 ### testing
 
+### dependency management
+- deps are listed in deps.ts and pinned to a specific version
+- ... dotenv, createFlake53, logger
+
 ### todo
 - validate inputs (especially media upload)
 - sanitize uploads

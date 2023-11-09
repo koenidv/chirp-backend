@@ -1,4 +1,4 @@
-import { Snelm } from "https://deno.land/x/snelm@1.3.0/mod.ts";
+import { Snelm } from "./deps.ts";
 
 // X-Permitted-Cross-Domain-Policies - https://owasp.org/www-project-secure-headers/#x-permitted-cross-domain-policies
 const crossDomainConfig = {

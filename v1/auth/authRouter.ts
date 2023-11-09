@@ -1,4 +1,4 @@
-import { Context, Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { Context, Router } from "../../deps.ts";
 import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,

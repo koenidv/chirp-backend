@@ -1,4 +1,4 @@
-import { Client, Pool } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
+import { pgClient as Client, pgPool as Pool } from "../deps.ts";
 import "https://deno.land/std@0.180.0/dotenv/load.ts";
 
 const pool = new Pool(

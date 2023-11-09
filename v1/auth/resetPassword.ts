@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { Router } from "../../deps.ts";
 import {
   createPasswordResetToken,
   generateTokenId,
@@ -11,7 +11,7 @@ import {
   consumePasswordResetTokenid,
   savePasswordResetTokenId,
 } from "../../db/reset_tokens.ts";
-import { verify } from "https://deno.land/x/djwt@v2.2/mod.ts";
+import { jwtVerify as verify } from "../../deps.ts";
 import { invalidateUser } from "../../db/sessions.ts";
 import { MailService } from "../../mailersend/MailService.ts";
 import { SecurityAction, SecurityLog } from "../../db/SecurityLogs.ts";

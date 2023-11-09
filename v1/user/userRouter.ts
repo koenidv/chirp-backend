@@ -1,5 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { createUser, queryUser } from "../../db/users.ts";
+import { Router } from "../../deps.ts";
 const userRouter = new Router();
 export default userRouter;
 

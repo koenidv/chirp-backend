@@ -56,7 +56,7 @@ export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
   return tweet.rows[0] || false;
 }
 
-export async function queryTweetsSubscribed(user_id: string, limit: number, offset: ): Promise<Tweet[]> {
+export async function queryTweetsSubscribed(user_id: string, limit: number, offset: number): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
   // todo include retweets
 
