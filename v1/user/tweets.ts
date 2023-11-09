@@ -11,7 +11,14 @@ router.get("/tweets", async (ctx) => {
     return;
   }
 
-  const tweets = await queryTweetsByUsername(ref_username!);
-  ctx.response.body = tweets;
-  ctx.response.status = 200;
+  const offset = Number(ctx.request.url.searchParams.get("offset"));
+  const limit = Number(Deno.env.get("TWEET_PAGE_LIMIT")) || 20;
+
+  const posts = await queryTweetsByUsername(ref_username!, limit, offset);
+  const nextOffset = posts.length === limit ? offset + limit : undefined;
+
+  ctx.response.body = {
+    nextOffset: nextOffset,
+    data: posts,
+  };
 });

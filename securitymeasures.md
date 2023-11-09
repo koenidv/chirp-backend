@@ -12,6 +12,9 @@
 - min 8 characters
 - checked against haveibeenpwned
 
+### Pagination
+- posts are paginated at 20 posts per page
+
 ### Header things
 - many only relevant for froentend
 - x-permitted-cross-domain-policies
@@ -68,7 +71,6 @@ Deno, explain please.
 - validate inputs (especially media upload)
 - sanitize uploads
 - limited key for database connection (mailersend implemented, cdn?)
-- paginate logs & sessions
 - deps file
 - security contact (is there a standard?)
 - database backups (potientally incremental?)
