@@ -16,7 +16,7 @@ export async function createTweet(
 ): Promise<number | false> {
   // user_id is expected to be verified!
 
-  if (anyUnescaped(content) || content.length > 280) {
+  if (anyUnescaped(user_id, content) || content.length > 280) {
     return false;
   }
 
@@ -32,6 +32,7 @@ export async function createTweet(
 }
 
 export async function deleteTweet(user_id: string, tweet_id: string) {
+  if (anyUnescaped(tweet_id, user_id)) return false;
   return await db(async (client) =>
     (await client.queryArray`
         DELETE FROM tweets WHERE author_id=${user_id} AND tweet_id=${tweet_id} RETURNING tweet_id`)
@@ -41,6 +42,7 @@ export async function deleteTweet(user_id: string, tweet_id: string) {
 
 export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
   // all tweets are public, so no need to check if user is subscribed to author
+  if (anyUnescaped(tweet_id)) return false;
 
   const tweet = await db(async (client) =>
     await client.queryObject<Tweet>`
@@ -59,6 +61,7 @@ export async function queryTweet(tweet_id: string): Promise<Tweet | false> {
 export async function queryTweetsSubscribed(user_id: string, limit: number, offset: number): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
   // todo include retweets
+  if (anyUnescaped(user_id)) return [];
 
   const tweets = await db(async (client) =>
     await client.queryObject<Tweet>`
@@ -85,6 +88,7 @@ export async function queryTweetsSubscribedExtended(
 ): Promise<Tweet[]> {
   // todo like count should be an estimate for efficiency. Cockroach doesn't support plpsql, so can't use usual function here
   // todo include retweets
+  if (anyUnescaped(user_id)) return [];
 
   const tweets = await db(async (client) =>
     await client.queryObject<Tweet>`
@@ -110,6 +114,8 @@ export async function queryTweetsByUsername(
   limit: number,
   offset: number,
 ): Promise<Tweet[]> {
+  if (anyUnescaped(username)) return [];
+
   const tweets = await db(async (client) =>
     await client.queryObject<Tweet>`
     SELECT t.tweet_id, t.author_id, t.content, t.created_at,

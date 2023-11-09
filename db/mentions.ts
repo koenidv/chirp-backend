@@ -1,5 +1,4 @@
 import db from "./db.ts";
-import { anyUnescaped } from "./dbMethods.ts";
 
 export async function createMention(tweet_id: number, username: bigint) {
   await db(async (client) =>

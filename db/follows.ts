@@ -1,6 +1,8 @@
 import db from "./db.ts";
+import { anyUnescaped } from "./dbMethods.ts";
 
 export async function queryFollowersByUsername(username: string) {
+  if (anyUnescaped(username)) return false;
   return await db(async (client) =>
     (await client.queryObject<
       {
@@ -19,6 +21,7 @@ export async function queryFollowersByUsername(username: string) {
 }
 
 export async function queryFollowingsByUsername(username: string) {
+  if (anyUnescaped(username)) return false;
   return await db(async (client) =>
     (await client.queryObject<
       {
@@ -40,6 +43,7 @@ export async function queryIsFollowingUsername(
   self_id: string,
   ref_username: string,
 ) {
+  if (anyUnescaped(self_id, ref_username)) return false;
   return await db(async (client) =>
     (await client.queryArray`
         SELECT EXISTS(
@@ -51,21 +55,23 @@ export async function queryIsFollowingUsername(
   );
 }
 
-export async function followUser(self_if: string, ref_username: string) {
+export async function followUser(self_id: string, ref_username: string) {
+  if (anyUnescaped(self_id, ref_username)) return false;
   return await db(async (client) =>
     (await client.queryArray`
         INSERT INTO follows (follower_id, following_id)
-        VALUES (${self_if}, (SELECT user_id FROM users WHERE username = ${ref_username}))
+        VALUES (${self_id}, (SELECT user_id FROM users WHERE username = ${ref_username}))
         ON CONFLICT DO NOTHING
     `).rows
   );
 }
 
-export async function unfollowUser(self_if: string, ref_username: string) {
+export async function unfollowUser(self_id: string, ref_username: string) {
+  if (anyUnescaped(self_id, ref_username)) return false;
   return await db(async (client) =>
     (await client.queryArray`
         DELETE FROM follows
-        WHERE follower_id = ${self_if} AND following_id = (SELECT user_id FROM users WHERE username = ${ref_username})
+        WHERE follower_id = ${self_id} AND following_id = (SELECT user_id FROM users WHERE username = ${ref_username})
     `).rows
   );
 }

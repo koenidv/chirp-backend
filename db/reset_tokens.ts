@@ -1,4 +1,5 @@
 import db from "./db.ts";
+import { anyUnescaped } from "./dbMethods.ts";
 
 export async function savePasswordResetTokenId(
   token_id: string,
@@ -16,6 +17,7 @@ export async function savePasswordResetTokenId(
 export async function consumePasswordResetTokenid(
   token_id: string,
 ): Promise<boolean> {
+  if (anyUnescaped(token_id)) return false;
   return await db(async (client) =>
     (await client.queryObject<{ token_id: string; created_at: string }>`
             DELETE FROM reset_tokens WHERE token_id=${token_id}

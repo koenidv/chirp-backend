@@ -21,6 +21,12 @@
 ### Pagination
 - posts are paginated at 20 posts per page
 
+### Input validation
+- file uploads (profile images) are limited to 15MB
+- no operations are performed on the file, it is transferred to imagekit (they're more competent)
+- all other requests are limited to 10MiB
+- many inputs are length checked (username, biography, ...) but usually rely on the 10MiB constraint
+
 ### Header things
 - many only relevant for froentend
 - x-permitted-cross-domain-policies

@@ -116,7 +116,6 @@ router.put("/profileimage", async (ctx) => {
   ) {
     ctx.response.status = 400;
     ctx.response.body = "Content-Type must be multipart/form-data";
-    console.log(ctx.request.headers.get("content-type"));
     return;
   }
   const user_id = await authenticate(ctx);

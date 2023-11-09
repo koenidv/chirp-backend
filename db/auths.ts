@@ -15,7 +15,7 @@ export async function createEmailAuth(
 ): Promise<bigint | false> {
   // userid is expected to be verified!
 
-  if (anyUnescaped(email, password)) {
+  if (anyUnescaped(email)) {
     console.log("Denied inserting unescaped data");
     return false;
   }
@@ -79,6 +79,10 @@ export async function updatePasswordForAuthId(
 }
 
 export async function queryAuthIdAndUsernameByEmail(email: string) {
+  if (anyUnescaped(email)) {
+    console.log("Denied inserting unescaped data");
+    return false;
+  }
   return await db(async (client) =>
     (await client.queryObject<
       { auth_id: bigint; username: string | undefined }
