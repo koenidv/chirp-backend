@@ -1,5 +1,6 @@
 import { pgClient as Client, pgPool as Pool } from "../deps.ts";
-import "https://deno.land/std@0.180.0/dotenv/load.ts";
+// deno-lint-ignore no-unused-vars
+import { dotenv } from "../deps.ts";
 
 const pool = new Pool(
   Deno.env.get(

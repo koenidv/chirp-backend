@@ -3,9 +3,9 @@ import v1Router from "./v1/v1Router.ts";
 import { Application, Router, oakCors } from "./deps.ts";
 import { snelm } from "./snelm.ts";
 import { ratelimit } from "./ratelimit.ts";
-
-import "https://deno.land/std@0.180.0/dotenv/load.ts";
-import logger from "https://deno.land/x/oak_logger@1.0.0/mod.ts";
+import { logger } from "./deps.ts";
+// deno-lint-ignore no-unused-vars
+import { dotenv } from "./deps.ts";
 
 const router = new Router();
 router.get("/", (ctx) => {
