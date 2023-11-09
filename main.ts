@@ -46,6 +46,11 @@ router.get("/health", (ctx) => {
 });
 app.use(router.routes());
 
+router.get("/.well-known/security.txt", async (ctx) => {
+  ctx.response.body = await Deno.readFile("./security.txt");
+  ctx.response.status = 200;
+})
+
 app.addEventListener("listen", ({ hostname, port, secure }) => {
   console.log(
     `Listening on: ${secure ? "https://" : "http://"}${hostname ??

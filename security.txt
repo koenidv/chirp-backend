@@ -1,0 +1,24 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Contact: mailto:security@thechirp.de
+Expires: 2024-04-30T21:59:00.000Z
+Encryption: https://koeni.dev/.well-known/pgp.txt
+Preferred-Languages: en, de
+Canonical: https://api.thechirp.de/.well_known/security.txt
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEQF3uk+GUllWhiwvGb6j77mMR/ZwFAmVNNRUACgkQb6j77mMR
+/Zxi1xAArnUSu5S9mmMvRzPszHgQ7mpcEC34MvlPVxEBfs/IQl2wYuevRWWReY2K
+7zwl4RKn0MmCaUi0ep5LcDJuMpjvdeODP7Xktfne37dcgPODu024ZPEZ0O7YxCtF
+L/fpHjjNd4tVoz05IQGpibNrBY0Vaz+erRMwF1XoIRP3Hox+LQ9GZhJBmYIRlrBc
+Fpxbv8aGvx4fW0w2QG5zOcivYQkIzBhqSddWW9M9sIxoXCu1S2MqOGuHxT5aTB8R
+SjY+Y2VBqnf2ZGjl67Q0h8MiD2bt1jdAaUEu4mZmV5jP+ZZY83doGYwrakaQG/Uv
+HsZTeSIdMQupMPS2EcYZCfr0ijxTgENN+JvYS2oOVWLefJSY5nLpb/CWW3Cv/5R1
+UgVhgxCk15o6jxVdleIl8GQuMtEeNdKhEZ2a91lY1xn+ip9brqxc2QXMVeV0VTSK
+STbYqQubuehWaFtT/r980HeKLPMQqs/5Ek3chZUekz4NcL0B+c3vCfyEq1vKjInQ
+uG4In3ihEQPTzfWp8WO9Zm72MxIasPBsceL1JR3ZLbZxEdOoLdv60HK+P8JoExBk
+FciFcmB5Uy60mo9IdJvB5rs1IosnPVcBxXZvBUxctm5jazUalQj4OK2s0+o0gN3Z
+eLGQ1BTQZirosvZGdAIPImpotvTlLTE7D7VfEiKb/8qRzCi6o4o=
+=IY8a
+-----END PGP SIGNATURE-----

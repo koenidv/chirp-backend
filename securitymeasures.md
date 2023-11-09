@@ -1,3 +1,8 @@
+### Security Contact
+- implemented using the [security.txt](https://securitytxt.org) standard
+- at [https://api.thechirp.de/.well-known/security.txt](https://api.thechirp.de/.well-known/security.txt)
+- signed to verify authenticity
+
 ### Auth
 - salted & hashed
 - bcrypt (wasnt there some vulnerability?)
@@ -70,6 +75,8 @@ Deno, explain please.
 - if i wasnt the sole backend developer it would make sense to require pr reviews
 
 ### testing
+- some things are tested but most not haha
+- automated code analysis with Snyk 
 
 ### dependency management
 - deps are listed in deps.ts and pinned to a specific version
@@ -78,7 +85,6 @@ Deno, explain please.
 ### todo
 - validate inputs (especially media upload)
 - sanitize uploads
-- security contact (is there a standard?)
 - database backups (potientally incremental?)
 - monitoring (accounts created, sign in requests ...) - (sentry, sonarqube, grafana, prometheus, datadog, new relic, logz.io, loggly, logr)
 - generate new refresh token after using it
@@ -86,8 +92,6 @@ Deno, explain please.
 - how are admin devices secured?
 - test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan things
 - canary tokens, "fake user" - if this user ever shows up, there was a breach. tools to get notified about this (canarytokens.org)
-- tools to keep dependencies up to date (dependabot, snyk, greenkeeper) - in CI pipeline!
-- testing
 - describe how i tested restoring a database backup lol
 - understand how a request flows, including the (osi) layers and checks that are performed
 - other emails (signup, username changed)
