@@ -89,10 +89,16 @@ Deno, explain please.
 - deps are listed in deps.ts and pinned to a specific version
 - checked for outdated dependencies using [denopendabot](https://github.com/hasundue/denopendabot)
 
+# observability
+- canary user via canarytokens.org
+- observability was difficult to implement proper observability half a year ago (no opentelemetry etc)
+- now basic implementation with sentry, but only error reporting so far
+- super basic deno deploy metrics and logs
+
 ### todo
 - general
-  - validate inputs (especially media upload)
-  - sanitize uploads
+  - validate numbers
+  - paramterized queries, not just prepared statements
 - backups
   - database backups (potientally incremental?)
   - describe how i tested restoring a database backup lol
@@ -101,7 +107,6 @@ Deno, explain please.
   - how are admin devices secured?
 - observability
   - monitoring (accounts created, sign in requests ...) - (sentry, sonarqube, grafana, prometheus, datadog, new relic, logz.io, loggly, logr)
-  - canary tokens, "fake user" - if this user ever shows up, there was a breach. tools to get notified about this (canarytokens.org)
 - analysis
   - test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan things
   - understand how a request flows, including the (osi) layers and checks that are performed

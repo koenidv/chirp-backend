@@ -7,6 +7,10 @@ import { logger } from "./deps.ts";
 // deno-lint-ignore no-unused-vars
 import { dotenv } from "./deps.ts";
 
+
+Sentry.init({ dsn: Deno.env.get("SENTRY_DSN") });
+
+
 const router = new Router();
 router.get("/", (ctx) => {
   ctx.response.body = "Twitter Clone API available";
