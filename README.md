@@ -75,7 +75,7 @@ However, the database will not be set up automatically and you will have to run 
 
 ## Security
 
-[![Threat Model](.docs-assets/ThreatModel_miro.png)](https://miro.com/app/board/uXjVNO6KpIU=/)
+[![Threat Model](.docs-assets/ThreatModel_miro.png)](.docs-assets/ThreatModel_miro.png)
 
 A list of security measures implemented can be found in [securitymeasures.md](securitymeasures.md).
 
