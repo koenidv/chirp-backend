@@ -2,7 +2,7 @@
 
 ### Threat Model
 
-[![Threat Model](.docs-assets/ThreatModel_miro.png)](https://miro.com/app/board/uXjVNO6KpIU=/)
+[![Threat Model](.docs-assets/ThreatModel_miro.png)](.docs-assets/ThreatModel_miro.png)
 
 ### Security Contact
 
