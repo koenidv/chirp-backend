@@ -11,4 +11,4 @@ export { isEscape } from "https://deno.land/x/escape@1.4.2/mod.ts";
 export * as dotenv from "https://deno.land/std@0.180.0/dotenv/load.ts";
 export { default as logger } from "https://deno.land/x/oak_logger@1.0.0/mod.ts";
 export { default as createFlakeID53} from "https://cdn.jsdelivr.net/npm/flakeid53/index.js";
-export * as Sentry from "https://deno.land/x/sentry/index.mjs";
+export * as Sentry from "https://deno.land/x/sentry@7.80.2-alpha.1/index.d.ts";
