@@ -1,4 +1,4 @@
-import { Context, Router } from "../../deps.ts";
+import { Context, Router, Sentry } from "../../deps.ts";
 import {
   AUTH_ID_DUPLICATE_EMAIL,
   checkEmailAuth,
@@ -62,6 +62,14 @@ MFARouter.post("/register", async (ctx: Context) => {
     return;
   }
 
+  Sentry.captureEvent({
+    message: "New user registered",
+    level: Sentry.Severity.Info,
+    extra: {
+      email: email,
+      ip: ctx.request.ip,
+    }
+  })
   const auth_id = await createEmailAuth(email, password);
 
   if (!auth_id) {
@@ -114,8 +122,26 @@ MFARouter.post("/login", async (ctx: Context) => {
 
   if (!validatedUser) {
     ctx.response.status = 401;
+
+    Sentry.captureEvent({
+      message: "Login failed",
+      level: Sentry.Severity.Info,
+      extra: {
+        email: email,
+        ip: ctx.request.ip,
+      }
+    })
     return;
   }
+
+  Sentry.captureEvent({
+    message: "Login successful",
+    level: Sentry.Severity.Info,
+    extra: {
+      email: email,
+      ip: ctx.request.ip,
+    }
+  })
 
   const session_id = generateSessionId();
   await registerSession(session_id, validatedUser.auth_id.toString(), ctx.request.ip);
@@ -178,6 +204,14 @@ MFARouter.delete("/", async (ctx: Context) => {
   const auth = await authenticateIncludingAuthId(ctx);
   if (!auth) {
     ctx.response.status = 401;
+
+    Sentry.captureEvent({
+      message: "Attempted to delete user, not authorized",
+      level: Sentry.Severity.Info,
+      extra: {
+        ip: ctx.request.ip,
+      }
+    })
     return;
   }
 

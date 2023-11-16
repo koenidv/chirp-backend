@@ -1,6 +1,6 @@
 import mockRouter from "./mock/MockRouter.ts";
 import v1Router from "./v1/v1Router.ts";
-import { Application, Router, oakCors } from "./deps.ts";
+import { Application, Router, Sentry, oakCors } from "./deps.ts";
 import { snelm } from "./snelm.ts";
 import { ratelimit } from "./ratelimit.ts";
 import { logger } from "./deps.ts";

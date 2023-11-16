@@ -89,19 +89,21 @@ Deno, explain please.
 - deps are listed in deps.ts and pinned to a specific version
 - checked for outdated dependencies using [denopendabot](https://github.com/hasundue/denopendabot)
 
-# observability
+### observability
 - canary user via canarytokens.org
 - observability was difficult to implement proper observability half a year ago (no opentelemetry etc)
-- now basic implementation with sentry, but only error reporting so far
-- super basic deno deploy metrics and logs
+- registrations, successful and failed logins, and a few other things are logged to sentry
+- basic performance metrics and logs on deno deploy
+
+### database backups
+- database is backed up hourly, but not with every change
+- this is automatically handles by cockroachdb
+- restoring works (tested, though not by free will)
 
 ### todo
 - general
   - validate numbers
   - paramterized queries, not just prepared statements
-- backups
-  - database backups (potientally incremental?)
-  - describe how i tested restoring a database backup lol
 - devsec
   - hardware token for accessing the system
   - how are admin devices secured?
@@ -110,8 +112,3 @@ Deno, explain please.
 - analysis
   - test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan things
   - understand how a request flows, including the (osi) layers and checks that are performed
-  - gpt4 turbo check entire project haha
-- concepts
-  - xss
-  - csrf
-  - sqli
