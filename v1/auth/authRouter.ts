@@ -64,7 +64,6 @@ MFARouter.post("/register", async (ctx: Context) => {
 
   Sentry.captureEvent({
     message: "New user registered",
-    level: Sentry.Severity.Info,
     extra: {
       email: email,
       ip: ctx.request.ip,
@@ -125,7 +124,6 @@ MFARouter.post("/login", async (ctx: Context) => {
 
     Sentry.captureEvent({
       message: "Login failed",
-      level: Sentry.Severity.Info,
       extra: {
         email: email,
         ip: ctx.request.ip,
@@ -136,7 +134,6 @@ MFARouter.post("/login", async (ctx: Context) => {
 
   Sentry.captureEvent({
     message: "Login successful",
-    level: Sentry.Severity.Info,
     extra: {
       email: email,
       ip: ctx.request.ip,
