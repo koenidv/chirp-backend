@@ -48,8 +48,8 @@ To prevent server overload and make responses more manageable, posts are paginat
 
 ### SQL Injection Prevention
 
-1. Prepared statements  **TODO PARAMETERIZED QUERIES**
-    Even though the statements look like regular JS template strings, the [postgres library](https://deno-postgres.com/#/?id=template-strings) parses them as SQL statements with arguments.
+1. Prepared and parameterized statements  
+    Even though the statements look like regular JS template strings, the [deno postgres drive](https://deno-postgres.com/#/?id=template-strings) parses them as prepared SQL statements with arguments.
 2. Disallow inserting unescaped characters
 3. I'm not using an ORM unfortunately because there's no proper ORM for Deno yet.
 
