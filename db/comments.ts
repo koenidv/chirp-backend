@@ -6,7 +6,7 @@ export async function createComment(
   tweet_id: string,
   content: string,
 ) {
-  if (anyUnescaped(content)) return null;
+  if (anyUnescaped(content, user_id, tweet_id)) return null;
 
   const snowflake = await generateId();
 
@@ -25,6 +25,10 @@ export async function createComment(
 }
 
 export async function deleteComment(user_id: string, tweet_id: string) {
+  if (anyUnescaped(user_id, tweet_id)) {
+    console.log("Denied inserting unescaped data");
+    return false;
+  }
   return await db(async (client) =>
     (await client.queryArray`
         DELETE FROM comments WHERE author_id=${user_id} AND comment_id=${tweet_id} RETURNING comment_id`)
@@ -33,6 +37,10 @@ export async function deleteComment(user_id: string, tweet_id: string) {
 }
 
 export async function queryComments(tweet_id: string) {
+  if (anyUnescaped(tweet_id)) {
+    console.log("Denied inserting unescaped data");
+    return false;
+  }
   return await db(async (client) =>
     (await client.queryObject<
       {
@@ -51,6 +59,10 @@ export async function queryComments(tweet_id: string) {
 }
 
 export async function queryComment(comment_id: string) {
+  if (anyUnescaped(tweet_id)) {
+    console.log("Denied inserting unescaped data");
+    return false;
+  }
   return await db(async (client) =>
     (await client.queryObject<
       {

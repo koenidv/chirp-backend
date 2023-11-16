@@ -24,7 +24,7 @@ export async function createUser(
 ): Promise<bigint | false> {
   // auth_id is expected to be verified!
   if (
-    anyUnescaped(username, displayname) || username.length > 24 ||
+    anyUnescaped(auth_id, username, displayname) || username.length > 24 ||
     displayname.length > 36 || !isUsernameAllowed(username)
   ) {
     return false;
@@ -50,6 +50,7 @@ export async function createUser(
 
 export async function deleteUser(user_id: string) {
   // sideeffect: this will also delete all associated auth entries
+  if (anyUnescaped(user_id)) return false;
   await db(async (client) =>
     await client.queryArray`
     DELETE FROM users WHERE user_id=${user_id}`
@@ -57,6 +58,7 @@ export async function deleteUser(user_id: string) {
 }
 
 export async function queryUser(user_id: string) {
+  if (anyUnescaped(user_id)) return false;
   const field = user_id.match(/^\d+$/) ? "user_id" : "username";
   return await db(async (client) =>
     (await client.queryObject<UserData>`
@@ -74,16 +76,18 @@ export async function queryUser(user_id: string) {
 }
 
 export async function queryUsernameTaken(username: string): Promise<boolean> {
+  if (anyUnescaped(username)) return false;
   return await db(async (client) =>
     (await client.queryObject<{ user_id: bigint }>`
       SELECT user_id FROM users WHERE username = ${username}`).rows[0] !==
-      undefined
+    undefined
   );
 }
 
 export async function overwriteUsername(user_id: string, username: string) {
   if (
-    anyUnescaped(username) || username.length > 24 ||
+    anyUnescaped(user_id, username) ||
+    username.length > 24 ||
     !isUsernameAllowed(username)
   ) return false;
 
@@ -104,7 +108,8 @@ export async function overwriteDisplayname(
   displayname: string,
 ) {
   if (
-    anyUnescaped(displayname) || displayname.length > 36 ||
+    anyUnescaped(displayname, user_id) ||
+    displayname.length > 36 ||
     !isUsernameAllowed(displayname)
   ) return false;
 
@@ -134,6 +139,7 @@ export async function overwriteProfilePicture(
   picture_url: string,
   picture_id: string,
 ) {
+  if (anyUnescaped(user_id)) return false;
   await db(async (client) =>
     await client.queryArray`
     UPDATE users SET profile_image_url = ${picture_url}, profile_image_id = ${picture_id} WHERE user_id = ${user_id}`
@@ -144,6 +150,7 @@ export async function overwriteProfilePicture(
 export async function queryProfilePictureIdByUserId(
   user_id: string,
 ): Promise<string | false> {
+  if (anyUnescaped(user_id)) return false;
   return await db(async (client) =>
     (await client.queryObject<{ profile_image_id: string }>`
       SELECT profile_image_id FROM users WHERE user_id = ${user_id}`).rows[0]
@@ -152,6 +159,7 @@ export async function queryProfilePictureIdByUserId(
 }
 
 export async function searchUsers(query: string) {
+  if (anyUnescaped(query)) return false;
   const grams = generateNGrams(query);
 
   const result = await db(async (client) =>
