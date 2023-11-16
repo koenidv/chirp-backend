@@ -1,5 +1,9 @@
 # Security Measures Implemented in Chirp's Backend
 
+### Threat Model
+
+[![Threat Model](.docs-assets/ThreatModel_miro.png)](https://miro.com/app/board/uXjVNO6KpIU=/)
+
 ### Security Contact
 
 A security contact is implemented following the [security.txt](https://securitytxt.org) standard. It is signed to verify authenticity.  
@@ -9,7 +13,7 @@ The security contact is available at [https://api.thechirp.de/.well-known/securi
 
 JWT access tokens are used to authenticate users. Refresh tokens are bound to session, whose existence is only checked on access token refresh. Thus, a deactivated session might still be valid until the access token expires.
 
-1. Access tokes are signed using a secret key that is only known to the backend (can only be read via exporting the env from code)
+1. Access tokes are signed using a synchronous key that is only known to the backend (can only be read via exporting the env from code)
 2. These tokens include the (public) user id of the authenticated user
 3. Access tokens are valid for 1 minute - on a single ip, this means a maximum of 192 requests per token
 4. Refresh tokens are automatically invalided after 28 days of inactivity
@@ -131,13 +135,5 @@ This could be improved by having different limits for anonymous / signed in / po
 1. The release branch (main) is protected and requires a pull request to be merged  
     *If I wasn't the sole backend developer, requiring PR reviews would make sense*
 2. Physical security of the development machine could be improved
-
-
-
-
-### todo
-- general
-  - validate numbers
-  - paramterized queries, not just prepared statements
-- analysis
-  - test owasp / portswigger automated tests against api - because hackers are lazy and will autoscan 
+3. Developers use commit signing with vigilant mode enabled
+4. Developers use 2FA on GitHub as well as other standard security practices

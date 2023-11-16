@@ -32,6 +32,10 @@ If you stumble across a *chirp.koenidv.de*, it is equivalent to *thechirp.de*.
 The public interactive API documentation can be found at [docs.api.thechirp.de](https://docs.api.thechirp.de).  
 If you prefer using Postman, you can refer to the badge above. Please note joining the Postman Team requires manual approval.
 
+## Project Architecture
+
+![Project Architecture](https://user-images.githubusercontent.com/32238636/234537319-c985eb14-b7b1-4aee-9dec-dc9f81e96af7.png)
+
 ## Testing
 
 Run tests using `deno test --allow-read --allow-env`.
@@ -60,7 +64,8 @@ Make sure to include these paramters in your environment to make the service wor
 - DATABASE_URL - Connection string to your Cockroach database
 - JWT_KEY - 256bit synchronous key for JWT signing
 - MAILERSEND_KEY - API key for MailerSend
-- CDN_KEY API key for ImageKit.io
+- CDN_KEY - API key for ImageKit.io
+- SENTRY_DSN - DSN for Sentry
 
 ## Deploying
 
@@ -68,9 +73,11 @@ This project is continuously deployed on Deno Deploy on pushes to main.
 If you'd rather deploy on your own infrastructure, a Dockerfile is set up.
 However, the database will not be set up automatically and you will have to run ./db/makeTables.ts manually.
 
-## Project Architecture
+## Security
 
-![Project Architecture](https://user-images.githubusercontent.com/32238636/234537319-c985eb14-b7b1-4aee-9dec-dc9f81e96af7.png)
+[![Threat Model](.docs-assets/ThreatModel_miro.png)](https://miro.com/app/board/uXjVNO6KpIU=/)
+
+A list of security measures implemented can be found in [securitymeasures.md](securitymeasures.md).
 
 ## Data Model
 
