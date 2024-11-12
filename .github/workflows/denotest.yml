@@ -13,3 +13,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Test
         run: deno test --allow-read --allow-env
+        env:
+          DATABASE_URL_NOCACHE: ${{ secrets.DATABASE_URL_NOCACHE }}
+          JWT_KEY: ${{ secrets.JWT_KEY }}
