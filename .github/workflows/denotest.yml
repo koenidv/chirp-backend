@@ -1,0 +1,15 @@
+name: Deno Test
+on:
+  push:
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - uses: actions/checkout@v4
+      - name: Test
+        run: deno test --allow-read --allow-env
