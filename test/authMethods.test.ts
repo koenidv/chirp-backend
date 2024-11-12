@@ -42,9 +42,9 @@ Deno.test("session id generation", () => {
 
 Deno.test("JWT validation", async () => {
   const jwt =
-    "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uIjoiLTEiLCJhdXRoX2lkIjoiLTEiLCJ1c2VyX2lkIjoiLTEiLCJpc3MiOiJodHRwczovL2FwaS5jaGlycC5rb2VuaWR2LmRlIiwiZXhwIjo5OTk5OTk5OTk5OTk5fQ.WFpGxw9B1kFxz49JoFEEq9Zdt5UlyDq3AEkmxuDe3Hc4b7eB3_lNsRx5Sa-LC7nbRgVse0qd29-RcciZ-ngJ2Q";
+    "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uIjoiLTEiLCJhdXRoX2lkIjoiLTEiLCJ1c2VyX2lkIjoiLTEiLCJpc3MiOiJodHRwczovL2FwaS5jaGlycC5rb2VuaWR2LmRlIiwiaWF0IjoxNzMxNDQyMjIxLCJleHAiOjk5OTk5OTk5OTk5OTl9.g8OLvb31C8zjvODfSUZRsawpZdHnLJNHMSTujFqmqrwljteh9mJYhc8dDlhEdanFujUw8P9QEhDaESZosjR5-g";
   const payload = await m.verifyJWT(jwt);
-  assert(payload);
+  assert(payload != false);
   assertEquals(payload.session, "-1");
   assertEquals(payload.auth_id, "-1");
   assertEquals(payload.user_id, "-1");
@@ -75,5 +75,5 @@ Deno.test("JWT creation", async () => {
   assertEquals(payload.user_id, "-1");
   assertEquals(payload.iss, "https://api.chirp.koenidv.de");
   assert(payload.iat);
-  assertEquals(payload.exp, payload.iat + 15 * 60);
+  assertEquals(payload.exp, payload.iat + 60);
 });
