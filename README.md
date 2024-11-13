@@ -2,7 +2,7 @@
 
 We created Chirp, a very simple copy of Twitter to learn about Agile Process Management, Collaboration, Web Technologies and Relational Databases. This repository contains the backend code for Chirp.
 
-[![Website](https://img.shields.io/website?down_message=Offline&label=API%20Status&up_message=Online&url=https%3A%2F%2Fapi.thechirp.de%2Fhealth)](https://api.thechirp.de)
+[![Website](https://img.shields.io/website?down_message=Offline&label=API%20Status&up_message=Online&url=https%3A%2F%2Fapi.chirp.koeni.dev%2Fhealth)](https://api.chirp.koeni.dev)
 [![Frontend Repository](https://img.shields.io/badge/Repository-Frontend-blue)](https://github.com/TobiasAschenbrenner/twitter-clone-frontend)
 [![Postman Docs](https://img.shields.io/badge/Docs-Postman-orange)](https://lively-flare-730471.postman.co/workspace/Chirp~afca99b0-c47a-4215-8c99-a25d79e212a0/api/15277022-5be5-4bf6-b392-4d909e436d00)
 [![Swagger Docs](https://img.shields.io/badge/Docs-Swagger%20UI-green)](https://docs.api.thechirp.de)
@@ -16,10 +16,10 @@ The system additionally interacts with [MailerSend](https://mailersend.com) for 
 
 The API is publicly accessible using the proper user authentication.
 
-Production Server: `https://api.thechirp.de`  
-Sandbox Server: `https://sandbox.api.thechirp.de`
+Production Server: `https://api.chirp.koeni.dev`  
+Sandbox Server: `https://sandbox.api.chirp.koeni.dev`
 
-If you stumble across a *chirp.koenidv.de*, it is equivalent to *thechirp.de*.
+*thechirp.de is no longer operational, please use chirp.koeni.dev*
 
 ## Running locally
 
